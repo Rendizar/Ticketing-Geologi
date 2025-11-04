@@ -10,6 +10,7 @@ use App\Http\Controllers\BookingController;
 
 // Welcome page
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 // Visitor routes
 Route::prefix('tickets')->group(function () {
@@ -37,6 +38,12 @@ Route::prefix('contact')->group(function () {
     Route::post('/quick-message', [ContactController::class, 'sendQuickMessage'])->name('contact.quick-message');
 });
 
+// Event routes
+Route::prefix('events')->group(function () {
+    Route::get('/{event}', [App\Http\Controllers\EventController::class, 'show'])->name('events.show');
+    Route::post('/{event}/book', [App\Http\Controllers\EventController::class, 'book'])->name('events.book');
+});
+
 // Admin routes
 Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/login', [AdminController::class, 'login'])->name('admin.login');
@@ -44,4 +51,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/tickets/{ticket}', [AdminController::class, 'show'])->name('admin.tickets.show');
     Route::put('/tickets/{ticket}', [AdminController::class, 'update'])->name('admin.tickets.update');
     Route::get('/stats', [AdminController::class, 'stats'])->name('admin.stats');
+    
+    // Event management routes
+    Route::resource('events', App\Http\Controllers\Admin\EventController::class, [
+        'as' => 'admin'
+    ]);
 });

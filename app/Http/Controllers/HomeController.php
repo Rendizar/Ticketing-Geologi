@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -16,6 +17,13 @@ class HomeController extends Controller
             'satisfaction_rate' => 98
         ];
 
-        return view('visitor.home', compact('stats'));
+        // Get active events
+        $events = Event::where('is_active', true)
+                      ->where('event_date', '>=', now())
+                      ->orderBy('event_date')
+                      ->take(6)
+                      ->get();
+
+        return view('visitor.home', compact('stats', 'events'));
     }
 }

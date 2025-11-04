@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticketing Geologi - @yield('title')</title>
+    <title>GESIT - @yield('title')</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Ticketing Geologi</a>
+            <a class="navbar-brand" href="/">GESIT</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,10 +23,10 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/tickets">Submit Ticket</a>
+                        <a class="nav-link" href="/tickets">Tiket</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin">Admin Panel</a>
+                        <a class="nav-link" href="/admin/login">Admin Panel</a>
                     </li>
                 </ul>
             </div>

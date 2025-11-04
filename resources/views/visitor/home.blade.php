@@ -15,19 +15,19 @@
             <div class="carousel-item active">
                 <img src="{{ asset('images/Museum1.jpg') }}" class="d-block w-100" alt="Geological Site 1" style="height: 400px; object-fit: cover;">
                 <div class="carousel-caption">
-                    <h2>Welcome to Ticketing Geologi</h2>
+                    <h2>Selamat Datang di Gesit!</h2>
                     <p>Your Gateway to Geological Support and Services</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="{{ asset('images/geology2.jpg') }}" class="d-block w-100" alt="Geological Site 2" style="height: 400px; object-fit: cover;">
+                <img src="{{ asset('images/Museum2.jpg') }}" class="d-block w-100" alt="Geological Site 2" style="height: 400px; object-fit: cover;">
                 <div class="carousel-caption">
                     <h2>Expert Assistance</h2>
                     <p>Get Help from Our Team of Geological Experts</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="{{ asset('images/geology3.jpg') }}" class="d-block w-100" alt="Geological Site 3" style="height: 400px; object-fit: cover;">
+                <img src="{{ asset('images/Museum3.jpg') }}" class="d-block w-100" alt="Geological Site 3" style="height: 400px; object-fit: cover;">
                 <div class="carousel-caption">
                     <h2>Quick Support</h2>
                     <p>Fast and Efficient Response to Your Queries</p>
@@ -83,6 +83,39 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Events Section -->
+<div class="container mb-5">
+    <h2 class="text-center mb-4">Upcoming Events</h2>
+    <div class="row g-4">
+        @foreach($events as $event)
+        <div class="col-md-4">
+            <div class="card h-100 event-card">
+                <img src="{{ asset('storage/'.$event->image) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $event->title }}</h5>
+                    <p class="card-text">{{ Str::limit($event->description, 100) }}</p>
+                    <div class="event-details mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                            <span>{{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-clock me-2 text-primary"></i>
+                            <span>{{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-ticket-alt me-2 text-primary"></i>
+                            <span>Rp {{ number_format($event->price, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+                    <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary w-100">Get Ticket</a>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
 </div>
 
@@ -159,6 +192,20 @@
 
 @section('styles')
 <style>
+    .event-card {
+        transition: transform 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .event-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .event-details {
+        font-size: 0.9rem;
+    }
+
     .service-card {
         transition: transform 0.3s ease;
         border: none;
