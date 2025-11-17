@@ -126,11 +126,7 @@
                     @endforeach
                 </div>
 
-                <div class="pro-plan mt-4">
-                    <h5>Pro Plan</h5>
-                    <p>Get full access for $5 per month</p>
-                    <button class="btn btn-outline-light w-100">Subscribe</button>
-                </div>
+                <!-- Pro Plan removed per request -->
                 </div>
             </div>
 
@@ -394,11 +390,7 @@
         margin: 0;
     }
 
-    .pro-plan {
-        background: rgba(255,255,255,0.1);
-        padding: 20px;
-        border-radius: 10px;
-    }
+    /* Pro Plan removed - styles kept if needed later */
 
     /* Game list styles */
     .game-item .game-icon i {
