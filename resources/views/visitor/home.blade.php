@@ -63,8 +63,13 @@
         </div>
 
         <!-- Sidebar -->
-        <div class="col-lg-3 py-5 bg-dark text-white">
-            <div class="audio-guide">
+        <div class="col-lg-3 py-5">
+            <div id="miniGamesBar" class="bg-dark text-white position-relative" style="padding:20px; border-radius:6px;">
+                <!-- Toggle button inside sidebar -->
+                <button id="miniGamesToggle" type="button" class="btn btn-sm btn-light position-absolute" style="right:12px;top:12px;">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="audio-guide">
                 <h3>Mini Games Edukasi</h3>
                 <p class="text-muted">Permainan singkat untuk belajar geologi</p>
 
@@ -126,7 +131,13 @@
                     <p>Get full access for $5 per month</p>
                     <button class="btn btn-outline-light w-100">Subscribe</button>
                 </div>
+                </div>
             </div>
+
+            <!-- Reopen floating button (shown when sidebar collapsed) -->
+            <button id="miniGamesReopen" type="button" class="btn btn-primary" style="position:fixed;right:12px;top:200px;z-index:1050;display:none;">
+                <i class="fas fa-gamepad"></i>
+            </button>
         </div>
     </div>
 </div>
@@ -406,6 +417,24 @@
         background: #222 !important;
     }
     .game-placeholder p { margin-bottom: 8px; }
+
+    /* Sidebar collapse styles */
+    #miniGamesBar {
+        transition: transform 0.28s ease, opacity 0.28s ease;
+        transform: translateX(0);
+        opacity: 1;
+    }
+    #miniGamesBar.collapsed {
+        transform: translateX(110%);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* When sidebar collapsed, show a small reopen button (handled by JS) */
+    @media (max-width: 991px) {
+        /* On small screens, let the reopen button be visible near top-right */
+        #miniGamesReopen { top: 120px; }
+    }
 </style>
 @endsection
 
@@ -430,6 +459,43 @@
                 alert('Demo dimulai (placeholder). Implementasikan game atau iframe di sini.');
             });
         });
+        
+        // Sidebar open/close handling
+        var miniBar = document.getElementById('miniGamesBar');
+        var toggleBtn = document.getElementById('miniGamesToggle');
+        var reopenBtn = document.getElementById('miniGamesReopen');
+
+        function setCollapsed(collapsed) {
+            if (!miniBar) return;
+            if (collapsed) {
+                miniBar.classList.add('collapsed');
+                if (reopenBtn) reopenBtn.style.display = 'block';
+                if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            } else {
+                miniBar.classList.remove('collapsed');
+                if (reopenBtn) reopenBtn.style.display = 'none';
+                if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            }
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var isCollapsed = miniBar.classList.contains('collapsed');
+                setCollapsed(!isCollapsed);
+            });
+        }
+
+        if (reopenBtn) {
+            reopenBtn.addEventListener('click', function(e) {
+                setCollapsed(false);
+            });
+        }
+
+        // Initialize closed state on small screens
+        if (window.innerWidth < 992) {
+            setCollapsed(true);
+        }
     });
 </script>
 @endsection
