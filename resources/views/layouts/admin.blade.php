@@ -13,35 +13,41 @@
     
     <!-- Admin CSS -->
     <style>
+        :root{
+            --mg-yellow: #FFD400;
+            --mg-black: #0b0b0b;
+            --mg-white: #ffffff;
+            --mg-muted: #6c6c6c;
+        }
+
         .sidebar {
             min-height: 100vh;
-            background-color: #212529;
-            color: white;
+            background-color: var(--mg-black);
+            color: var(--mg-white);
         }
-        
+
         .sidebar .nav-link {
-            color: rgba(255,255,255,.8);
+            color: rgba(255,255,255,.85);
             padding: 1rem;
         }
-        
+
         .sidebar .nav-link:hover {
-            color: white;
-            background-color: rgba(255,255,255,.1);
+            color: var(--mg-white);
+            background-color: rgba(255,255,255,.06);
         }
-        
+
         .sidebar .nav-link.active {
-            color: white;
-            background-color: rgba(255,255,255,.1);
+            color: var(--mg-white);
+            background-color: rgba(255,255,255,.06);
         }
-        
-        .sidebar .nav-link i {
-            margin-right: 0.5rem;
-        }
-        
-        .content {
-            margin-left: 250px;
-        }
-        
+
+        .sidebar .nav-link i { margin-right: 0.5rem; }
+
+        .content { margin-left: 250px; }
+
+        /* Admin topbar accent */
+        .sidebar .sidebar-heading { color: var(--mg-yellow); }
+
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -51,14 +57,10 @@
                 z-index: 100;
                 transition: all 0.3s;
             }
-            
-            .sidebar.active {
-                left: 0;
-            }
-            
-            .content {
-                margin-left: 0;
-            }
+
+            .sidebar.active { left: 0; }
+
+            .content { margin-left: 0; }
         }
     </style>
     

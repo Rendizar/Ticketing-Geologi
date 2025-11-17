@@ -9,26 +9,70 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root{
+            --mg-yellow: #FFD400; /* primary yellow */
+            --mg-black: #0b0b0b;  /* primary black */
+            --mg-white: #ffffff;  /* white */
+            --mg-muted: #6c6c6c;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: var(--mg-white);
+            color: var(--mg-black);
         }
+
+        /* Navbar */
         .navbar {
-            background: white !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: var(--mg-yellow) !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             padding: 1rem 2rem;
         }
+
         .navbar-brand {
             font-weight: bold;
-            color: #000 !important;
+            color: var(--mg-black) !important;
         }
+
         .nav-link {
-            color: #000 !important;
-            font-weight: 500;
+            color: var(--mg-black) !important;
+            font-weight: 600;
             margin: 0 1rem;
         }
+
         .navbar-nav .active {
-            color: #0d6efd !important;
+            color: var(--mg-black) !important;
         }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--mg-black) !important;
+            border-color: var(--mg-black) !important;
+            color: var(--mg-white) !important;
+        }
+
+        .btn-outline-light {
+            color: var(--mg-black) !important;
+            border-color: var(--mg-black) !important;
+            background: transparent !important;
+        }
+
+        /* Dark backgrounds used for sidebars/cards -> make them black */
+        .bg-dark {
+            background: var(--mg-black) !important;
+            color: var(--mg-white) !important;
+        }
+
+        /* Cards default to white with subtle border */
+        .card {
+            background: var(--mg-white) !important;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        a { color: var(--mg-black); }
+        a:hover { color: #b88600; }
+
+        .text-muted { color: var(--mg-muted) !important; }
     </style>
     @yield('styles')
 </head>
