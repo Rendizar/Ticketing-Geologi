@@ -172,9 +172,9 @@
                     <div class="service-icon mb-3">
                         <i class="fas fa-book fa-3x text-info"></i>
                     </div>
-                    <h4>Knowledge Base</h4>
-                    <p>Access our geological knowledge base and resources</p>
-                    <a href="#" class="btn btn-info text-white">Learn More</a>
+                    <h4>Mini Games</h4>
+                    <p>Cek mini game museum disini</p>
+                    <a href="#" class="btn btn-info text-white">Games</a>
                 </div>
             </div>
         </div>
