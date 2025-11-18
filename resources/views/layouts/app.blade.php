@@ -79,7 +79,9 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="/">MG</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+    <img src="{{ asset('images/logo-mg.png') }}" alt="Museum Geologi" style="height:70px;">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
