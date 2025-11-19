@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     public function up(): void {
@@ -14,6 +15,15 @@ return new class extends Migration {
             $table->dateTime('terakhir_login')->nullable();
             $table->timestamps();
         });
+
+        // Insert default admin
+        DB::table('admins')->insert([
+            'nama' => 'admin',
+            'password' => bcrypt('1234'),
+            'status_aktif' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     public function down(): void {
