@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\EventController;
 
 // Welcome page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -37,12 +38,11 @@ Route::prefix('knowledge-base')->group(function () {
 Route::prefix('contact')->group(function () {
     Route::post('/quick-message', [ContactController::class, 'sendQuickMessage'])->name('contact.quick-message');
 });
-
-// Event routes
-Route::prefix('events')->group(function () {
-    Route::get('/{event}', [App\Http\Controllers\EventController::class, 'show'])->name('events.show');
-    Route::post('/{event}/book', [App\Http\Controllers\EventController::class, 'book'])->name('events.book');
-});
+// // Event routes
+// Route::prefix('events')->group(function () {
+//     Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
+//     Route::post('/{event}/book', [EventController::class, 'book'])->name('events.book');
+// });
 
 // Admin routes
 Route::prefix('admin')->group(function () {

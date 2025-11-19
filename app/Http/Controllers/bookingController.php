@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facades\Pdf;
 
 class BookingController extends Controller {
     public function store(Request $request) {

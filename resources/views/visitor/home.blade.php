@@ -6,151 +6,53 @@
 <div class="container-fluid px-5">
     <div class="row">
         <!-- Main Content -->
-        <div class="col-lg-9 py-5">
-            <h1 class="display-4 mb-4">Museum Geologi</h1>
+        <div class="col-lg-12 py-5">  <!-- Diperluas menjadi full width karena sidebar dihapus -->
+            {{-- <h1 class="display-4 mb-4">Museum Geologi</h1> --}}
             
-            <!-- Knowledge Test Section -->
-            <div class="row mb-5">
-                <div class="col-md-6">
-                    <div class="card knowledge-test">
-                        <div class="card-body">
-                            <h3>Knowledge Test</h3>
-                            <div class="test-progress">
-                                <div class="progress-ring">
-                                    <span>51%</span>
-                                </div>
-                                <p>12 questions</p>
+            <!-- Banner Slider Section (menggantikan knowledge test dan related items) -->
+            <div class="row mb-5" id="banner">
+                <div class="col-12">
+                    <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{ asset('images/banner1.png') }}" class="d-block w-100" alt="Banner 1" style="height: 1000px; object-fit: cover;">
                             </div>
-                            <a href="#" class="btn btn-outline-dark mt-3">Start Test</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3>Related Items</h3>
-                            <div class="gallery-grid">
-                                @foreach($events as $event)
-                                <div class="gallery-item">
-                                    <img src="{{ asset('storage/'.$event->image) }}" alt="{{ $event->title }}">
-                                </div>
-                                @endforeach
+                            <div class="carousel-item">
+                                <img src="{{ asset('images/banner1.png') }}" class="d-block w-100" alt="Banner 2" style="height: 1000px; object-fit: cover;">
                             </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('images/banner1.png') }}" class="d-block w-100" alt="Banner 3" style="height: 1000px; object-fit: cover;">
+                            </div>
+                            <!-- Tambahkan lebih banyak carousel-item sesuai kebutuhan -->
                         </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Timeline Section -->
-            <div class="timeline-section">
-                <h3 class="mb-4">Major Events <span class="badge bg-primary">NEW</span></h3>
-                <div class="timeline">
-                    @foreach($events as $event)
-                    <div class="timeline-item">
-                        <div class="timeline-image">
-                            <img src="{{ asset('storage/'.$event->image) }}" alt="{{ $event->title }}">
-                        </div>
-                        <div class="timeline-content">
-                            <h4>{{ $event->title }}</h4>
-                            <p>{{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}</p>
-                            <p>{{ Str::limit($event->description, 100) }}</p>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-                <a href="#" class="btn btn-link">Virtual Tour <i class="fas fa-arrow-right"></i></a>
-            </div>
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-3 py-5">
-            <div id="miniGamesBar" class="bg-dark text-white position-relative" style="padding:20px; border-radius:6px;">
-                <!-- Toggle button inside sidebar -->
-                <button id="miniGamesToggle" type="button" class="btn btn-sm btn-light position-absolute" style="right:12px;top:12px;">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <div class="audio-guide">
-                <h3>Mini Games Edukasi</h3>
-                <p class="text-muted">Permainan singkat untuk belajar geologi</p>
-
-                <div class="game-list">
-                    {{-- Daftar game edukasi ringan untuk pengunjung --}}
-                    @php
-                        $games = [
-                            ['id' => 1, 'title' => 'Quiz Geologi', 'desc' => 'Jawab beberapa pertanyaan singkat tentang batu dan fosil. Cocok untuk anak-anak.', 'link' => '#'],
-                            ['id' => 2, 'title' => 'Puzzle Stratigrafi', 'desc' => 'Susun lapisan batu secara kronologis untuk memahami sejarah geologi.', 'link' => '#'],
-                            ['id' => 3, 'title' => 'Tebak Mineral', 'desc' => 'Identifikasi mineral berdasarkan warna, kilap, dan sifat sederhana.', 'link' => '#'],
-                        ];
-                    @endphp
-
-                    @foreach($games as $game)
-                    <div class="game-item d-flex align-items-start mb-3">
-                        <div class="game-icon me-3 bg-light text-dark rounded-circle d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <div class="game-info flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <strong>{{ $game['title'] }}</strong>
-                                    <p class="mb-1 text-muted small">{{ $game['desc'] }}</p>
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-sm btn-outline-light open-game-btn" data-game-id="{{ $game['id'] }}">Play</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal for game -->
-                    <div class="modal fade" id="gameModal{{ $game['id'] }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content bg-dark text-white">
-                                <div class="modal-header border-0">
-                                    <h5 class="modal-title">{{ $game['title'] }}</h5>
-                                    <button type="button" class="btn-close btn-close-white close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>{{ $game['desc'] }}</p>
-                                    <div class="game-placeholder p-3 bg-light text-dark rounded">
-                                        <p class="mb-2"><strong>Demo:</strong></p>
-                                        <p>Placeholder untuk demo game & interactive content. Anda dapat menambahkan iframe atau script permainan di sini.</p>
-                                        <button class="btn btn-primary start-demo">Start Demo</button>
-                                    </div>
-                                </div>
-                                <div class="modal-footer border-0">
-                                    <button type="button" class="btn btn-secondary close-modal" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-
-                <!-- Pro Plan removed per request -->
-                </div>
-            </div>
-
-            <!-- Reopen floating button (shown when sidebar collapsed) -->
-            <button id="miniGamesReopen" type="button" class="btn btn-primary" style="position:fixed;right:12px;top:200px;z-index:1050;display:none;">
-                <i class="fas fa-gamepad"></i>
-            </button>
         </div>
     </div>
 </div>
 
-<!-- Services Section -->
-<div class="container mb-5">
+<!-- Services Section (dipindah ke atas) -->
+<div class="container mb-5" id="services">
     <h2 class="text-center mb-4">Our Services</h2>
     <div class="row g-4">
         <div class="col-md-4">
             <div class="card h-100 service-card">
                 <div class="card-body text-center">
                     <div class="service-icon mb-3">
-                        <i class="fas fa-ticket-alt fa-3x text-primary"></i>
+                        <i class="fas fa-ticket-alt fa-3x" style="color: var(--mg-yellow);"></i>
                     </div>
                     <h4>Submit Ticket</h4>
                     <p>Create a new support ticket for your geological inquiries</p>
-                    <a href="{{ route('tickets.create') }}" class="btn btn-primary">Create Ticket</a>
+                    <a href="{{ route('tickets.create') }}" class="btn btn-service-yellow">Create Ticket</a>
                 </div>
             </div>
         </div>
@@ -158,11 +60,11 @@
             <div class="card h-100 service-card">
                 <div class="card-body text-center">
                     <div class="service-icon mb-3">
-                        <i class="fas fa-search fa-3x text-success"></i>
+                        <i class="fas fa-search fa-3x" style="color: var(--mg-yellow);"></i>
                     </div>
                     <h4>Track Status</h4>
                     <p>Check the status of your existing support tickets</p>
-                    <a href="#" class="btn btn-success">Track Ticket</a>
+                    <a href="#" class="btn btn-service-yellow">Track Ticket</a>
                 </div>
             </div>
         </div>
@@ -170,113 +72,164 @@
             <div class="card h-100 service-card">
                 <div class="card-body text-center">
                     <div class="service-icon mb-3">
-                        <i class="fas fa-book fa-3x text-info"></i>
+                        <i class="fas fa-book fa-3x" style="color: var(--mg-yellow);"></i>
                     </div>
                     <h4>Mini Games</h4>
-                    <p>Cek mini game museum disini</p>
-                    <a href="#" class="btn btn-info text-white">Games</a>
+                    <p>Check out the mini games available at the museum!</p>
+                    <a href="#" class="btn btn-service-yellow">Games</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Events Section -->
-<div class="container mb-5">
+<!-- Upcoming Events Section (diubah menjadi statis dengan 3 poster random placeholder) -->
+<div class="container mb-5" id="events">
     <h2 class="text-center mb-4">Upcoming Events</h2>
     <div class="row g-4">
-        @foreach($events as $event)
+        <!-- Event 1 -->
         <div class="col-md-4">
             <div class="card h-100 event-card">
-                <img src="{{ asset('storage/'.$event->image) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                <img src="https://via.placeholder.com/400x200?text=Poster+Event+1" class="card-img-top" alt="Event 1 Poster" style="height: 200px; object-fit: cover;">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $event->title }}</h5>
-                    <p class="card-text">{{ Str::limit($event->description, 100) }}</p>
+                    <h5 class="card-title">Geology Workshop 2023</h5>
+                    <p class="card-text">Join our interactive workshop on modern geology techniques.</p>
                     <div class="event-details mb-3">
                         <div class="d-flex align-items-center mb-2">
-                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
-                            <span>{{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}</span>
+                            <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
+                            <span>15 Dec 2023</span>
                         </div>
                         <div class="d-flex align-items-center mb-2">
-                            <i class="fas fa-clock me-2 text-primary"></i>
-                            <span>{{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}</span>
+                            <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
+                            <span>10:00 AM</span>
                         </div>
                         <div class="d-flex align-items-center">
-                            <i class="fas fa-ticket-alt me-2 text-primary"></i>
-                            <span>Rp {{ number_format($event->price, 0, ',', '.') }}</span>
+                            <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
+                            <span>Rp 50.000</span>
                         </div>
                     </div>
-                    <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary w-100">Get Ticket</a>
+                    <a href="#" class="btn btn-event-yellow w-100">Get Ticket</a>
                 </div>
             </div>
         </div>
-        @endforeach
-    </div>
-</div>
-
-<!-- Quick Stats Section -->
-<div class="container-fluid bg-light py-5">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-3 mb-3">
-                <div class="stat-card">
-                    <h3 class="counter">500+</h3>
-                    <p>Tickets Resolved</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="stat-card">
-                    <h3 class="counter">24/7</h3>
-                    <p>Support Available</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="stat-card">
-                    <h3 class="counter">50+</h3>
-                    <p>Expert Geologists</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="stat-card">
-                    <h3 class="counter">98%</h3>
-                    <p>Satisfaction Rate</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Contact Section -->
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>Need Immediate Assistance?</h2>
-            <p class="lead">Our team is here to help you with any geological inquiries</p>
-            <div class="d-flex align-items-center mb-3">
-                <i class="fas fa-phone me-2 text-primary"></i>
-                <span>+1234567890</span>
-            </div>
-            <div class="d-flex align-items-center mb-3">
-                <i class="fas fa-envelope me-2 text-primary"></i>
-                <span>support@ticketinggeologi.com</span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
+        <!-- Event 2 -->
+        <div class="col-md-4">
+            <div class="card h-100 event-card">
+                <img src="https://via.placeholder.com/400x200?text=Poster+Event+2" class="card-img-top" alt="Event 2 Poster" style="height: 200px; object-fit: cover;">
                 <div class="card-body">
-                    <h4 class="card-title">Quick Contact</h4>
-                    <form>
+                    <h5 class="card-title">Fossil Exhibition</h5>
+                    <p class="card-text">Explore ancient fossils from around the world.</p>
+                    <div class="event-details mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
+                            <span>20 Jan 2024</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
+                            <span>09:00 AM</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
+                            <span>Rp 30.000</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-event-yellow w-100">Get Ticket</a>
+                </div>
+            </div>
+        </div>
+        <!-- Event 3 -->
+        <div class="col-md-4">
+            <div class="card h-100 event-card">
+                <img src="https://via.placeholder.com/400x200?text=Poster+Event+3" class="card-img-top" alt="Event 3 Poster" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Earthquake Simulation Tour</h5>
+                    <p class="card-text">Experience a simulated earthquake and learn safety measures.</p>
+                    <div class="event-details mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
+                            <span>05 Feb 2024</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
+                            <span>11:00 AM</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
+                            <span>Rp 40.000</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-event-yellow w-100">Get Ticket</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Rating & Review Section --}}
+<div class="container my-5" id="rating-review">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Rating & Review</h2>
+        </div>
+    </div>
+
+    {{-- SATU KOLOM: Rate Your Experience + Write Your Review di bawahnya --}}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+
+            {{-- Bagian Rate Your Experience --}}
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h4 class="card-title mb-4">Rate Your Experience</h4>
+                    <div class="rating-section mb-4">
+                        <div class="stars-container" id="starsContainer">
+                            <i class="fas fa-star" data-rating="1" style="cursor: pointer; font-size: 2.5rem; margin: 0 0.5rem; color: #ddd; transition: color 0.3s;"></i>
+                            <i class="fas fa-star" data-rating="2" style="cursor: pointer; font-size: 2.5rem; margin: 0 0.5rem; color: #ddd; transition: color 0.3s;"></i>
+                            <i class="fas fa-star" data-rating="3" style="cursor: pointer; font-size: 2.5rem; margin: 0 0.5rem; color: #ddd; transition: color 0.3s;"></i>
+                            <i class="fas fa-star" data-rating="4" style="cursor: pointer; font-size: 2.5rem; margin: 0 0.5rem; color: #ddd; transition: color 0.3s;"></i>
+                            <i class="fas fa-star" data-rating="5" style="cursor: pointer; font-size: 2.5rem; margin: 0 0.5rem; color: #ddd; transition: color 0.3s;"></i>
+                        </div>
+                        {{-- Text default dihapus, diganti jadi kosong atau langsung menampilkan rating saat dipilih --}}
+                        <p class="mt-3" id="ratingText" style="font-size: 1.2rem; font-weight: 600; color: var(--mg-black); min-height: 1.5em;">
+                            &nbsp;
+                        </p>
+                    </div>
+                    <input type="hidden" id="selectedRating" value="0">
+                </div>
+            </div>
+
+            {{-- Bagian Write Your Review (dipindah ke bawah) --}}
+            <div class="card mb-5">
+                <div class="card-body">
+                    <h4 class="card-title mb-4 text-center">Write Your Review</h4>
+                    <form id="reviewForm">
                         <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Your Name">
+                            <label for="reviewName" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="reviewName" placeholder="Enter your name" required>
                         </div>
                         <div class="mb-3">
-                            <input type="email" class="form-control" placeholder="Your Email">
+                            <label for="reviewEmail" class="form-label">Your Email</label>
+                            <input type="email" class="form-control" id="reviewEmail" placeholder="Enter your email" required>
                         </div>
                         <div class="mb-3">
-                            <textarea class="form-control" rows="3" placeholder="Your Message"></textarea>
+                            <label for="reviewText" class="form-label">Your Review</label>
+                            <textarea class="form-control" id="reviewText" rows="5" placeholder="Share your experience with us..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" class="btn btn-review-yellow w-100">Submit Review</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Display Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class=" text-center mb-4">Customer Reviews</h3>
+            <div id="reviewsList" class="row g-4">
+                <!-- Reviews akan ditampilkan di sini -->
+                <div class="col-12 text-center text-muted">
+                    <p>No reviews yet. Be the first to review!</p>
                 </div>
             </div>
         </div>
@@ -289,6 +242,87 @@
 <style>
     body {
         background: #fff;
+    }
+
+    /* Service Button Yellow Styling */
+    .btn-service-yellow {
+        background: var(--mg-yellow) !important;
+        color: var(--mg-black) !important;
+        border: 2px solid var(--mg-yellow) !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-service-yellow:hover {
+        background: var(--mg-black) !important;
+        color: var(--mg-yellow) !important;
+        border-color: var(--mg-black) !important;
+    }
+
+    /* Event Button Yellow Styling */
+    .btn-event-yellow {
+        background: var(--mg-yellow) !important;
+        color: var(--mg-black) !important;
+        border: 2px solid var(--mg-yellow) !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-event-yellow:hover {
+        background: var(--mg-black) !important;
+        color: var(--mg-yellow) !important;
+        border-color: var(--mg-black) !important;
+    }
+
+    /* Service Card Styling */
+    .service-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .service-card .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .service-card .service-icon {
+        flex-shrink: 0;
+    }
+
+    .service-card p {
+        flex-grow: 1;
+    }
+
+    .service-card .btn {
+        margin-top: auto;
+    }
+
+    /* Event Card Styling */
+    .event-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .event-card .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .event-card .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .event-card .card-text {
+        flex-grow: 1;
+    }
+
+    .event-card .btn {
+        margin-top: auto;
     }
 
     .knowledge-test {
@@ -403,6 +437,60 @@
     .game-item .game-info p {
         margin: 0;
     }
+    /* Rating & Review Styles */
+    .btn-review-yellow {
+        background: var(--mg-yellow) !important;
+        color: var(--mg-black) !important;
+        border: 2px solid var(--mg-yellow) !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-review-yellow:hover {
+        background: var(--mg-black) !important;
+        color: var(--mg-yellow) !important;
+        border-color: var(--mg-black) !important;
+    }
+
+    .stars-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .stars-container i {
+        color: #ddd;
+        transition: color 0.2s ease;
+    }
+
+    .stars-container i:hover,
+    .stars-container i.active,
+    .stars-container i.selected {
+        color: var(--mg-yellow) !important;
+    }
+
+    .review-card {
+        background: #f8f9fa;
+        border-left: 4px solid var(--mg-yellow);
+        border-radius: 0.5rem;
+        padding: 1rem;
+    }
+
+    .review-rating {
+        color: var(--mg-yellow);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .review-author {
+        font-weight: 600;
+        color: var(--mg-black);
+    }
+
+    .review-email {
+        color: var(--mg-muted);
+        font-size: 0.9rem;
+    }
 
     /* Modal specific tweaks */
     .modal-content.bg-dark {
@@ -432,62 +520,134 @@
 
 @section('scripts')
 <script>
-    // Open modal when Play button clicked
+    // Script untuk carousel auto-slide dengan interval 5 detik (5000 ms)
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.open-game-btn').forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                var id = btn.getAttribute('data-game-id');
-                var modalEl = document.getElementById('gameModal' + id);
-                if (modalEl) {
-                    var modal = new bootstrap.Modal(modalEl);
-                    modal.show();
-                }
+        var carousel = document.getElementById('bannerCarousel');
+        if (carousel) {
+            var bsCarousel = new bootstrap.Carousel(carousel, {
+                interval: 5000,  // 5 detik
+                wrap: true
             });
-        });
+        }
 
-        // Example start-demo handler (placeholder)
-        document.querySelectorAll('.start-demo').forEach(function(b) {
-            b.addEventListener('click', function() {
-                alert('Demo dimulai (placeholder). Implementasikan game atau iframe di sini.');
-            });
-        });
-        
-        // Sidebar open/close handling
-        var miniBar = document.getElementById('miniGamesBar');
-        var toggleBtn = document.getElementById('miniGamesToggle');
-        var reopenBtn = document.getElementById('miniGamesReopen');
+        // Rating & Review: star interactions
+        var starsContainer = document.getElementById('starsContainer');
+        var selectedRatingInput = document.getElementById('selectedRating');
+        var ratingText = document.getElementById('ratingText');
 
-        function setCollapsed(collapsed) {
-            if (!miniBar) return;
-            if (collapsed) {
-                miniBar.classList.add('collapsed');
-                if (reopenBtn) reopenBtn.style.display = 'block';
-                if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            } else {
-                miniBar.classList.remove('collapsed');
-                if (reopenBtn) reopenBtn.style.display = 'none';
-                if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        if (starsContainer) {
+            var stars = Array.from(starsContainer.querySelectorAll('i[data-rating]'));
+
+            function setStars(rating) {
+                stars.forEach(function(star) {
+                    var r = parseInt(star.getAttribute('data-rating'));
+                    if (r <= rating) {
+                        star.classList.add('selected');
+                        star.classList.remove('active');
+                    } else {
+                        star.classList.remove('selected');
+                        star.classList.remove('active');
+                    }
+                });
             }
-        }
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                var isCollapsed = miniBar.classList.contains('collapsed');
-                setCollapsed(!isCollapsed);
+            stars.forEach(function(star) {
+                star.addEventListener('mouseenter', function() {
+                    var r = parseInt(this.getAttribute('data-rating'));
+                    stars.forEach(function(s) {
+                        var rr = parseInt(s.getAttribute('data-rating'));
+                        if (rr <= r) s.classList.add('active');
+                        else s.classList.remove('active');
+                    });
+                });
+
+                star.addEventListener('mouseleave', function() {
+                    // remove hover effects
+                    stars.forEach(function(s) { s.classList.remove('active'); });
+                });
+
+                star.addEventListener('click', function() {
+                    var r = parseInt(this.getAttribute('data-rating'));
+                    selectedRatingInput.value = r;
+                    setStars(r);
+                    var texts = ['Very poor','Poor','Okay','Good','Excellent'];
+                    ratingText.textContent = r + ' / 5 — ' + texts[r-1];
+                });
             });
         }
 
-        if (reopenBtn) {
-            reopenBtn.addEventListener('click', function(e) {
-                setCollapsed(false);
+        // Review form submission (client-side only)
+        var reviewForm = document.getElementById('reviewForm');
+        var reviewsList = document.getElementById('reviewsList');
+
+        if (reviewForm && reviewsList) {
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var rating = parseInt(document.getElementById('selectedRating').value || 0);
+                var name = document.getElementById('reviewName').value.trim();
+                var email = document.getElementById('reviewEmail').value.trim();
+                var text = document.getElementById('reviewText').value.trim();
+
+                if (!rating) {
+                    alert('Please select a rating (1-5 stars) before submitting.');
+                    return;
+                }
+
+                if (!name || !email || !text) {
+                    alert('Please fill name, email and review text.');
+                    return;
+                }
+
+                // Build review HTML (client-side only). For production, POST to server instead.
+                var col = document.createElement('div');
+                col.className = 'col-md-6';
+
+                var card = document.createElement('div');
+                card.className = 'review-card';
+
+                var ratingEl = document.createElement('div');
+                ratingEl.className = 'review-rating';
+                ratingEl.innerHTML = Array.from({length: rating}).map(function(){ return '<i class="fas fa-star"></i>'; }).join('') +
+                    Array.from({length: 5-rating}).map(function(){ return '<i class="far fa-star" style="color:#ddd"></i>'; }).join('');
+
+                var authorEl = document.createElement('div');
+                authorEl.className = 'review-author';
+                authorEl.textContent = name;
+
+                var emailEl = document.createElement('div');
+                emailEl.className = 'review-email mb-2';
+                emailEl.textContent = email;
+
+                var textEl = document.createElement('div');
+                textEl.className = 'review-text';
+                textEl.textContent = text;
+
+                card.appendChild(ratingEl);
+                card.appendChild(authorEl);
+                card.appendChild(emailEl);
+                card.appendChild(textEl);
+
+                col.appendChild(card);
+
+                // If there was the 'no reviews' placeholder, remove it
+                var placeholder = reviewsList.querySelector('.text-muted');
+                if (placeholder) placeholder.remove();
+
+                // Prepend new review
+                reviewsList.insertBefore(col, reviewsList.firstChild);
+
+                // Reset form and stars
+                reviewForm.reset();
+                selectedRatingInput.value = 0;
+                if (starsContainer) setStars(0);
+                ratingText.textContent = 'Select Rating';
+
+                // Optional: show success message
+                alert('Thank you! Your review has been added (client-side only).');
             });
         }
 
-        // Initialize closed state on small screens
-        if (window.innerWidth < 992) {
-            setCollapsed(true);
-        }
+        // Hapus script terkait mini games karena sidebar dihapus
     });
 </script>
 @endsection
