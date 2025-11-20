@@ -10,17 +10,17 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root{
-            --mg-yellow: #FFD400; /* primary yellow */
-            --mg-black: #0b0b0b;  /* primary black */
-            --mg-white: #ffffff;  /* white */
+            --mg-yellow: #FFD400;
+            --mg-black: #0b0b0b;
+            --mg-white: #ffffff;
             --mg-muted: #6c6c6c;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Gradient dinamis untuk background */
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--mg-black);
-            margin-top: 120px;  /* Ruang untuk navbar fixed */
+            margin-top: 120px;
             position: relative;
         }
 
@@ -32,14 +32,16 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: transparent; /* Biarkan transparan agar gradient body terlihat */
+            background: transparent;
         }
 
-        /* Navbar */
+        /* Enhanced Navbar with Glass Effect */
         .navbar {
-            background: linear-gradient(135deg, var(--mg-yellow) 0%, #f7c600 100%) !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            padding: 0.5rem 2rem;
+            background: rgba(255, 212, 0, 0.95) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            padding: 0.75rem 2rem;
             border-bottom: 3px solid var(--mg-black);
             position: fixed;
             top: 0;
@@ -47,6 +49,12 @@
             right: 0;
             width: 100%;
             z-index: 1030;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .navbar::before {
@@ -56,7 +64,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px); /* Pattern garis diagonal halus */
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px);
             opacity: 0.5;
             pointer-events: none;
         }
@@ -66,15 +74,25 @@
             color: var(--mg-black) !important;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             margin-right: auto;
+            transition: transform 0.3s ease;
         }
 
-        .navbar-nav {
-            gap: 0.2rem;
+        .navbar-brand:hover {
+            transform: scale(1.05);
         }
 
-        /* GESIT Text Style */
+        .navbar-brand img {
+            transition: transform 0.5s ease, filter 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .navbar-brand:hover img {
+            transform: rotate(360deg);
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+        }
+
         .brand-text {
             font-family: 'Futura PT', 'Century Gothic', sans-serif;
             font-size: 2rem;
@@ -86,33 +104,177 @@
                 4px 4px 0px rgba(11, 11, 11, 0.2),
                 6px 6px 12px rgba(0, 0, 0, 0.15);
             transform: perspective(600px) rotateX(-5deg);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .brand-text {
+            text-shadow: 
+                3px 3px 0px rgba(11, 11, 11, 0.4),
+                6px 6px 0px rgba(11, 11, 11, 0.3),
+                9px 9px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-nav {
+            gap: 0.3rem;
         }
 
         .nav-link {
             color: var(--mg-black) !important;
             font-weight: 700;
             margin: 0 0.3rem;
-            transition: background-color 0.3s, color 0.3s, border-radius 0.3s, transform 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-size: 1.15rem;
             padding: 0.6rem 1.2rem !important;
-            border-radius: 25px;
-            position: relative; /* Untuk efek hover */
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--mg-black);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::before {
+            width: 80%;
         }
 
         .nav-link:hover {
             background: var(--mg-black) !important;
             color: var(--mg-yellow) !important;
-            border-radius: 25px;
-            transform: translateY(-2px); /* Efek angkat saat hover */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Shadow saat hover */
-        }
-        
-        .nav-link i {
-            font-size: 1.5rem;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        .navbar-nav .active {
-            color: var(--mg-black) !important;
+        .nav-link.active {
+            background: rgba(11, 11, 11, 0.1);
+            border-bottom: 3px solid var(--mg-black);
+        }
+
+        .language-toggle-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #language-toggle {
+            background: var(--mg-black);
+            border-radius: 50%;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #language-toggle::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255,212,0,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #language-toggle:hover::before {
+            opacity: 1;
+        }
+
+        #language-toggle:hover {
+            transform: scale(1.15) rotate(360deg);
+            box-shadow: 0 6px 20px rgba(255,212,0,0.5);
+        }
+
+        #lang-flag {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--mg-yellow);
+            transition: all 0.3s ease;
+        }
+
+        .admin-button-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--mg-black);
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .admin-button-wrapper:hover {
+            background: linear-gradient(135deg, var(--mg-black) 0%, #2c2c2c 100%);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .admin-text {
+            color: var(--mg-yellow);
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+
+        .admin-button-wrapper:hover .admin-text {
+            letter-spacing: 1px;
+        }
+
+        .admin-icon {
+            color: var(--mg-yellow);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .admin-button-wrapper:hover .admin-icon {
+            transform: rotate(360deg);
+        }
+
+        .navbar-toggler {
+            border: 2px solid var(--mg-black);
+            padding: 0.4rem 0.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler:hover {
+            background: var(--mg-black);
+            transform: scale(1.1);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(11, 11, 11, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .navbar-toggler:hover .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 212, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .lang-switching {
+            animation: rotateSwitch 0.5s ease;
+        }
+
+        @keyframes rotateSwitch {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         /* Buttons */
@@ -128,13 +290,11 @@
             background: transparent !important;
         }
 
-        /* Dark backgrounds used for sidebars/cards -> make them black */
         .bg-dark {
             background: var(--mg-black) !important;
             color: var(--mg-white) !important;
         }
 
-        /* Cards default to white with subtle border */
         .card {
             background: var(--mg-white) !important;
             border: 1px solid rgba(0,0,0,0.06);
@@ -145,11 +305,10 @@
 
         .text-muted { color: var(--mg-muted) !important; }
 
-        /* Responsif adjustments */
+        /* Responsive */
         @media (max-width: 992px) {
-            /* Tablet dan bawah */
             .navbar {
-                padding: 0.5rem 1rem;
+                padding: 0.6rem 1rem;
             }
 
             .navbar-brand {
@@ -180,7 +339,6 @@
         }
 
         @media (max-width: 768px) {
-            /* Mobile */
             .container-fluid.px-5 {
                 padding-left: 15px !important;
                 padding-right: 15px !important;
@@ -229,19 +387,28 @@
                 margin-top: 85px;
             }
 
-            /* Navbar toggler styling */
             .navbar-toggler {
                 padding: 0.25rem 0.5rem;
                 border: none;
             }
 
-            .navbar-toggler:focus {
-                box-shadow: none;
+            .navbar-nav {
+                align-items: stretch !important;
+            }
+
+            .language-toggle-wrapper,
+            .admin-button-wrapper {
+                width: 100%;
+                justify-content: center;
+                margin: 0.5rem 0;
+            }
+
+            .admin-text {
+                font-size: 0.9rem;
             }
         }
 
         @media (max-width: 576px) {
-            /* Extra small devices */
             .navbar {
                 padding: 0.4rem 0.5rem;
             }
@@ -279,32 +446,37 @@
         <div class="container-fluid px-4">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="{{ asset('images/logo-mg.png') }}" alt="Museum Geologi" style="height:90px;">
-                <span class="brand-text">Geologi Visit</span>
+                <span class="brand-text">Geology Visit</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="/#banner">News</a>
+                        <a class="nav-link" href="/#banner" data-section="banner" data-lang-key="nav_news">News</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#services">Services</a>
+                        <a class="nav-link" href="/#services" data-section="services" data-lang-key="nav_services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#events">Events</a>
+                        <a class="nav-link" href="/#events" data-section="events" data-lang-key="nav_events">Events</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#rating-review">Rating & Review</a>
+                        <a class="nav-link" href="/#rating-review" data-section="rating-review" data-lang-key="nav_rating">Rating & Review</a>
                     </li>
-                    <li class="nav-item ms-2">
-                        <a href="javascript:void(0)" id="language-toggle" class="nav-link p-0 border-0" title="Ganti Bahasa">
-                            <img id="lang-flag" src="{{ asset('images/flags/id.svg') }}" alt="ID" style="width: 38px; height: 38px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s;">
+                    <li class="nav-item ms-lg-3">
+                        <div class="language-toggle-wrapper">
+                            <a href="javascript:void(0)" id="language-toggle" class="p-0 border-0" title="Switch Language">
+                                <img id="lang-flag" src="https://flagcdn.com/w40/us.png" alt="EN">
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a href="/admin/login" class="admin-button-wrapper text-decoration-none">
+                            <span class="admin-text" data-lang-key="nav_admin">Admin</span>
+                            <i class="fas fa-user admin-icon"></i>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/login"><i class="fas fa-user"></i></a>
                     </li>
                 </ul>
             </div>
@@ -340,7 +512,7 @@
                         "color": "#6c6c6c"
                     },
                     "polygon": {
-                        "nb_sides": 6 // Hexagon for crystal-like shapes
+                        "nb_sides": 6
                     }
                 },
                 "opacity": {
@@ -366,7 +538,7 @@
                 },
                 "move": {
                     "enable": true,
-                    "speed": 3, // Slow movement for natural feel
+                    "speed": 3,
                     "direction": "none",
                     "out_mode": "out"
                 }
@@ -392,42 +564,147 @@
             "retina_detect": true
         });
     </script>
+
+    <!-- Enhanced Language Toggle & Navbar Scripts -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const langToggle = document.getElementById('language-toggle');
-        const langFlag = document.getElementById('lang-flag');
-        
-        // Cek bahasa yang tersimpan di localStorage
-        const savedLang = localStorage.getItem('language') || 'en'; // default English
-        
-        // Set awal sesuai yang tersimpan
-        setLanguage(savedLang);
-
-        // Event klik untuk toggle
-        langToggle.addEventListener('click', function () {
-            const newLang = (savedLang === 'en') ? 'id' : 'en';
-            localStorage.setItem('language', newLang);
-            setLanguage(newLang);
-            
-            // Refresh halaman agar translation Laravel di-load ulang (jika pakai @lang)
-            location.reload();
-        });
-
-        function setLanguage(lang) {
-            if (lang === 'id') {
-                langFlag.src = "{{ asset('images/id.svg') }}";
-                langFlag.alt = "ID";
-                document.documentElement.lang = 'id';
-                langToggle.title = "Switch to English";
-            } else {
-                langFlag.src = "{{ asset('images/en.svg') }}";
-                langFlag.alt = "EN";
-                document.documentElement.lang = 'en';
-                langToggle.title = "Ganti ke Bahasa Indonesia";
+        // Global translations object
+        window.translations = {
+            en: {
+                nav_news: 'News',
+                nav_services: 'Services',
+                nav_events: 'Events',
+                nav_rating: 'Rating & Review',
+                nav_admin: 'Admin'
+            },
+            id: {
+                nav_news: 'Berita',
+                nav_services: 'Layanan',
+                nav_events: 'Acara',
+                nav_rating: 'Rating & Ulasan',
+                nav_admin: 'Admin'
             }
-        }
-    });
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const langToggle = document.getElementById('language-toggle');
+            const langFlag = document.getElementById('lang-flag');
+            const navbar = document.querySelector('.navbar');
+            
+            // Get current language from localStorage or default to 'en'
+            let currentLang = localStorage.getItem('language') || 'en';
+            
+            // Set initial language
+            setLanguage(currentLang);
+
+            // Language toggle click event
+            langToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // Add animation class
+                langFlag.classList.add('lang-switching');
+                
+                // Toggle language
+                currentLang = (currentLang === 'en') ? 'id' : 'en';
+                localStorage.setItem('language', currentLang);
+                
+                // Wait for animation to complete
+                setTimeout(() => {
+                    setLanguage(currentLang);
+                    langFlag.classList.remove('lang-switching');
+                    
+                    // Dispatch custom event for other pages to listen
+                    window.dispatchEvent(new CustomEvent('languageChanged', { 
+                        detail: { language: currentLang } 
+                    }));
+                }, 250);
+            });
+
+            function setLanguage(lang) {
+                const trans = window.translations[lang];
+                
+                // Update flag
+                if (lang === 'id') {
+                    langFlag.src = "https://flagcdn.com/w40/id.png";
+                    langFlag.alt = "ID";
+                    langToggle.setAttribute('title', 'Switch to English');
+                } else {
+                    langFlag.src = "https://flagcdn.com/w40/us.png";
+                    langFlag.alt = "EN";
+                    langToggle.setAttribute('title', 'Ganti ke Bahasa Indonesia');
+                }
+                
+                // Update all elements with data-lang-key
+                document.querySelectorAll('[data-lang-key]').forEach(el => {
+                    const key = el.getAttribute('data-lang-key');
+                    if (trans[key]) {
+                        el.textContent = trans[key];
+                    }
+                });
+                
+                // Update HTML lang attribute
+                document.documentElement.lang = lang;
+            }
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Active link highlighting on scroll
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link[data-section]');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-section') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Smooth scroll for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    const targetId = href.replace(/^\//, '');
+                    const target = document.querySelector(targetId);
+                    
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // Close mobile menu after click
+                        const navbarCollapse = document.getElementById('navbarNav');
+                        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    }
+                });
+            });
+        });
     </script>
+
     @yield('scripts')
 </body>
 </html>
