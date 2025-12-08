@@ -16,11 +16,13 @@
             --mg-muted: #6c6c6c;
         }
 
+        html, body { height: 100%; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Gradient dinamis untuk background selaras dengan visitor */
             color: var(--mg-black);
             position: relative;
+            padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
         }
 
         /* Particle Background */
@@ -41,9 +43,7 @@
             border-radius: 8px;
         }
 
-        .card-body {
-            padding: 3rem !important;
-        }
+        .card-body { padding: 3rem !important; }
 
         .card-title {
             font-size: 1.8rem;
@@ -53,7 +53,7 @@
         /* Brand Text Style selaras dengan visitor */
         .brand-text {
             font-family: 'Futura PT', 'Century Gothic', sans-serif;
-            font-size: 3.5rem;
+            font-size: clamp(1.75rem, 5vw, 3.5rem);
             font-weight: 900;
             letter-spacing: 0.10em;
             color: var(--mg-black);
@@ -62,6 +62,10 @@
                 4px 4px 0px rgba(11, 11, 11, 0.2),
                 6px 6px 12px rgba(0, 0, 0, 0.15);
             transform: perspective(600px) rotateX(-5deg);
+        }
+
+        .brand-logo {
+            height: 140px;
         }
 
         /* Button Styling selaras dengan btn-service-yellow di visitor */
@@ -106,26 +110,34 @@
         }
 
         .subtitle-text {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
             font-weight: 500;
             letter-spacing: 0.05em;
         }
 
+        /* Layout wrapper for better mobile scroll behavior */
+        .login-wrapper { min-height: 100vh; }
+        @supports (height: 100dvh) {
+            .login-wrapper { min-height: 100dvh; }
+        }
+
         /* Responsif adjustments selaras dengan visitor */
         @media (max-width: 768px) {
-            .brand-text {
-                font-size: 2rem;
-            }
-
-            .card-body {
-                padding: 2rem !important;
-            }
+            .card-body { padding: 2rem !important; }
+            .btn-login { font-size: 1rem; padding: 0.65rem 1.5rem; border-radius: 22px; }
+            .form-control { font-size: 1rem; padding: 0.7rem 0.9rem; }
+            .form-label { font-size: 1rem; }
+            .brand-logo { height: 100px; }
         }
 
         @media (max-width: 576px) {
-            .brand-text {
-                font-size: 1.5rem;
-            }
+            body { padding-bottom: 2.5rem; }
+            .card-body { padding: 1.25rem !important; }
+            .brand-logo { height: 80px; }
+            .btn-login { font-size: 0.95rem; padding: 0.6rem 1.2rem; border-radius: 20px; }
+            .form-control { font-size: 0.95rem; padding: 0.6rem 0.85rem; }
+            .form-label { font-size: 0.95rem; }
+            .container { padding-left: 1rem; padding-right: 1rem; }
         }
     </style>
 </head>
@@ -134,15 +146,15 @@
     <div id="particles-js"></div>
 
     <div class="container">
-        <div class="row justify-content-center min-vh-100 align-items-center">
-            <div class="col-md-6 col-lg-4">
+        <div class="row justify-content-center login-wrapper align-items-start align-items-md-center py-4 py-md-0">
+            <div class="col-12 col-sm-10 col-md-7 col-lg-4">
                 <div class="text-center mb-4">
-                    <img src="{{ asset('images/logo-mg.png') }}" alt="Museum Geologi" style="height: 140px; margin-bottom: 1.5rem;">
+                    <img src="{{ asset('images/logo-mg.png') }}" alt="Museum Geologi" class="brand-logo" style="margin-bottom: 1.5rem;">
                     <h2 class="brand-text">GESIT</h2>
                     <p class="text-muted subtitle-text">Museum Geologi Bandung</p>
                 </div>
                 <div class="card shadow">
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         <h4 class="card-title mb-4 text-center">Login Admin</h4>
                         
                         @if($errors->any())
