@@ -6,26 +6,27 @@
 <div class="container-fluid dashboard-content">
     <div class="row mb-4">
         <div class="col-12">
-            <h1 class="brand-text mb-3">
-                <i class="fas fa-chart-line me-3"></i>Dashboard Analytics
+            <h1 class="brand-text dashboard-title-outline mb-3">
+                <i class="bi bi-graph-up-arrow me-3"></i>Dashboard Analytics
             </h1>
-            <p class="subtitle-text">Sistem Analitik & Forecasting Museum Geologi Bandung</p>
+            <p class="subtitle-text"><strong>Sistem Analitik & Forecasting Museum Geologi Bandung</strong></p>
         </div>
     </div>
    
+    <!-- SECTION 1: DATA UMUM (General Statistics) -->
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="card-body text-center">
                     <div class="icon-wrapper mb-3">
-                        <i class="fas fa-calendar-day"></i>
+                        <i class="bi bi-calendar-day"></i>
                     </div>
                     <h2 class="stat-number">{{ number_format($kunjungan_hari_ini) }}</h2>
                     <p class="stat-label">Kunjungan Hari Ini</p>
                     <div class="stat-date">{{ now()->format('d F Y') }}</div>
                     <div class="trend-indicator positive">
-                        <i class="fas fa-arrow-up"></i> <span id="todayTrend">+0%</span>
+                        <i class="bi bi-arrow-up"></i> <span id="todayTrend">+0%</span>
                     </div>
                 </div>
             </div>
@@ -35,13 +36,13 @@
             <div class="stat-card stat-card-pelajar">
                 <div class="card-body text-center">
                     <div class="icon-wrapper mb-3">
-                        <i class="fas fa-user-graduate"></i>
+                        <i class="bi bi-mortarboard-fill"></i>
                     </div>
                     <h2 class="stat-number">{{ number_format($total_per_kategori->pelajar ?? 0) }}</h2>
                     <p class="stat-label">Total Pelajar</p>
                     <div class="stat-date">Semua Jenjang</div>
                     <div class="trend-indicator positive">
-                        <i class="fas fa-arrow-up"></i> <span id="studentTrend">+0%</span>
+                        <i class="bi bi-arrow-up"></i> <span id="studentTrend">+0%</span>
                     </div>
                 </div>
             </div>
@@ -51,13 +52,13 @@
             <div class="stat-card stat-card-umum">
                 <div class="card-body text-center">
                     <div class="icon-wrapper mb-3">
-                        <i class="fas fa-users"></i>
+                        <i class="bi bi-people-fill"></i>
                     </div>
                     <h2 class="stat-number">{{ number_format($total_per_kategori->umum ?? 0) }}</h2>
                     <p class="stat-label">Total Umum</p>
                     <div class="stat-date">Pengunjung Dewasa</div>
                     <div class="trend-indicator positive">
-                        <i class="fas fa-arrow-up"></i> <span id="publicTrend">+0%</span>
+                        <i class="bi bi-arrow-up"></i> <span id="publicTrend">+0%</span>
                     </div>
                 </div>
             </div>
@@ -67,118 +68,31 @@
             <div class="stat-card stat-card-asing">
                 <div class="card-body text-center">
                     <div class="icon-wrapper mb-3">
-                        <i class="fas fa-globe-asia"></i>
+                        <i class="bi bi-globe-americas"></i>
                     </div>
                     <h2 class="stat-number">{{ number_format($total_per_kategori->asing ?? 0) }}</h2>
                     <p class="stat-label">Wisatawan Asing</p>
                     <div class="stat-date">Mancanegara</div>
                     <div class="trend-indicator positive">
-                        <i class="fas fa-arrow-up"></i> <span id="foreignTrend">+0%</span>
+                        <i class="bi bi-arrow-up"></i> <span id="foreignTrend">+0%</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Advanced Forecasting Section -->
-    <div class="row g-4 mb-4">
-        <div class="col-xl-8">
-            <div class="detail-card">
-                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div>
-                        <i class="fas fa-chart-area me-2"></i>
-                        Tren & Forecasting Kunjungan
-                    </div>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-warning active" onclick="changeForecastPeriod(7)">7 Hari</button>
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="changeForecastPeriod(14)">14 Hari</button>
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="changeForecastPeriod(30)">30 Hari</button>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-success" onclick="exportForecastXlsx()" title="Export Prediksi XLSX">
-                            <i class="fas fa-file-excel me-1"></i>Export XLSX
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <canvas id="forecastChart" height="80"></canvas>
-                    <div class="forecast-info mt-3">
-                        <div class="row text-center">
-                            <div class="col-md-4">
-                                <div class="forecast-metric">
-                                    <i class="fas fa-chart-line"></i>
-                                    <h5 id="predictedAvg">0</h5>
-                                    <small>Rata-rata Prediksi</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="forecast-metric">
-                                    <i class="fas fa-arrow-trend-up"></i>
-                                    <h5 id="growthRate">0%</h5>
-                                    <small>Pertumbuhan</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="forecast-metric">
-                                    <i class="fas fa-percentage"></i>
-                                    <h5 id="accuracy">0%</h5>
-                                    <small>Akurasi Model</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="fas fa-robot me-2"></i>
-                    AI Insights & Rekomendasi
-                </div>
-                <div class="card-body">
-                    <div class="insight-item">
-                        <div class="insight-icon success">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div class="insight-content">
-                            <h6>Peak Day Prediction</h6>
-                            <p id="peakDayInsight">Memuat prediksi...</p>
-                        </div>
-                    </div>
-                    <div class="insight-item">
-                        <div class="insight-icon warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="insight-content">
-                            <h6>Capacity Alert</h6>
-                            <p id="capacityInsight">Memuat analisis...</p>
-                        </div>
-                    </div>
-                    <div class="insight-item">
-                        <div class="insight-icon info">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div class="insight-content">
-                            <h6>Seasonal Pattern</h6>
-                            <p id="seasonalInsight">Menganalisis pola...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Secondary Stats -->
     <div class="row g-4 mb-4">
         <div class="col-xl-4 col-md-6">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-chart-line me-2"></i>
+                    <i class="bi bi-bar-chart-line me-2"></i>
                     Rata-rata Harian
                 </div>
                 <div class="card-body">
                     <div class="stat-item-large">
                         <div class="stat-icon">
-                            <i class="fas fa-calculator"></i>
+                            <i class="bi bi-calculator"></i>
                         </div>
                         <div class="stat-content">
                             <h3 class="stat-value">{{ number_format($avg_daily, 1) }}</h3>
@@ -191,13 +105,13 @@
         <div class="col-xl-4 col-md-6">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-calendar-check me-2"></i>
+                    <i class="bi bi-calendar-check me-2"></i>
                     Bulan Ini
                 </div>
                 <div class="card-body">
                     <div class="stat-item-large">
                         <div class="stat-icon">
-                            <i class="fas fa-calendar"></i>
+                            <i class="bi bi-calendar3"></i>
                         </div>
                         <div class="stat-content">
                             <h3 class="stat-value">{{ number_format($kunjungan_bulan_ini ?? 0) }}</h3>
@@ -210,13 +124,13 @@
         <div class="col-xl-4 col-md-12">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-database me-2"></i>
+                    <i class="bi bi-database me-2"></i>
                     Total Keseluruhan
                 </div>
                 <div class="card-body">
                     <div class="stat-item-large">
                         <div class="stat-icon">
-                            <i class="fas fa-chart-pie"></i>
+                            <i class="bi bi-pie-chart"></i>
                         </div>
                         <div class="stat-content">
                             <h3 class="stat-value">{{ number_format($total_pengunjung ?? 0) }}</h3>
@@ -227,43 +141,21 @@
             </div>
         </div>
     </div>
-    <!-- Export Actions Row -->
+
+    <!-- SECTION 2: PENJUALAN TIKET PER BULAN -->
     <div class="row g-4 mb-4">
         <div class="col-12">
             <div class="detail-card">
-                <div class="card-header">
-                    <i class="fas fa-download me-2"></i>
-                    Export Data Tahunan
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-3 flex-wrap">
-                        <div class="d-flex align-items-center gap-2">
-                            <label for="exportYear" class="form-label mb-0 fw-bold">Pilih Tahun:</label>
-                            <select id="exportYear" class="form-select form-select-sm" style="max-width: 140px;"></select>
-                        </div>
-                        <button type="button" class="btn btn-success" onclick="exportYearlyXlsx()">
-                            <i class="fas fa-file-excel me-2"></i>Export Laporan Tahunan (XLSX)
-                        </button>
-                        <small class="text-muted ms-auto">Export data penjualan tiket per bulan dalam satu tahun</small>
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cash-coin me-2"></i>
+                        <span>Penjualan Tiket Per Bulan</span>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Monthly Sales (Per Bulan) -->
-    <div class="row g-4 mb-4">
-        <div class="col-12">
-            <div class="detail-card">
-                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div>
-                        <i class="fas fa-coins me-2"></i>
-                        Penjualan Tiket Per Bulan
-                    </div>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <select id="salesMonth" class="form-select form-select-sm" style="max-width: 160px;"></select>
-                        <select id="salesYear" class="form-select form-select-sm" style="max-width: 120px;"></select>
-                        <button type="button" class="btn btn-sm btn-success" onclick="exportMonthlyXlsx()" title="Export XLSX Bulanan">
-                            <i class="fas fa-file-excel me-1"></i>Export XLSX
+                    <div class="d-flex align-items-center gap-3">
+                        <select id="salesMonth" class="form-select" style="min-width: 150px; max-width: 180px;"></select>
+                        <select id="salesYear" class="form-select" style="min-width: 110px; max-width: 130px;"></select>
+                        <button type="button" class="btn btn-success" onclick="exportMonthlyXlsx()" style="border-radius: 0.5rem !important; white-space: nowrap;">
+                            <i class="bi bi-file-earmark-excel me-2"></i>Export XLSX
                         </button>
                     </div>
                 </div>
@@ -273,13 +165,72 @@
             </div>
         </div>
     </div>
-    <!-- Detailed Statistics -->
-    <div class="row g-4">
+
+    <!-- Export Data Tahunan -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="detail-card">
+                <div class="card-header">
+                    <i class="bi bi-download me-2"></i>
+                    Export Data Tahunan
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <label for="exportYear" class="form-label mb-0 fw-bold">Pilih Tahun:</label>
+                        </div>
+                        <div class="col-auto">
+                            <select id="exportYear" class="form-select" style="min-width: 140px;"></select>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-success" onclick="exportYearlyXlsx()">
+                                <i class="bi bi-file-earmark-excel me-2"></i>Export Laporan Tahunan (XLSX)
+                            </button>
+                        </div>
+                        <div class="col">
+                            <small class="text-muted">Export data penjualan tiket per bulan dalam satu tahun</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: DISTRIBUSI & ANALISIS TENGAH -->
+    <div class="row g-4 mb-4">
+        <!-- Distribusi Kategori Pengunjung -->
+        <div class="col-xl-8">
+            <div class="detail-card">
+                <div class="card-header">
+                    <i class="bi bi-pie-chart-fill me-2"></i>
+                    Distribusi Kategori Pengunjung
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Persentase Kategori -->
+        <div class="col-xl-4">
+            <div class="detail-card">
+                <div class="card-header">
+                    <i class="bi bi-pie-chart me-2"></i>
+                    Persentase Kategori
+                </div>
+                <div class="card-body">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Heatmap & Moving Average -->
+    <div class="row g-4 mb-4">
         <!-- Heatmap Kunjungan per Hari -->
         <div class="col-xl-6">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-fire me-2"></i>
+                    <i class="bi bi-bar-chart-fill me-2"></i>
                     Heatmap Kunjungan (Hari dalam Seminggu)
                 </div>
                 <div class="card-body">
@@ -291,7 +242,7 @@
         <div class="col-xl-6">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-wave-square me-2"></i>
+                    <i class="bi bi-graph-up me-2"></i>
                     Moving Average Trend (7 & 30 Hari)
                 </div>
                 <div class="card-body">
@@ -299,35 +250,15 @@
                 </div>
             </div>
         </div>
-        <!-- Chart Kategori Pengunjung -->
-        <div class="col-xl-8">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="fas fa-chart-pie me-2"></i>
-                    Distribusi Kategori Pengunjung
-                </div>
-                <div class="card-body">
-                    <canvas id="categoryChart" height="80"></canvas>
-                </div>
-            </div>
-        </div>
-        <!-- Pie Chart -->
-        <div class="col-xl-4">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="fas fa-chart-donut me-2"></i>
-                    Persentase Kategori
-                </div>
-                <div class="card-body">
-                    <canvas id="pieChart"></canvas>
-                </div>
-            </div>
-        </div>
+    </div>
+
+    <!-- Top Provinsi & Detail Pelajar -->
+    <div class="row g-4 mb-4">
         <!-- Top Provinsi -->
         <div class="col-xl-6">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-map-marked-alt me-2"></i>
+                    <i class="bi bi-geo-alt-fill me-2"></i>
                     Top 10 Provinsi
                 </div>
                 <div class="card-body">
@@ -340,7 +271,7 @@
         <div class="col-xl-6">
             <div class="detail-card">
                 <div class="card-header">
-                    <i class="fas fa-graduation-cap me-2"></i>
+                    <i class="bi bi-mortarboard-fill me-2"></i>
                     Detail Kategori Pelajar
                 </div>
                 <div class="card-body">
@@ -349,6 +280,96 @@
             </div>
         </div>
     </div>
+
+    <!-- SECTION 4: FORECASTING (Paling Akhir) -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-8">
+            <div class="detail-card">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-graph-up me-2"></i>
+                        <span>Tren & Forecasting Kunjungan</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-warning active" onclick="changeForecastPeriod(7)">7 Hari</button>
+                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="changeForecastPeriod(14)">14 Hari</button>
+                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="changeForecastPeriod(30)">30 Hari</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success" onclick="exportForecastXlsx()" title="Export Prediksi XLSX">
+                            <i class="bi bi-file-earmark-excel me-1"></i>Export XLSX
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="forecastChart" height="80"></canvas>
+                    <div class="forecast-info mt-3">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="forecast-metric">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    <h5 id="predictedAvg">0</h5>
+                                    <small>Rata-rata Prediksi</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="forecast-metric">
+                                    <i class="bi bi-arrow-up-right"></i>
+                                    <h5 id="growthRate">0%</h5>
+                                    <small>Pertumbuhan</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="forecast-metric">
+                                    <i class="bi bi-percent"></i>
+                                    <h5 id="accuracy">0%</h5>
+                                    <small>Akurasi Model</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="detail-card">
+                <div class="card-header">
+                    <i class="bi bi-cpu me-2"></i>
+                    AI Insights & Rekomendasi
+                </div>
+                <div class="card-body">
+                    <div class="insight-item">
+                        <div class="insight-icon success">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h6>Peak Day Prediction</h6>
+                            <p id="peakDayInsight">Memuat prediksi...</p>
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h6>Capacity Alert</h6>
+                            <p id="capacityInsight">Memuat analisis...</p>
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon info">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h6>Seasonal Pattern</h6>
+                            <p id="seasonalInsight">Menganalisis pola...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
 @section('styles')
@@ -376,17 +397,23 @@
     }
     /* Brand Text */
     .brand-text {
-        font-family: 'Futura PT', 'Century Gothic', sans-serif;
+        font-family: 'Montserrat', 'Futura PT', 'Century Gothic', sans-serif;
         font-size: 2.5rem;
-        font-weight: 900;
-        letter-spacing: 0.10em;
+        font-weight: 800;
+        letter-spacing: 0.08em;
         color: var(--mg-black);
-        text-shadow:
-            2px 2px 0px rgba(255, 212, 0, 0.3),
-            4px 4px 0px rgba(255, 212, 0, 0.2),
-            6px 6px 12px rgba(0, 0, 0, 0.15);
-        transform: perspective(600px) rotateX(-5deg);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         animation: fadeInDown 0.8s ease-out;
+    }
+    
+    .dashboard-title-outline {
+        -webkit-text-stroke: 3px var(--mg-yellow);
+        text-stroke: 3px var(--mg-yellow);
+        paint-order: stroke fill;
+    }
+    
+    .brand-text i {
+        color: var(--mg-yellow);
     }
     .subtitle-text {
         color: var(--mg-muted);
@@ -629,6 +656,22 @@
         background: var(--mg-yellow);
         color: var(--mg-black);
         border-color: var(--mg-yellow);
+    }
+    
+    /* Export Button Styling */
+    .btn-success {
+        border-radius: 8px !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+    }
+    
+    .card-header .btn-success {
+        border-radius: 8px !important;
     }
     /* Stat Item Large */
     .stat-item-large {
@@ -1780,10 +1823,20 @@ function initMonthlySalesControls() {
     yearSelect.addEventListener('change', loadMonthlySales);
 }
 
+let isLoadingMonthlySales = false;
+
 async function loadMonthlySales() {
     const month = document.getElementById('salesMonth')?.value;
     const year = document.getElementById('salesYear')?.value;
     if (!month || !year) return;
+    
+    // Prevent multiple simultaneous calls
+    if (isLoadingMonthlySales) {
+        console.log('Already loading monthly sales, skipping...');
+        return;
+    }
+
+    isLoadingMonthlySales = true;
 
     try {
         const resp = await fetch(`${monthlySalesUrl}?month=${month}&year=${year}`);
@@ -1791,6 +1844,8 @@ async function loadMonthlySales() {
         renderMonthlySalesChart(data);
     } catch (e) {
         console.error('Gagal memuat data penjualan bulanan', e);
+    } finally {
+        isLoadingMonthlySales = false;
     }
 }
 
@@ -2149,7 +2204,15 @@ function measureChartPerformance() {
 // ============================================================================
 // INITIALIZE ALL CHARTS ON PAGE LOAD
 // ============================================================================
+let dashboardInitialized = false;
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Prevent multiple initialization
+    if (dashboardInitialized) {
+        console.log('Dashboard already initialized, skipping...');
+        return;
+    }
+    
     console.log('Initializing Advanced Analytics Dashboard...');
    
     // Create all charts
@@ -2165,27 +2228,20 @@ document.addEventListener('DOMContentLoaded', function() {
     initYearlyExportSelector();
     
     // Update metrics
-    updateTrendIndicators();    // Check for anomalies
+    updateTrendIndicators();
+    
+    // Check for anomalies
     checkForAnomalies();
    
-    // Optional: Start real-time updates
-    // startRealTimeUpdates();
+    // Mark as initialized
+    dashboardInitialized = true;
    
     console.log('Dashboard initialized successfully!');
 });
 // ============================================================================
-// WINDOW RESIZE HANDLER
+// WINDOW RESIZE HANDLER - Disabled to prevent continuous chart reloading
 // ============================================================================
-let resizeTimeout;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-        // Recreate charts on resize for better responsiveness
-        if (forecastChart) {
-            createForecastChart(currentForecastPeriod);
-        }
-    }, 250);
-});
+// Chart.js handles responsive resize automatically, no need for manual recreation
 // ============================================================================
 // EXPORT GLOBAL FUNCTIONS (if needed)
 // ============================================================================

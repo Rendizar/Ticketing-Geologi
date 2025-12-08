@@ -306,7 +306,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-ticket-yellow btn-lg w-100 mt-4 shadow-lg" style="border-radius: 50px; padding: 1rem 2rem; font-weight: 800; letter-spacing: 1px;">
-                        SUBMIT TIKET SEKARANG
+                        SUBMIT TIKET
                     </button>
                 </form>
             </div>

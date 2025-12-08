@@ -8,24 +8,22 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-3" 
-                style="color: #FFC107; text-shadow: 0 10px 30px rgba(0,0,0,0.8); letter-spacing: 4px;">
-                🪨 Rock & Fossil Quiz
+            <h1 class="display-2 fw-bold mb-3 quiz-title quiz-title-outline">
+                Rock & Fossil Quiz
             </h1>
-            <p class="fs-3 opacity-95" 
-               style="color: #FFC107; text-shadow: 0 4px 12px rgba(0,0,0,0.7);">
+            <p class="fs-3 text-dark opacity-95 quiz-subtitle">
                 Test your knowledge about rocks and fossils!
             </p>
             
             <!-- Score & Progress -->
-            <div class="d-flex justify-content-center gap-4 mt-4">
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2">
+            <div class="d-flex flex-wrap justify-content-center gap-3 mt-4 px-3">
+                <div class="badge bg-dark border border-warning fs-5 px-4 py-2" role="status" aria-live="polite">
                     <i class="fas fa-star text-warning me-2"></i>
-                    Score: <span id="score" class="text-warning fw-bold">0</span>/<span id="total" class="text-warning">10</span>
+                    Score: <span id="score" class="text-warning fw-bold" aria-label="Current score">0</span>/<span id="total" class="text-warning">10</span>
                 </div>
-                <div class="badge bg-dark border border-info fs-5 px-4 py-2">
-                    <i class="fas fa-question-circle text-info me-2"></i>
-                    Question: <span id="currentQ" class="text-info fw-bold">1</span>/<span id="totalQ" class="text-info">10</span>
+                <div class="badge bg-dark border border-warning fs-5 px-4 py-2" role="status" aria-live="polite">
+                    <i class="fas fa-question-circle text-warning me-2"></i>
+                    Question: <span id="currentQ" class="text-warning fw-bold" aria-label="Current question number">1</span>/<span id="totalQ" class="text-warning">10</span>
                 </div>
             </div>
         </div>
@@ -33,28 +31,28 @@
         <!-- Card Game Utama -->
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10 col-xl-8">
-                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden"
-                     style="border: 5px solid #FFD400; backdrop-filter: blur(18px);">
+                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden quiz-card">
                     <div class="card-body p-4 p-xl-5">
 
                         <div id="quiz">
                             <!-- Question -->
-                            <div class="bg-black bg-opacity-50 p-4 rounded-3 border border-warning border-3 mb-4">
-                                <h2 class="text-center mb-0 fs-3 fs-md-2 fw-bold" id="question" style="color: #FFC107;"></h2>
+                            <div class="p-4 rounded-3 border-dark border-3 mb-4 quiz-question-box">
+                                <h2 class="text-center mb-0 fs-3 fs-md-2 fw-bold quiz-question" id="question" role="heading" aria-level="2"></h2>
                             </div>
 
                             <!-- Options -->
-                            <div class="row g-3 justify-content-center mb-4" id="options"></div>
+                            <div class="row g-3 justify-content-center mb-4" id="options" role="group" aria-label="Answer options"></div>
 
                             <!-- Feedback -->
-                            <div id="feedback" class="text-center mb-4 fs-5"></div>
+                            <div id="feedback" class="text-center mb-4 fs-5" role="status" aria-live="assertive"></div>
 
                             <!-- Next Button -->
                             <div class="text-center">
                                 <button onclick="nextQuestion()" 
-                                        class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg hover-lift" 
+                                        class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg hover-lift quiz-next-btn" 
                                         id="nextBtn" 
-                                        style="display:none; border-radius:50px;">
+                                        style="display:none;"
+                                        aria-label="Go to next question">
                                     <i class="fas fa-arrow-right me-2"></i>Next Question
                                 </button>
                             </div>
@@ -78,6 +76,53 @@
 
 @section('styles')
 <style>
+    /* Theme Variables */
+    :root {
+        --quiz-yellow: #FFC107;
+        --quiz-dark: #1a1a1a;
+        --quiz-border: #FFD400;
+    }
+
+    /* Title Styles */
+    .quiz-title {
+        text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        letter-spacing: 4px;
+    }
+
+    .quiz-title-outline {
+        color: var(--mg-black);
+        -webkit-text-stroke: 3px var(--quiz-border);
+        text-stroke: 3px var(--quiz-border);
+        paint-order: stroke fill;
+    }
+
+    .quiz-subtitle {
+        text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    }
+
+    /* Quiz Card */
+    .quiz-card {
+        border: 5px solid var(--quiz-border) !important;
+        backdrop-filter: blur(18px);
+    }
+
+    /* Question Box */
+    .quiz-question-box {
+        background: var(--quiz-border);
+        border: 3px solid var(--mg-black) !important;
+    }
+
+    /* Question Text */
+    .quiz-question {
+        color: var(--mg-black);
+        font-weight: 700;
+    }
+
+    /* Next Button */
+    .quiz-next-btn {
+        border-radius: 50px;
+    }
+
     /* Hover Lift Effect */
     .hover-lift {
         transition: all 0.4s ease;
@@ -107,9 +152,11 @@
     }
 
     .option-btn:hover:not(:disabled) {
-        background: rgba(255,212,0,0.2);
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(255,212,0,0.3);
+        background: var(--quiz-border);
+        color: var(--mg-black);
+        border-color: var(--mg-black) !important;
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(255,212,0,0.5);
     }
 
     .option-btn:disabled {
@@ -156,18 +203,83 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+// Game Configuration
+const QUIZ_CONFIG = {
+    CONFETTI_COLORS: ['#FFD400', '#FFC107', '#FFB300'],
+    SWAL_THEME: {
+        background: '#1a1a1a',
+        color: '#fff',
+        confirmButtonColor: '#FFD400'
+    },
+    SCORE_THRESHOLDS: {
+        EXCELLENT: 80,
+        GOOD: 60,
+        FAIR: 40
+    }
+};
+
 // Quiz Data - 10 Questions
 const questions = [
-    { q: "What type of rock is formed from cooled lava or magma?", options: ["Sedimentary", "Igneous", "Metamorphic"], a: 1 },
-    { q: "Which mineral is the hardest natural substance (hardness 10 on Mohs scale)?", options: ["Quartz", "Diamond", "Talc"], a: 1 },
-    { q: "A trilobite is a famous example of a...", options: ["Dinosaur", "Fossil", "Volcano"], a: 1 },
-    { q: "Which rock type is formed by heat and pressure?", options: ["Metamorphic", "Sedimentary", "Igneous"], a: 0 },
-    { q: "Limestone is classified as which type of rock?", options: ["Igneous", "Sedimentary", "Metamorphic"], a: 1 },
-    { q: "What is the study of fossils called?", options: ["Geology", "Paleontology", "Archaeology"], a: 1 },
-    { q: "Which rock is formed from layers of sediment?", options: ["Granite", "Marble", "Sandstone"], a: 2 },
-    { q: "Obsidian is an example of which rock type?", options: ["Igneous", "Sedimentary", "Metamorphic"], a: 0 },
-    { q: "Which era is known as the 'Age of Dinosaurs'?", options: ["Paleozoic", "Mesozoic", "Cenozoic"], a: 1 },
-    { q: "What mineral is commonly found in granite?", options: ["Quartz", "Calcite", "Gypsum"], a: 0 }
+    { 
+        q: "What type of rock is formed from cooled lava or magma?", 
+        options: ["Sedimentary", "Igneous", "Metamorphic"], 
+        a: 1,
+        category: "Rock Types"
+    },
+    { 
+        q: "Which mineral is the hardest natural substance (hardness 10 on Mohs scale)?", 
+        options: ["Quartz", "Diamond", "Talc"], 
+        a: 1,
+        category: "Minerals"
+    },
+    { 
+        q: "A trilobite is a famous example of a...", 
+        options: ["Dinosaur", "Fossil", "Volcano"], 
+        a: 1,
+        category: "Fossils"
+    },
+    { 
+        q: "Which rock type is formed by heat and pressure?", 
+        options: ["Metamorphic", "Sedimentary", "Igneous"], 
+        a: 0,
+        category: "Rock Types"
+    },
+    { 
+        q: "Limestone is classified as which type of rock?", 
+        options: ["Igneous", "Sedimentary", "Metamorphic"], 
+        a: 1,
+        category: "Rock Types"
+    },
+    { 
+        q: "What is the study of fossils called?", 
+        options: ["Geology", "Paleontology", "Archaeology"], 
+        a: 1,
+        category: "Science"
+    },
+    { 
+        q: "Which rock is formed from layers of sediment?", 
+        options: ["Granite", "Marble", "Sandstone"], 
+        a: 2,
+        category: "Rock Types"
+    },
+    { 
+        q: "Obsidian is an example of which rock type?", 
+        options: ["Igneous", "Sedimentary", "Metamorphic"], 
+        a: 0,
+        category: "Rock Types"
+    },
+    { 
+        q: "Which era is known as the 'Age of Dinosaurs'?", 
+        options: ["Paleozoic", "Mesozoic", "Cenozoic"], 
+        a: 1,
+        category: "Geology History"
+    },
+    { 
+        q: "What mineral is commonly found in granite?", 
+        options: ["Quartz", "Calcite", "Gypsum"], 
+        a: 0,
+        category: "Minerals"
+    }
 ];
 
 let score = 0;
@@ -176,39 +288,69 @@ let answered = false;
 
 // Initialize Quiz
 function initQuiz() {
-    score = 0;
-    currentQuestion = 0;
-    answered = false;
-    document.getElementById('score').textContent = score;
-    document.getElementById('total').textContent = questions.length;
-    document.getElementById('totalQ').textContent = questions.length;
-    showQuestion();
+    try {
+        score = 0;
+        currentQuestion = 0;
+        answered = false;
+        
+        const scoreEl = document.getElementById('score');
+        const totalEl = document.getElementById('total');
+        const totalQEl = document.getElementById('totalQ');
+        
+        if (!scoreEl || !totalEl || !totalQEl) {
+            throw new Error('Required elements not found');
+        }
+        
+        scoreEl.textContent = score;
+        totalEl.textContent = questions.length;
+        totalQEl.textContent = questions.length;
+        
+        showQuestion();
+    } catch (error) {
+        console.error('Failed to initialize quiz:', error);
+        alert('Failed to load quiz. Please refresh the page.');
+    }
 }
 
 // Show Current Question
 function showQuestion() {
-    answered = false;
-    const q = questions[currentQuestion];
-    document.getElementById('question').textContent = q.q;
-    document.getElementById('currentQ').textContent = currentQuestion + 1;
-    document.getElementById('nextBtn').style.display = 'none';
-    document.getElementById('feedback').innerHTML = '';
-    
-    const opts = document.getElementById('options');
-    opts.innerHTML = '';
-    
-    q.options.forEach((opt, i) => {
-        const col = document.createElement('div');
-        col.className = 'col-12 col-md-6';
+    try {
+        answered = false;
+        const q = questions[currentQuestion];
         
-        const btn = document.createElement('button');
-        btn.className = 'option-btn w-100';
-        btn.textContent = opt;
-        btn.onclick = () => checkAnswer(i, btn);
+        const questionEl = document.getElementById('question');
+        const currentQEl = document.getElementById('currentQ');
+        const nextBtn = document.getElementById('nextBtn');
+        const feedback = document.getElementById('feedback');
+        const opts = document.getElementById('options');
         
-        col.appendChild(btn);
-        opts.appendChild(col);
-    });
+        if (!questionEl || !currentQEl || !nextBtn || !feedback || !opts) {
+            throw new Error('Required elements not found');
+        }
+        
+        questionEl.textContent = q.q;
+        currentQEl.textContent = currentQuestion + 1;
+        nextBtn.style.display = 'none';
+        feedback.innerHTML = '';
+        opts.innerHTML = '';
+        
+        q.options.forEach((opt, i) => {
+            const col = document.createElement('div');
+            col.className = 'col-12 col-md-6';
+            
+            const btn = document.createElement('button');
+            btn.className = 'option-btn w-100';
+            btn.textContent = opt;
+            btn.setAttribute('aria-label', `Option ${i + 1}: ${opt}`);
+            btn.onclick = () => checkAnswer(i, btn);
+            
+            col.appendChild(btn);
+            opts.appendChild(col);
+        });
+    } catch (error) {
+        console.error('Failed to show question:', error);
+        alert('Failed to load question. Please refresh the page.');
+    }
 }
 
 // Check Answer
@@ -216,13 +358,20 @@ function checkAnswer(selected, btn) {
     if (answered) return;
     answered = true;
     
-    const correct = questions[currentQuestion].a;
-    const feedback = document.getElementById('feedback');
-    
-    // Disable all buttons
-    document.querySelectorAll('.option-btn').forEach(b => {
-        b.disabled = true;
-    });
+    try {
+        const correct = questions[currentQuestion].a;
+        const feedback = document.getElementById('feedback');
+        const scoreEl = document.getElementById('score');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        if (!feedback || !scoreEl || !nextBtn) {
+            throw new Error('Required elements not found');
+        }
+        
+        // Disable all buttons
+        document.querySelectorAll('.option-btn').forEach(b => {
+            b.disabled = true;
+        });
     
     if (selected === correct) {
         score++;
@@ -232,12 +381,14 @@ function checkAnswer(selected, btn) {
         feedback.innerHTML = '<p class="text-success fw-bold mb-0"><i class="fas fa-check-circle me-2"></i>Correct! Great job!</p>';
         
         // Confetti effect
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#FFD400', '#FFC107', '#FFB300']
-        });
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: QUIZ_CONFIG.CONFETTI_COLORS
+            });
+        }
     } else {
         btn.classList.add('wrong');
         
@@ -248,7 +399,11 @@ function checkAnswer(selected, btn) {
         feedback.innerHTML = '<p class="text-danger fw-bold mb-0"><i class="fas fa-times-circle me-2"></i>Wrong! The correct answer is highlighted in green.</p>';
     }
     
-    document.getElementById('nextBtn').style.display = 'inline-block';
+    nextBtn.style.display = 'inline-block';
+    } catch (error) {
+        console.error('Error checking answer:', error);
+        answered = false;
+    }
 }
 
 // Next Question
@@ -270,15 +425,15 @@ function showResults() {
     let title = 'Excellent!';
     let message = '';
     
-    if (percentage >= 80) {
+    if (percentage >= QUIZ_CONFIG.SCORE_THRESHOLDS.EXCELLENT) {
         icon = 'success';
         title = '🏆 Outstanding!';
         message = 'You have excellent knowledge of rocks and fossils!';
-    } else if (percentage >= 60) {
+    } else if (percentage >= QUIZ_CONFIG.SCORE_THRESHOLDS.GOOD) {
         icon = 'info';
         title = '👍 Good Job!';
         message = 'You have a solid understanding of geology!';
-    } else if (percentage >= 40) {
+    } else if (percentage >= QUIZ_CONFIG.SCORE_THRESHOLDS.FAIR) {
         icon = 'warning';
         title = '📚 Not Bad!';
         message = 'Keep learning about rocks and fossils!';
@@ -298,10 +453,8 @@ function showResults() {
             </div>
         `,
         icon: icon,
-        background: '#1a1a1a',
-        color: '#fff',
+        ...QUIZ_CONFIG.SWAL_THEME,
         confirmButtonText: '<i class="fas fa-redo me-2"></i>Play Again',
-        confirmButtonColor: '#FFD400',
         showCancelButton: true,
         cancelButtonText: '<i class="fas fa-arrow-left me-2"></i>Back to Games',
         cancelButtonColor: '#6c757d'
@@ -315,6 +468,19 @@ function showResults() {
 }
 
 // Initialize quiz on page load
-initQuiz();
+try {
+    if (questions.length === 0) {
+        throw new Error('No questions available');
+    }
+    initQuiz();
+} catch (error) {
+    console.error('Failed to start quiz:', error);
+    Swal.fire({
+        title: 'Error!',
+        text: 'Failed to load the quiz. Please refresh the page.',
+        icon: 'error',
+        ...QUIZ_CONFIG.SWAL_THEME
+    });
+}
 </script>
 @endsection

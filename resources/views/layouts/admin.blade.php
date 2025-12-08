@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Admin GESIT</title>
     
+    <!-- Google Fonts - Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -46,15 +53,29 @@
         .sidebar-header {
             padding: 2rem 1.5rem;
             background: linear-gradient(135deg, var(--mg-yellow) 0%, #FFB300 100%);
-            border-bottom: 3px solid var(--mg-black);
+            border-bottom: 4px solid var(--mg-black);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px);
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         .sidebar-brand {
-            font-family: 'Futura PT', 'Century Gothic', sans-serif;
+            font-family: 'Montserrat', 'Futura PT', 'Century Gothic', sans-serif;
             font-size: 2rem;
-            font-weight: 900;
-            letter-spacing: 0.1em;
+            font-weight: 800;
+            letter-spacing: 0.12em;
             color: var(--mg-black);
             text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
             margin: 0;
@@ -128,9 +149,10 @@
 
         /* Navbar */
         .top-navbar {
-            background: var(--mg-white);
-            border-bottom: 3px solid var(--mg-yellow);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 212, 0, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid var(--mg-black);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             padding: 1rem 1.5rem;
             display: flex;
             align-items: center;
@@ -138,6 +160,13 @@
             position: sticky;
             top: 0;
             z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        .top-navbar.scrolled {
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 212, 0, 1);
         }
 
         .navbar-toggle {
@@ -158,20 +187,36 @@
         }
 
         .navbar-title {
+            font-family: 'Futura PT', 'Century Gothic', 'Montserrat', sans-serif;
             font-size: 1.3rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--mg-black);
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 0px rgba(11, 11, 11, 0.15);
         }
 
         .navbar-user {
             display: flex;
             align-items: center;
             gap: 1rem;
+            background: var(--mg-black);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-user:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-user span {
+            color: var(--mg-yellow);
         }
 
         .user-avatar {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--mg-yellow);
             display: flex;
@@ -179,12 +224,19 @@
             justify-content: center;
             font-weight: 900;
             color: var(--mg-black);
-            border: 3px solid var(--mg-black);
+            border: 3px solid var(--mg-yellow);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-user:hover .user-avatar {
+            transform: rotate(360deg);
         }
 
         /* Content Area */
         .content-wrapper {
             padding: 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: calc(100vh - 80px);
         }
 
         /* Mobile Responsive */
@@ -319,6 +371,21 @@
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('mainContent');
         const sidebarToggle = document.getElementById('sidebarToggle');
+        const navbar = document.querySelector('.top-navbar');
+
+        // Navbar scroll effect
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
 
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');

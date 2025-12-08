@@ -20,7 +20,7 @@
                         </h2>
                         <p class="lead fs-4 mb-5 mx-auto animate__animated animate__fadeInUp" style="max-width: 800px; animation-delay: 0.6s;" data-lang-key="hero_description">
                             Explore the Geology Museum of Bandung with ease.<br>
-                            Book tickets, attend events, and enjoy the ultimate virtual tour experience.
+                            Book tickets, attend events, and enjoy the ultimate experience.
                         </p>
                         <a href="#banner" class="btn btn-lg btn-service-yellow fw-bold px-5 py-3 animate__animated animate__fadeInUp" style="animation-delay: 0.8s;" data-lang-key="hero_button">
                             Get Started
@@ -46,10 +46,10 @@
                                 <img src="{{ asset('images/banner1.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 1" style="object-fit: cover;">
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ asset('images/banner2.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 2" style="object-fit: cover;">
+                                <img src="{{ asset('images/banner1.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 2" style="object-fit: cover;">
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ asset('images/banner3.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 3" style="object-fit: cover;">
+                                <img src="{{ asset('images/banner1.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 3" style="object-fit: cover;">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
@@ -119,7 +119,7 @@
                                 <img src="https://via.placeholder.com/600x400?text=Geology+Workshop+2023" class="card-img-top" alt="Geology Workshop 2023" style="height: 250px; object-fit: cover;">
                                 <div class="card-body d-flex flex-column p-4">
                                     <h5 class="card-title fw-bold" data-lang-key="event1_title">Geology Workshop 2023</h5>
-                                    <p class="card-text flex-grow-1 text-muted" data-lang-key="event1_desc">Join our interactive workshop on modern geology techniques.</p>
+                                    <p class="card-text grow text-muted" data-lang-key="event1_desc">Join our interactive workshop on modern geology techniques.</p>
                                     <div class="event-details mt-3 text-muted">
                                         <div class="d-flex align-items-center mb-2">
                                             <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
@@ -143,7 +143,7 @@
                                 <img src="https://via.placeholder.com/600x400?text=Fossil+Exhibition" class="card-img-top" alt="Fossil Exhibition" style="height: 250px; object-fit: cover;">
                                 <div class="card-body d-flex flex-column p-4">
                                     <h5 class="card-title fw-bold" data-lang-key="event2_title">Fossil Exhibition</h5>
-                                    <p class="card-text flex-grow-1 text-muted" data-lang-key="event2_desc">Explore ancient fossils from around the world, including rare dinosaur specimens.</p>
+                                    <p class="card-text grow text-muted" data-lang-key="event2_desc">Explore ancient fossils from around the world, including rare dinosaur specimens.</p>
                                     <div class="event-details mt-3 text-muted">
                                         <div class="d-flex align-items-center mb-2">
                                             <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
@@ -167,7 +167,7 @@
                                 <img src="https://via.placeholder.com/600x400?text=Earthquake+Simulation" class="card-img-top" alt="Earthquake Simulation Tour" style="height: 250px; object-fit: cover;">
                                 <div class="card-body d-flex flex-column p-4">
                                     <h5 class="card-title fw-bold" data-lang-key="event3_title">Earthquake Simulation Tour</h5>
-                                    <p class="card-text flex-grow-1 text-muted" data-lang-key="event3_desc">Experience a realistic earthquake simulation and learn essential safety measures.</p>
+                                    <p class="card-text grow text-muted" data-lang-key="event3_desc">Experience a realistic earthquake simulation and learn essential safety measures.</p>
                                     <div class="event-details mt-3 text-muted">
                                         <div class="d-flex align-items-center mb-2">
                                             <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
@@ -260,6 +260,8 @@
 
 @section('styles')
 <style>
+    /* No need for additional font import - using Futura PT/Century Gothic from system */
+
     /* IMPROVED HERO SECTION STYLING - Better Readability */
     .hero-section {
         background: transparent !important;
@@ -282,18 +284,34 @@
     }
 
     .hero-content h1 {
-        font-size: 5.5rem;
-        font-weight: 800;
-        font-family: inherit;
+        font-size: 5rem;
+        font-weight: 900;
+        font-family: 'Futura PT', 'Century Gothic', sans-serif;
         color: #1a1a1a;
-        text-shadow: 0 2px 4px rgba(255,255,255,0.8), 0 4px 8px rgba(255,255,255,0.6);
-        letter-spacing: 8px;
+        -webkit-text-stroke: 3px #FFD400;
+        text-stroke: 3px #FFD400;
+        paint-order: stroke fill;
+        text-shadow: 
+            0 1px 0 #FFD400,
+            0 2px 0 #FFC107,
+            0 3px 0 #FFA000,
+            0 4px 0 #FF8F00,
+            0 5px 0 #FF6F00,
+            0 6px 1px rgba(0,0,0,.1),
+            0 0 5px rgba(0,0,0,.1),
+            0 1px 3px rgba(0,0,0,.3),
+            0 3px 5px rgba(0,0,0,.2),
+            0 5px 10px rgba(0,0,0,.25),
+            0 10px 20px rgba(0,0,0,.2),
+            0 20px 30px rgba(0,0,0,.15);
+        letter-spacing: 0.15em;
         line-height: 1.1;
+        transform: perspective(500px) rotateX(5deg);
     }
 
     .text-subtitle {
         color: #2c3e50 !important;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 1.8rem !important;
         text-shadow: 0 1px 3px rgba(255,255,255,0.8);
         letter-spacing: 3px;

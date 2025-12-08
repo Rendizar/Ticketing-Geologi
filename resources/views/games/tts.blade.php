@@ -9,24 +9,22 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold text-white mb-3" 
-                style="text-shadow: 0 10px 30px rgba(0,0,0,0.8); letter-spacing: 4px;">
-                🪨 Geology Crossword Puzzle
+            <h1 class="display-2 fw-bold mb-3 game-title game-title-outline">
+                Geology Crossword Puzzle
             </h1>
-            <p class="fs-3 text-warning opacity-95" 
-               style="text-shadow: 0 4px 12px rgba(0,0,0,0.7);">
+            <p class="fs-3 text-dark opacity-95 game-subtitle">
                 Fill the grid with correct geology terms!
             </p>
             
             <!-- Score & Timer -->
             <div class="d-flex justify-content-center gap-4 mt-4">
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2">
-                    <i class="fas fa-clock text-warning me-2"></i>
-                    Time: <span id="timer" class="text-warning">00:00</span>
+                <div class="badge bg-dark border border-danger fs-5 px-4 py-2">
+                    <i class="fas fa-clock text-danger me-2"></i>
+                    Time: <span id="timer" class="text-danger">00:00</span>
                 </div>
-                <div class="badge bg-dark border border-success fs-5 px-4 py-2">
-                    <i class="fas fa-check-circle text-success me-2"></i>
-                    Score: <span id="score" class="text-success">0</span>/<span id="total">0</span>
+                <div class="badge bg-dark border border-warning fs-5 px-4 py-2">
+                    <i class="fas fa-check-circle text-warning me-2"></i>
+                    Score: <span id="score" class="text-warning">0</span>/<span id="total" class="text-warning">0</span>
                 </div>
             </div>
         </div>
@@ -34,23 +32,25 @@
         <!-- Card Game Utama -->
         <div class="row justify-content-center">
             <div class="col-12 col-xl-11">
-                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden"
-                     style="border: 5px solid #FFD400; backdrop-filter: blur(18px);">
+                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden game-card">
                     <div class="card-body p-4 p-xl-5 text-white">
 
                         <div class="row g-4 align-items-start">
 
                             <!-- Crossword Grid -->
                             <div class="col-lg-7">
-                                <div class="bg-black bg-opacity-50 p-4 rounded-3 border border-warning border-3">
+                                <div class="bg-black bg-opacity-50 p-4 rounded-3 border-warning border-3">
                                     <div id="crossword" class="mx-auto"></div>
                                 </div>
                                 
                                 <!-- Progress Bar -->
                                 <div class="mt-3">
-                                    <div class="progress" style="height: 30px; background: #1a1a1a;">
+                                    <label class="form-label text-dark fw-bold mb-2">
+                                        <i class="fas fa-chart-line me-2"></i>Progress Bar
+                                    </label>
+                                    <div class="progress game-progress">
                                         <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
-                                             role="progressbar" style="width: 0%">
+                                             role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                                             <span class="fw-bold">0%</span>
                                         </div>
                                     </div>
@@ -62,23 +62,15 @@
                                 <h3 class="text-warning fw-bold mb-4 fs-2">
                                     <i class="fas fa-lightbulb me-3"></i>Clues
                                 </h3>
-                                <div class="clues-container bg-black bg-opacity-40 p-4 rounded-3 border border-warning border-2" 
-                                     style="max-height: 500px; overflow-y: auto;">
+                                <div class="clues-container bg-black bg-opacity-40 p-4 rounded-3 border-warning border-2">
                                     
                                     <!-- Across -->
                                     <div class="mb-4">
                                         <h5 class="text-warning fw-bold mb-3 fs-4">
                                             <i class="fas fa-arrow-right me-2"></i>Across
                                         </h5>
-                                        <div class="clue-list">
-                                            <div class="clue-item mb-3 p-3 rounded" style="background: rgba(255,212,0,0.1);">
-                                                <span class="badge bg-warning text-dark fw-bold me-2">1</span>
-                                                <span class="fs-6">Rock formed from cooled magma (7 letters)</span>
-                                            </div>
-                                            <div class="clue-item mb-3 p-3 rounded" style="background: rgba(255,212,0,0.1);">
-                                                <span class="badge bg-warning text-dark fw-bold me-2">4</span>
-                                                <span class="fs-6">Most common mineral on Earth (6 letters)</span>
-                                            </div>
+                                        <div class="clue-list" id="acrossClues">
+                                            <!-- Clues will be generated dynamically -->
                                         </div>
                                     </div>
                                     
@@ -87,23 +79,16 @@
                                         <h5 class="text-warning fw-bold mb-3 fs-4">
                                             <i class="fas fa-arrow-down me-2"></i>Down
                                         </h5>
-                                        <div class="clue-list">
-                                            <div class="clue-item mb-3 p-3 rounded" style="background: rgba(255,212,0,0.1);">
-                                                <span class="badge bg-warning text-dark fw-bold me-2">2</span>
-                                                <span class="fs-6">Preserved remains of ancient life (6 letters)</span>
-                                            </div>
-                                            <div class="clue-item mb-3 p-3 rounded" style="background: rgba(255,212,0,0.1);">
-                                                <span class="badge bg-warning text-dark fw-bold me-2">3</span>
-                                                <span class="fs-6">Tectonic ___ moves continents (5 letters)</span>
-                                            </div>
+                                        <div class="clue-list" id="downClues">
+                                            <!-- Clues will be generated dynamically -->
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <!-- Hint Button -->
                                 <div class="mt-3">
-                                    <button onclick="giveHint()" class="btn btn-info btn-sm w-100 fw-bold">
-                                        <i class="fas fa-question-circle me-2"></i>Get Hint (3 remaining)
+                                    <button onclick="giveHint()" class="btn btn-warning btn-sm w-100 fw-bold text-dark">
+                                        <i class="fas fa-question-circle me-2"></i><span id="hintText">Get Hint (3 remaining)</span>
                                     </button>
                                 </div>
                             </div>
@@ -111,18 +96,20 @@
 
                         <!-- Tombol Aksi -->
                         <div class="text-center mt-5">
-                            <button onclick="checkAnswers()" 
-                                    class="btn btn-success btn-lg px-5 py-3 me-3 fw-bold shadow-lg">
-                                <i class="fas fa-check-double me-2"></i>Check Answers
-                            </button>
-                            <button onclick="revealAnswer()" 
-                                    class="btn btn-outline-info btn-lg px-5 py-3 me-3 fw-bold shadow-lg">
-                                <i class="fas fa-eye me-2"></i>Reveal All
-                            </button>
-                            <button onclick="resetPuzzle()" 
-                                    class="btn btn-outline-warning btn-lg px-5 py-3 fw-bold shadow-lg">
-                                <i class="fas fa-redo me-2"></i>Reset
-                            </button>
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <button onclick="checkAnswers()" 
+                                        class="btn btn-success btn-lg px-5 py-3 fw-bold shadow-lg">
+                                    <i class="fas fa-check-double me-2"></i>Check Answers
+                                </button>
+                                <button onclick="revealAnswer()" 
+                                        class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg text-white">
+                                    <i class="fas fa-eye me-2"></i>Reveal All
+                                </button>
+                                <button onclick="resetPuzzle()" 
+                                        class="btn btn-danger btn-lg px-5 py-3 fw-bold shadow-lg">
+                                    <i class="fas fa-redo me-2"></i>Reset
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Hasil -->
@@ -146,6 +133,60 @@
 {{-- STYLE KHUSUS TTS --}}
 @section('styles')
 <style>
+    /* Theme Variables */
+    :root {
+        --game-yellow: #FFD400;
+        --game-black: #1a1a1a;
+        --game-dark: #0a0a0a;
+    }
+
+    /* Title Styles */
+    .game-title {
+        text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        letter-spacing: 4px;
+    }
+
+    .game-title-outline {
+        color: var(--mg-black);
+        -webkit-text-stroke: 3px var(--game-yellow);
+        text-stroke: 3px var(--game-yellow);
+        paint-order: stroke fill;
+    }
+
+    .game-subtitle {
+        text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    }
+
+    /* Game Card */
+    .game-card {
+        border: 5px solid var(--game-yellow) !important;
+        backdrop-filter: blur(18px);
+    }
+
+    /* Clue Items */
+    .clue-item {
+        background: rgba(255,212,0,0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .clue-item:hover {
+        background: rgba(255,212,0,0.2);
+        transform: translateX(5px);
+    }
+
+    /* Progress Bar */
+    .game-progress {
+        height: 30px;
+        background: var(--game-black);
+    }
+
+    /* Clues Container */
+    .clues-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
     /* Grid Crossword - Responsive & Beautiful */
     #crossword {
         display: grid;
@@ -294,25 +335,99 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-// Data Crossword dengan koordinat yang benar
+// Constants
+const GAME_CONFIG = {
+    GRID_SIZE: 12,
+    INITIAL_HINTS: 3,
+    SWAL_THEME: {
+        background: '#1a1a1a',
+        color: '#fff',
+        confirmButtonColor: '#FFD400'
+    }
+};
+
+// Data Crossword dengan clues terintegrasi
 const crosswordData = [
-    { word: 'IGNEOUS', x: 2, y: 3, direction: 'across', number: 1 },  // Across 1
-    { word: 'FOSSIL', x: 5, y: 1, direction: 'down', number: 2 },     // Down 2
-    { word: 'PLATE', x: 5, y: 5, direction: 'down', number: 3 },      // Down 3
-    { word: 'QUARTZ', x: 3, y: 8, direction: 'across', number: 4 }    // Across 4
+    { 
+        word: 'IGNEOUS', 
+        x: 2, 
+        y: 3, 
+        direction: 'across', 
+        number: 1,
+        clue: 'Rock formed from cooled magma'
+    },
+    { 
+        word: 'FOSSIL', 
+        x: 5, 
+        y: 1, 
+        direction: 'down', 
+        number: 2,
+        clue: 'Preserved remains of ancient life'
+    },
+    { 
+        word: 'PLATE', 
+        x: 5, 
+        y: 5, 
+        direction: 'down', 
+        number: 3,
+        clue: 'Tectonic ___ moves continents'
+    },
+    { 
+        word: 'QUARTZ', 
+        x: 3, 
+        y: 8, 
+        direction: 'across', 
+        number: 4,
+        clue: 'Most common mineral on Earth'
+    }
 ];
 
 let timerInterval;
 let seconds = 0;
-let hintsRemaining = 3;
+let hintsRemaining = GAME_CONFIG.INITIAL_HINTS;
+
+// Generate Clues Dynamically
+function generateClues() {
+    const acrossContainer = document.getElementById('acrossClues');
+    const downContainer = document.getElementById('downClues');
+    
+    if (!acrossContainer || !downContainer) {
+        console.error('Clue containers not found');
+        return;
+    }
+    
+    acrossContainer.innerHTML = '';
+    downContainer.innerHTML = '';
+    
+    crosswordData.forEach(item => {
+        const clueDiv = document.createElement('div');
+        clueDiv.className = 'clue-item mb-3 p-3 rounded';
+        clueDiv.innerHTML = `
+            <span class="badge bg-warning text-dark fw-bold me-2">${item.number}</span>
+            <span class="fs-6">${item.clue} (${item.word.length} letters)</span>
+        `;
+        
+        if (item.direction === 'across') {
+            acrossContainer.appendChild(clueDiv);
+        } else {
+            downContainer.appendChild(clueDiv);
+        }
+    });
+}
 
 // Create Crossword Grid
 function createCrossword() {
     const grid = document.getElementById('crossword');
+    
+    if (!grid) {
+        console.error('Crossword grid element not found');
+        return;
+    }
+    
     grid.innerHTML = '';
     
-    // Buat grid 12x12
-    const gridSize = 12;
+    // Buat grid dengan ukuran dari config
+    const gridSize = GAME_CONFIG.GRID_SIZE;
     const cells = [];
     
     // Initialize semua cell sebagai kosong
@@ -355,10 +470,13 @@ function createCrossword() {
             
             if (cells[i][j].hasInput) {
                 const input = document.createElement('input');
+                input.type = 'text';
                 input.maxLength = 1;
                 input.dataset.answer = cells[i][j].letter;
                 input.dataset.row = i;
                 input.dataset.col = j;
+                input.setAttribute('aria-label', `Cell row ${i + 1}, column ${j + 1}`);
+                input.setAttribute('autocomplete', 'off');
                 input.addEventListener('input', handleInput);
                 input.addEventListener('keydown', handleKeydown);
                 cellDiv.appendChild(input);
@@ -538,9 +656,7 @@ function giveHint() {
             title: 'No hints left!',
             text: 'You have used all your hints.',
             icon: 'warning',
-            background: '#1a1a1a',
-            color: '#fff',
-            confirmButtonColor: '#FFD400'
+            ...GAME_CONFIG.SWAL_THEME
         });
         return;
     }
@@ -553,9 +669,7 @@ function giveHint() {
             title: 'All filled!',
             text: 'All cells are already filled correctly.',
             icon: 'info',
-            background: '#1a1a1a',
-            color: '#fff',
-            confirmButtonColor: '#FFD400'
+            ...GAME_CONFIG.SWAL_THEME
         });
         return;
     }
@@ -565,11 +679,15 @@ function giveHint() {
     randomInput.classList.add('hint', 'correct');
     
     hintsRemaining--;
-    document.querySelector('.btn-info').innerHTML = 
-        `<i class="fas fa-question-circle me-2"></i>Get Hint (${hintsRemaining} remaining)`;
+    const hintText = document.getElementById('hintText');
+    const hintBtn = document.querySelector('.btn-info');
     
-    if (hintsRemaining === 0) {
-        document.querySelector('.btn-info').disabled = true;
+    if (hintText) {
+        hintText.textContent = `Get Hint (${hintsRemaining} remaining)`;
+    }
+    
+    if (hintsRemaining === 0 && hintBtn) {
+        hintBtn.disabled = true;
     }
     
     updateScore();
@@ -582,8 +700,7 @@ function revealAnswer() {
         text: "This will show all the correct answers!",
         icon: 'question',
         showCancelButton: true,
-        background: '#1a1a1a',
-        color: '#fff',
+        ...GAME_CONFIG.SWAL_THEME,
         confirmButtonColor: '#17a2b8',
         cancelButtonColor: '#6c757d',
         confirmButtonText: 'Yes, reveal!',
@@ -612,12 +729,10 @@ function gameCompleted() {
         html: `
             <p class="fs-5">You completed the Geology Crossword!</p>
             <p class="text-warning fs-4 fw-bold">⏱️ Time: ${timeStr}</p>
-            <p class="text-info">💡 Hints used: ${3 - hintsRemaining}</p>
+            <p class="text-info">💡 Hints used: ${GAME_CONFIG.INITIAL_HINTS - hintsRemaining}</p>
         `,
         icon: 'success',
-        background: '#1a1a1a',
-        color: '#fff',
-        confirmButtonColor: '#FFD400',
+        ...GAME_CONFIG.SWAL_THEME,
         confirmButtonText: 'Play Again!'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -630,16 +745,34 @@ function gameCompleted() {
 function resetPuzzle() {
     clearInterval(timerInterval);
     seconds = 0;
-    hintsRemaining = 3;
-    document.getElementById('result').innerHTML = '';
-    document.getElementById('score').textContent = '0';
-    document.querySelector('.btn-info').disabled = false;
-    document.querySelector('.btn-info').innerHTML = 
-        '<i class="fas fa-question-circle me-2"></i>Get Hint (3 remaining)';
+    hintsRemaining = GAME_CONFIG.INITIAL_HINTS;
+    
+    const resultEl = document.getElementById('result');
+    const scoreEl = document.getElementById('score');
+    const hintBtn = document.querySelector('.btn-info');
+    
+    if (resultEl) resultEl.innerHTML = '';
+    if (scoreEl) scoreEl.textContent = '0';
+    if (hintBtn) {
+        hintBtn.disabled = false;
+        hintBtn.innerHTML = `<i class="fas fa-question-circle me-2"></i>Get Hint (${GAME_CONFIG.INITIAL_HINTS} remaining)`;
+    }
+    
     createCrossword();
 }
 
 // Initialize
-createCrossword();
+try {
+    generateClues();
+    createCrossword();
+} catch (error) {
+    console.error('Failed to initialize crossword game:', error);
+    Swal.fire({
+        title: 'Error!',
+        text: 'Failed to load the game. Please refresh the page.',
+        icon: 'error',
+        ...GAME_CONFIG.SWAL_THEME
+    });
+}
 </script>
 @endsection
