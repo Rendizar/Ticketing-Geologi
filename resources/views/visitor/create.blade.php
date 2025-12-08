@@ -20,11 +20,11 @@
                     <!-- Nama -->
                     <div class="mb-4">
                         <label for="nama" class="form-label fw-bold fs-6">
-                            <i class="bi bi-person-circle me-2" style="color: var(--mg-yellow);"></i>Nama Lengkap
+                            Nama Lengkap
                         </label>
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-person-fill" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-person-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <input type="text" class="form-control border-2 shadow-sm" id="nama" name="nama" 
                                 placeholder="Masukkan nama lengkap" required 
@@ -35,11 +35,11 @@
                     <!-- Email -->
                     <div class="mb-4">
                         <label for="email" class="form-label fw-bold fs-6">
-                            <i class="bi bi-envelope-at me-2" style="color: var(--mg-yellow);"></i>Email
+                            Email
                         </label>
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-envelope-fill" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-envelope-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <input type="email" class="form-control border-2 shadow-sm" id="email" name="email" 
                                 placeholder="contoh@email.com" required 
@@ -50,11 +50,11 @@
                     <!-- Negara -->
                     <div class="mb-4">
                         <label for="negara" class="form-label fw-bold fs-6">
-                            <i class="bi bi-globe2 me-2" style="color: var(--mg-yellow);"></i>Negara Asal
+                            Negara Asal
                         </label>
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-flag-fill" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-globe-americas" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <select class="form-select border-2 shadow-sm" id="negara" name="negara" required 
                                 style="border-color: var(--mg-yellow);">
@@ -66,11 +66,11 @@
                     <!-- Nomor Telepon -->
                     <div class="mb-4">
                         <label for="nomor_telepon" class="form-label fw-bold fs-6">
-                            <i class="bi bi-telephone-fill me-2" style="color: var(--mg-yellow);"></i>Nomor Telepon
+                            Nomor Telepon
                         </label>
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-phone-fill" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-phone-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <input type="text" class="form-control border-2 shadow-sm" id="nomor_telepon" name="nomor_telepon" 
                                 placeholder="08123456789" required 
@@ -81,11 +81,11 @@
                     <!-- Jenis Pemesanan -->
                     <div class="mb-4">
                         <label for="jenis_pemesanan" class="form-label fw-bold fs-6">
-                            <i class="bi bi-people-fill me-2" style="color: var(--mg-yellow);"></i>Jenis Pemesanan
+                            Jenis Pemesanan
                         </label>
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-person-check-fill" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-ticket-detailed-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <select class="form-select border-2 shadow-sm" id="jenis_pemesanan" name="jenis_pemesanan" required 
                                 style="border-color: var(--mg-yellow);">
@@ -99,11 +99,11 @@
                     <!-- Nama Rombongan -->
                     <div class="mb-4" id="nama_rombongan_group" style="display:none;">
                         <label for="nama_rombongan" class="form-label fw-bold fs-6">
-                            <i class="bi bi-building me-2" style="color: var(--mg-yellow);"></i>Nama Rombongan / Instansi
+                            Nama Rombongan / Instansi
                         </label>
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-buildings-fill" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-buildings-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <input type="text" class="form-control border-2 shadow-sm" id="nama_rombongan" name="nama_rombongan" 
                                 placeholder="Nama sekolah / perusahaan" 
@@ -114,14 +114,14 @@
                     <!-- Jenis Pengunjung Dinamis -->
                     <div class="mb-4" id="jenis_pengunjung_group" style="display:none;">
                         <label class="form-label fw-bold fs-6">
-                            <i class="bi bi-person-lines-fill me-2" style="color: var(--mg-yellow);"></i>Jenis Pengunjung
+                            Jenis Pengunjung
                         </label>
 
                         <!-- Individu -->
                         <div id="pengunjung_individu" style="display:none;" class="p-4 rounded-3 shadow-sm" style="background: rgba(255,255,255,0.7); border-left: 5px solid var(--mg-yellow);">
                             <div class="mb-3">
-                                <label class="form-label fw-semibold">
-                                    <i class="bi bi-person-badge me-2"></i>Pilih Kategori Individu
+                                <label class="form-label fw-bold fs-6">
+                                    Pilih Kategori Individu
                                 </label>
                                 <select class="form-select shadow-sm border-2" id="kategori_individu" name="kategori_individu" 
                                     style="border-color: var(--mg-yellow);">
@@ -131,14 +131,14 @@
 
                             <!-- Asing -->
                             <div id="individu_asing" style="display:none;" class="alert alert-info border-start border-5 border-primary shadow-sm">
-                                <i class="bi bi-globe2 me-2"></i><strong>Kategori:</strong> Asing, <strong>Jumlah:</strong> 1
+                                <strong>Kategori:</strong> Asing, <strong>Jumlah:</strong> 1
                                 <input type="hidden" id="jumlah_asing" name="jumlah_asing" value="1">
                             </div>
 
                             <!-- Umum -->
                             <div id="individu_umum" style="display:none;">
-                                <label class="form-label fw-semibold">
-                                    <i class="bi bi-mortarboard-fill me-2"></i>Apakah Anda Pelajar?
+                                <label class="form-label fw-bold fs-6">
+                                    Apakah Anda Pelajar?
                                 </label>
                                 <select class="form-select shadow-sm border-2" id="is_pelajar" name="is_pelajar" 
                                     style="border-color: var(--mg-yellow);">
@@ -149,13 +149,13 @@
                             </div>
 
                             <div id="individu_umum_bukan" style="display:none;" class="alert alert-success border-start border-5 border-success shadow-sm mt-3">
-                                <i class="bi bi-person-check me-2"></i><strong>Kategori:</strong> Umum (Bukan Pelajar), <strong>Jumlah:</strong> 1
+                                <strong>Kategori:</strong> Umum (Bukan Pelajar), <strong>Jumlah:</strong> 1
                                 <input type="hidden" id="jumlah_umum" name="jumlah_umum" value="1">
                             </div>
 
                             <div id="individu_umum_pelajar" style="display:none;" class="mt-3">
-                                <label class="form-label fw-semibold">
-                                    <i class="bi bi-book-fill me-2"></i>Pilih Jenjang Pendidikan
+                                <label class="form-label fw-bold fs-6">
+                                    Pilih Jenjang Pendidikan
                                 </label>
                                 <select class="form-select shadow-sm border-2" id="jenjang_pelajar" name="jenjang_pelajar" 
                                     style="border-color: var(--mg-yellow);">
@@ -169,7 +169,6 @@
                             </div>
 
                             <div id="individu_umum_pelajar_jumlah" style="display:none;" class="alert border-start border-5 shadow-sm mt-3" style="background: #FFF3CD; border-color: var(--mg-yellow) !important;">
-                                <i class="bi bi-award-fill me-2" style="color: var(--mg-yellow);"></i>
                                 <span id="info_pelajar"><strong>Kategori:</strong> Pelajar, <strong>Jumlah:</strong> 1</span>
                                 <input type="hidden" id="jumlah_pelajar" name="jumlah_pelajar" value="1">
                                 <input type="hidden" id="sub_tk" name="sub_tk" value="0">
@@ -183,22 +182,22 @@
                         <!-- Rombongan -->
                         <div id="pengunjung_rombongan" style="display:none;" class="p-4 rounded-3 shadow-sm" style="background: rgba(255,255,255,0.7); border-left: 5px solid #28a745;">
                             <div class="mb-4">
-                                <label class="form-label fw-semibold fs-6">
-                                    <i class="bi bi-people me-2"></i>Jumlah Pelajar
+                                <label class="form-label fw-bold fs-6">
+                                    Jumlah Pelajar
                                 </label>
                                 <div class="row g-3">
                                     @foreach(['tk'=>'TK','sd'=>'SD','smp'=>'SMP','sma'=>'SMA','kuliah'=>'Kuliah'] as $k=>$v)
                                     <div class="col-6 col-md-4">
-                                        <label class="fw-semibold mb-2">
-                                            <i class="bi bi-mortarboard me-1"></i>{{ $v }}
+                                        <label class="fw-bold mb-2">
+                                            {{ $v }}
                                         </label>
                                         <div class="input-group shadow-sm">
-                                            <button type="button" class="btn btn-outline-warning" onclick="changeCount('rombongan_sub_{{ $k }}',-1)" style="border-width: 2px;">
-                                                <i class="bi bi-dash-lg"></i>
+                                            <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',-1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">
+                                                −
                                             </button>
-                                            <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" readonly style="border-color: var(--mg-yellow);">
-                                            <button type="button" class="btn btn-outline-warning" onclick="changeCount('rombongan_sub_{{ $k }}',1)" style="border-width: 2px;">
-                                                <i class="bi bi-plus-lg"></i>
+                                            <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" oninput="validateNumberInput(this)" style="border-color: var(--mg-yellow);">
+                                            <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">
+                                                +
                                             </button>
                                         </div>
                                     </div>
@@ -207,31 +206,31 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="form-label fw-semibold fs-6">
-                                    <i class="bi bi-person me-2"></i>Jumlah Umum
+                                <label class="form-label fw-bold fs-6">
+                                    Jumlah Umum
                                 </label>
                                 <div class="input-group shadow-sm" style="max-width:250px;">
-                                    <button type="button" class="btn btn-outline-warning" onclick="changeCount('rombongan_jumlah_umum',-1)" style="border-width: 2px;">
-                                        <i class="bi bi-dash-lg"></i>
+                                    <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',-1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">
+                                        −
                                     </button>
-                                    <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_jumlah_umum" name="jumlah_umum" value="0" min="0" readonly style="border-color: var(--mg-yellow);">
-                                    <button type="button" class="btn btn-outline-warning" onclick="changeCount('rombongan_jumlah_umum',1)" style="border-width: 2px;">
-                                        <i class="bi bi-plus-lg"></i>
+                                    <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_jumlah_umum" name="jumlah_umum" value="0" min="0" oninput="validateNumberInput(this)" style="border-color: var(--mg-yellow);">
+                                    <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">
+                                        +
                                     </button>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label fw-semibold fs-6">
-                                    <i class="bi bi-globe-americas me-2"></i>Jumlah Asing
+                                <label class="form-label fw-bold fs-6">
+                                    Jumlah Asing
                                 </label>
                                 <div class="input-group shadow-sm" style="max-width:250px;">
-                                    <button type="button" class="btn btn-outline-warning" onclick="changeCount('rombongan_jumlah_asing',-1)" style="border-width: 2px;">
-                                        <i class="bi bi-dash-lg"></i>
+                                    <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',-1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">
+                                        −
                                     </button>
-                                    <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_jumlah_asing" name="jumlah_asing" value="0" min="0" readonly style="border-color: var(--mg-yellow);">
-                                    <button type="button" class="btn btn-outline-warning" onclick="changeCount('rombongan_jumlah_asing',1)" style="border-width: 2px;">
-                                        <i class="bi bi-plus-lg"></i>
+                                    <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_jumlah_asing" name="jumlah_asing" value="0" min="0" oninput="validateNumberInput(this)" style="border-color: var(--mg-yellow);">
+                                    <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">
+                                        +
                                     </button>
                                 </div>
                             </div>
@@ -241,11 +240,11 @@
                     <!-- Tanggal Kunjungan -->
                     <div class="mb-4">
                         <label class="form-label fw-bold fs-6">
-                            <i class="bi bi-calendar-event me-2" style="color: var(--mg-yellow);"></i>Tanggal Kunjungan
+                            Tanggal Kunjungan
                         </label>
                         <div class="input-group input-group-lg shadow-sm">
                             <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                <i class="bi bi-calendar3" style="color: var(--mg-yellow);"></i>
+                                <i class="bi bi-calendar3" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                             </span>
                             <input type="date" id="tanggal_kunjungan_raw" class="form-control border-2" 
                                 style="border-color: var(--mg-yellow);" min="{{ date('Y-m-d') }}" required>
@@ -260,11 +259,11 @@
                     <div id="lokasi_indonesia" style="display:none;">
                         <div class="mb-4">
                             <label for="kota_kabupaten" class="form-label fw-bold fs-6">
-                                <i class="bi bi-building me-2" style="color: var(--mg-yellow);"></i>Kota/Kabupaten
+                                Kota/Kabupaten
                             </label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-buildings" style="color: var(--mg-yellow);"></i>
+                                    <i class="bi bi-buildings" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                                 </span>
                                 <select class="form-select border-2 shadow-sm" id="kota_kabupaten" name="kota_kabupaten" 
                                     style="border-color: var(--mg-yellow);">
@@ -283,11 +282,11 @@
                         </div>
                         <div class="mb-4">
                             <label for="provinsi" class="form-label fw-bold fs-6">
-                                <i class="bi bi-geo-alt-fill me-2" style="color: var(--mg-yellow);"></i>Provinsi
+                                Provinsi
                             </label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-map-fill" style="color: var(--mg-yellow);"></i>
+                                    <i class="bi bi-map-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
                                 </span>
                                 <select class="form-select border-2 shadow-sm" id="provinsi" name="provinsi" 
                                     style="border-color: var(--mg-yellow);">
@@ -307,7 +306,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-ticket-yellow btn-lg w-100 mt-4 shadow-lg" style="border-radius: 50px; padding: 1rem 2rem; font-weight: 800; letter-spacing: 1px;">
-                        <i class="bi bi-send-fill me-2"></i>SUBMIT TIKET SEKARANG
+                        SUBMIT TIKET SEKARANG
                     </button>
                 </form>
             </div>
@@ -398,6 +397,24 @@
         font-weight: 600;
     }
     
+    /* Hover effect untuk tombol +/- */
+    .input-group button:hover {
+        background-color: var(--mg-yellow) !important;
+        color: var(--mg-black) !important;
+        transform: scale(1.1);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 0 10px rgba(255, 212, 0, 0.5);
+    }
+    
+    .input-group button {
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .input-group button:active {
+        transform: scale(0.95);
+    }
+
     /* Responsive improvements */
     @media (max-width: 768px) {
         .card-body {
@@ -418,6 +435,20 @@
 
 @section('scripts')
 <script>
+// Fungsi validasi input angka
+function validateNumberInput(input) {
+    // Hapus karakter non-digit
+    let value = input.value.replace(/[^0-9]/g, '');
+    
+    // Jika kosong atau negatif, set ke 0
+    if (value === '' || parseInt(value) < 0) {
+        value = '0';
+    }
+    
+    // Update nilai input
+    input.value = value;
+}
+
 // Fungsi +/- jumlah (rombongan)
 function changeCount(id, delta) {
     const input = document.getElementById(id);
