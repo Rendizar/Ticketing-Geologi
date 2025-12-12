@@ -46,7 +46,7 @@
                             <img src="{{ asset('images/banner1.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 1" style="object-fit: cover;">
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ asset('images/banner1.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 2" style="object-fit: cover;">
+                            <img src="{{ asset('images/banner2.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 2" style="object-fit: cover;">
                         </div>
                         <div class="carousel-item">
                             <img src="{{ asset('images/banner1.png') }}" class="d-block w-100 h-100 banner-img" alt="Banner 3" style="object-fit: cover;">
@@ -108,88 +108,50 @@
         </section>
 
         <!-- UPCOMING EVENTS SECTION -->
-        <section id="events" class="min-vh-100 d-flex align-items-center py-5 position-relative">
-            <div class="container">
-                <h2 class="text-center mb-5 display-4 fw-bold" data-lang-key="events_title">Upcoming Events</h2>
-                <div class="row g-5 justify-content-center">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 event-card shadow-lg border-0 overflow-hidden">
-                            <img src="https://via.placeholder.com/600x400?text=Geology+Workshop+2023" class="card-img-top" alt="Geology Workshop 2023" style="height: 250px; object-fit: cover;">
-                            <div class="card-body d-flex flex-column p-4">
-                                <h5 class="card-title fw-bold" data-lang-key="event1_title">Geology Workshop 2023</h5>
-                                <p class="card-text flex-grow-1 text-muted" data-lang-key="event1_desc">Join our interactive workshop on modern geology techniques.</p>
-                                <div class="event-details mt-3 text-muted">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
-                                        <span>15 Dec 2023</span>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
-                                        <span>10:00 AM - 04:00 PM</span>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
-                                        <strong>Rp 50.000</strong>
-                                    </div>
+<section id="events" class="min-vh-100 d-flex align-items-center py-5 position-relative">
+    <div class="container">
+        <h2 class="text-center mb-5 display-4 fw-bold">Upcoming Events</h2>
+
+        <div class="row g-5 justify-content-center">
+            @forelse($events as $event)
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 event-card shadow-lg border-0 overflow-hidden">
+                        <img src="{{ asset('storage/'.$event->image) }}" 
+                             class="card-img-top" 
+                             alt="{{ $event->title }}" 
+                             style="height: 250px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title fw-bold">{{ $event->title }}</h5>
+                            <p class="card-text flex-grow-1 text-muted">
+                                {{ Str::limit($event->description, 120) }}
+                            </p>
+                            <div class="event-details mt-3 text-muted">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
+                                    <span>{{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}</span>
                                 </div>
-                                <a href="#" class="btn btn-event-yellow mt-4 fw-bold" data-lang-key="event_button">Get Ticket</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 event-card shadow-lg border-0 overflow-hidden">
-                            <img src="https://via.placeholder.com/600x400?text=Fossil+Exhibition" class="card-img-top" alt="Fossil Exhibition" style="height: 250px; object-fit: cover;">
-                            <div class="card-body d-flex flex-column p-4">
-                                <h5 class="card-title fw-bold" data-lang-key="event2_title">Fossil Exhibition</h5>
-                                <p class="card-text flex-grow-1 text-muted" data-lang-key="event2_desc">Explore ancient fossils from around the world, including rare dinosaur specimens.</p>
-                                <div class="event-details mt-3 text-muted">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
-                                        <span>20 - 25 Jan 2024</span>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
-                                        <span>09:00 AM - 05:00 PM</span>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
-                                        <strong>Rp 30.000</strong>
-                                    </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
+                                    <span>{{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}</span>
                                 </div>
-                                <a href="#" class="btn btn-event-yellow mt-4 fw-bold" data-lang-key="event_button">Get Ticket</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 event-card shadow-lg border-0 overflow-hidden">
-                            <img src="https://via.placeholder.com/600x400?text=Earthquake+Simulation" class="card-img-top" alt="Earthquake Simulation Tour" style="height: 250px; object-fit: cover;">
-                            <div class="card-body d-flex flex-column p-4">
-                                <h5 class="card-title fw-bold" data-lang-key="event3_title">Earthquake Simulation Tour</h5>
-                                <p class="card-text flex-grow-1 text-muted" data-lang-key="event3_desc">Experience a realistic earthquake simulation and learn essential safety measures.</p>
-                                <div class="event-details mt-3 text-muted">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-calendar-alt me-2" style="color: var(--mg-yellow);"></i>
-                                        <span>05 Feb 2024</span>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
-                                        <span>11:00 AM & 02:00 PM</span>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
-                                        <strong>Rp 40.000</strong>
-                                    </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
+                                    <strong>Rp {{ number_format($event->price, 0, ',', '.') }}</strong>
                                 </div>
-                                <a href="#" class="btn btn-event-yellow mt-4 fw-bold" data-lang-key="event_button">Get Ticket</a>
                             </div>
+                            <a href="#" class="btn btn-event-yellow mt-4 fw-bold">Get Ticket</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <a href="#rating-review" class="section-arrow">
-                <i class="fas fa-chevron-down"></i>
-            </a>
-        </section>
+            @empty
+                <div class="col-12 text-center text-muted py-5">
+                    <p class="fs-3">Belum ada event yang tersedia saat ini.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
 
         <!-- RATING & REVIEW FORM SECTION -->
         <section id="rating-review" class="min-vh-100 d-flex align-items-center bg-light py-5 position-relative">
@@ -244,10 +206,32 @@
         <section id="customer-reviews" class="min-vh-100 d-flex align-items-center py-5 position-relative">
             <div class="container">
                 <h2 class="text-center mb-5 display-4 fw-bold" data-lang-key="reviews_title">Customer Reviews</h2>
-                <div class="row g-4" id="reviewsList">
-                    <div class="col-12 text-center text-muted py-5">
-                        <p class="fs-3" data-lang-key="reviews_empty">No reviews yet. Be the first to review!</p>
-                    </div>
+                <div id="reviewsSlider" class="reviews-slider position-relative">
+                    @if(($reviews ?? collect())->count())
+                        <div class="reviews-track d-flex gap-4" id="reviewsTrack">
+                            @foreach(($reviews ?? collect()) as $review)
+                                <div class="review-slide flex-shrink-0">
+                                    <div class="review-card p-4 shadow-sm h-100 border-start border-4 border-warning bg-white">
+                                        <div class="review-rating mb-2">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class="{{ $i <= $review->rating ? 'fas fa-star text-warning' : 'far fa-star text-muted' }}"></i>
+                                            @endfor
+                                        </div>
+                                        <div class="review-author fw-bold">{{ $review->name }}</div>
+                                        <div class="review-email text-muted small mb-2">{{ $review->email }}</div>
+                                        <div class="review-text mb-3">{{ $review->text }}</div>
+                                        <div class="review-date text-muted small">
+                                            {{ optional($review->created_at)->diffForHumans() }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="reviews-placeholder text-center text-muted py-5" id="reviewsPlaceholder">
+                            <p class="fs-3" data-lang-key="reviews_empty">No reviews yet. Be the first to review!</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </section>
@@ -497,12 +481,18 @@
         font-size: 3.8rem;
         transition: all 0.3s ease;
         filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+        color: #c6c6c6;
+        cursor: pointer;
+    }
+
+    .stars-container i.selected,
+    .stars-container i.active {
+        color: var(--mg-yellow) !important;
+        filter: drop-shadow(0 0 20px rgba(255,193,7,0.6));
     }
 
     .stars-container i:hover {
         transform: scale(1.35) translateY(-8px);
-        color: var(--mg-yellow) !important;
-        filter: drop-shadow(0 0 20px rgba(255,193,7,0.6));
     }
 
     /* Review Card (setelah submit) */
@@ -537,6 +527,39 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+
+    /* Reviews slider */
+    .reviews-slider {
+        overflow: hidden;
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+        .reviews-track {
+            width: max-content;
+            display: flex;
+            gap: 1.5rem;
+            padding-bottom: 0.5rem;
+            will-change: transform;
+        }
+
+    .review-slide {
+        flex: 0 0 calc(100% - 2rem);
+        max-width: 420px;
+    }
+
+    @media (min-width: 768px) {
+        .review-slide {
+            flex: 0 0 360px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .review-slide {
+            flex: 0 0 420px;
+        }
     }
 </style>
 @endsection
@@ -585,7 +608,6 @@
                 });
 
                 star.addEventListener('mouseleave', function() {
-                    // remove hover effects
                     stars.forEach(function(s) { s.classList.remove('active'); });
                 });
 
@@ -599,13 +621,89 @@
             });
         }
 
-        // Review form submission (client-side only)
-        var reviewForm = document.getElementById('reviewForm');
-        var reviewsList = document.getElementById('reviewsList');
+        // Reviews slider autoplay
+        var reviewsSlider = document.getElementById('reviewsSlider');
+        var reviewsTrack = document.getElementById('reviewsTrack');
+        var sliderAnimationId;
+        var sliderSpeed = 0.35; // px per frame
+        var trackOffset = 0;
+        var trackGap = 0;
 
-        if (reviewForm && reviewsList) {
+        function updateTrackGap() {
+            if (!reviewsTrack) return;
+            var styles = window.getComputedStyle(reviewsTrack);
+            var gapValue = parseFloat(styles.columnGap || styles.gap || 0);
+            trackGap = isNaN(gapValue) ? 0 : gapValue;
+        }
+
+        function runReviewsSlider() {
+            if (!reviewsSlider || !reviewsTrack) return;
+            if (reviewsTrack.children.length < 2) {
+                reviewsTrack.style.transform = 'translateX(0)';
+                return;
+            }
+
+            if (reviewsSlider.dataset.paused === 'true') {
+                sliderAnimationId = requestAnimationFrame(runReviewsSlider);
+                return;
+            }
+
+            trackOffset -= sliderSpeed;
+            var firstSlide = reviewsTrack.children[0];
+
+            if (firstSlide) {
+                var firstWidth = firstSlide.getBoundingClientRect().width;
+                if (-trackOffset >= firstWidth + trackGap) {
+                    trackOffset += firstWidth + trackGap;
+                    reviewsTrack.appendChild(firstSlide);
+                }
+            }
+
+            reviewsTrack.style.transform = 'translateX(' + trackOffset + 'px)';
+            sliderAnimationId = requestAnimationFrame(runReviewsSlider);
+        }
+
+        function initReviewsSlider() {
+            reviewsTrack = document.getElementById('reviewsTrack');
+
+            if (sliderAnimationId) cancelAnimationFrame(sliderAnimationId);
+
+            if (!reviewsSlider || !reviewsTrack) return;
+            if (reviewsTrack.children.length < 2) {
+                reviewsTrack.style.transform = 'translateX(0)';
+                return;
+            }
+
+            trackOffset = 0;
+            reviewsTrack.style.transform = 'translateX(0)';
+            updateTrackGap();
+            sliderAnimationId = requestAnimationFrame(runReviewsSlider);
+        }
+
+        if (reviewsSlider) {
+            reviewsSlider.dataset.paused = 'false';
+            ['mouseenter', 'touchstart'].forEach(function(evt) {
+                reviewsSlider.addEventListener(evt, function() {
+                    reviewsSlider.dataset.paused = 'true';
+                });
+            });
+            ['mouseleave', 'touchend'].forEach(function(evt) {
+                reviewsSlider.addEventListener(evt, function() {
+                    reviewsSlider.dataset.paused = 'false';
+                });
+            });
+
+            initReviewsSlider();
+            window.addEventListener('resize', initReviewsSlider);
+        }
+
+        // === Review form submission (server-side via AJAX) ===
+        var reviewForm = document.getElementById('reviewForm');
+
+        if (reviewForm) {
             reviewForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+
                 var rating = parseInt(document.getElementById('selectedRating').value || 0);
                 var name = document.getElementById('reviewName').value.trim();
                 var email = document.getElementById('reviewEmail').value.trim();
@@ -621,56 +719,82 @@
                     return;
                 }
 
-                // Build review HTML (client-side only). For production, POST to server instead.
-                var col = document.createElement('div');
-                col.className = 'col-md-6';
+                fetch('/reviews', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ name, email, text, rating })
+                })
+                .then(async response => {
+                    if (!response.ok) {
+                        let message = 'Failed to save review. Please try again.';
+                        try {
+                            const body = await response.json();
+                            if (body?.message) {
+                                message = body.message;
+                            } else if (body?.errors) {
+                                message = Object.values(body.errors).flat().join('\n');
+                            }
+                        } catch (parseError) {
+                            console.error(parseError);
+                        }
+                        throw new Error(message);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message || 'Thank you! Your review has been saved.');
 
-                var card = document.createElement('div');
-                card.className = 'review-card';
+                    var col = document.createElement('div');
+                    col.className = 'review-slide flex-shrink-0';
+                    col.innerHTML = `
+                        <div class="review-card p-4 shadow-sm h-100 border-start border-4 border-warning bg-white">
+                            <div class="review-rating mb-2">
+                                ${'<i class="fas fa-star text-warning"></i>'.repeat(rating)}
+                                ${'<i class="far fa-star text-muted"></i>'.repeat(5 - rating)}
+                            </div>
+                            <div class="review-author fw-bold">${data.review?.name || name}</div>
+                            <div class="review-email text-muted small mb-2">${data.review?.email || email}</div>
+                            <div class="review-text mb-3">${data.review?.text || text}</div>
+                            <div class="review-date text-muted small">baru saja</div>
+                        </div>
+                    `;
 
-                var ratingEl = document.createElement('div');
-                ratingEl.className = 'review-rating';
-                ratingEl.innerHTML = Array.from({length: rating}).map(function(){ return '<i class="fas fa-star"></i>'; }).join('') +
-                    Array.from({length: 5-rating}).map(function(){ return '<i class="far fa-star" style="color:#ddd"></i>'; }).join('');
+                    var placeholder = document.getElementById('reviewsPlaceholder');
+                    if (placeholder) placeholder.remove();
 
-                var authorEl = document.createElement('div');
-                authorEl.className = 'review-author';
-                authorEl.textContent = name;
+                    var sliderWrapper = document.getElementById('reviewsSlider');
+                    var track = document.getElementById('reviewsTrack');
 
-                var emailEl = document.createElement('div');
-                emailEl.className = 'review-email mb-2';
-                emailEl.textContent = email;
+                    if (!track) {
+                        track = document.createElement('div');
+                        track.className = 'reviews-track d-flex gap-4';
+                        track.id = 'reviewsTrack';
+                        if (sliderWrapper) {
+                            sliderWrapper.innerHTML = '';
+                            sliderWrapper.appendChild(track);
+                        }
+                    }
 
-                var textEl = document.createElement('div');
-                textEl.className = 'review-text';
-                textEl.textContent = text;
+                    track.insertBefore(col, track.firstChild);
+                    initReviewsSlider();
 
-                card.appendChild(ratingEl);
-                card.appendChild(authorEl);
-                card.appendChild(emailEl);
-                card.appendChild(textEl);
-
-                col.appendChild(card);
-
-                // If there was the 'no reviews' placeholder, remove it
-                var placeholder = reviewsList.querySelector('.text-muted');
-                if (placeholder) placeholder.remove();
-
-                // Prepend new review
-                reviewsList.insertBefore(col, reviewsList.firstChild);
-
-                // Reset form and stars
-                reviewForm.reset();
-                selectedRatingInput.value = 0;
-                if (starsContainer) setStars(0);
-                ratingText.textContent = 'Select Rating';
-
-                // Optional: show success message
-                alert('Thank you! Your review has been added (client-side only).');
+                    reviewForm.reset();
+                    document.getElementById('selectedRating').value = 0;
+                    ratingText.textContent = '';
+                    stars.forEach(function(s) { s.classList.remove('selected'); });
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert(error.message || 'Failed to save review. Please try again.');
+                });
             });
         }
 
-        // Hapus script terkait mini games karena sidebar dihapus
+        
     });
 </script>
 @endsection

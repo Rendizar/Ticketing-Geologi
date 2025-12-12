@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gesit - Museum Geologi</title>
@@ -565,117 +566,8 @@
         });
     </script>
 
-    <!-- Enhanced Language Toggle & Navbar Scripts -->
-    <script>
-        // Global translations object
-        window.translations = {
-            en: {
-                nav_news: 'News',
-                nav_services: 'Services',
-                nav_events: 'Events',
-                nav_rating: 'Rating & Review',
-                nav_admin: 'Admin'
-            },
-            id: {
-                nav_news: 'Berita',
-                nav_services: 'Layanan',
-                nav_events: 'Acara',
-                nav_rating: 'Rating & Ulasan',
-                nav_admin: 'Admin'
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const langToggle = document.getElementById('language-toggle');
-            const langFlag = document.getElementById('lang-flag');
-            const navbar = document.querySelector('.navbar');
-            
-            // Get current language from localStorage or default to 'en'
-            let currentLang = localStorage.getItem('language') || 'en';
-            
-            // Set initial language
-            setLanguage(currentLang);
-
-            // Language toggle click event
-            langToggle.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                // Add animation class
-                langFlag.classList.add('lang-switching');
-                
-                // Toggle language
-                currentLang = (currentLang === 'en') ? 'id' : 'en';
-                localStorage.setItem('language', currentLang);
-                
-                // Wait for animation to complete
-                setTimeout(() => {
-                    setLanguage(currentLang);
-                    langFlag.classList.remove('lang-switching');
-                    
-                    // Dispatch custom event for other pages to listen
-                    window.dispatchEvent(new CustomEvent('languageChanged', { 
-                        detail: { language: currentLang } 
-                    }));
-                }, 250);
-            });
-
-            function setLanguage(lang) {
-                const trans = window.translations[lang];
-                
-                // Update flag
-                if (lang === 'id') {
-                    langFlag.src = "https://flagcdn.com/w40/id.png";
-                    langFlag.alt = "ID";
-                    langToggle.setAttribute('title', 'Switch to English');
-                } else {
-                    langFlag.src = "https://flagcdn.com/w40/us.png";
-                    langFlag.alt = "EN";
-                    langToggle.setAttribute('title', 'Ganti ke Bahasa Indonesia');
-                }
-                
-                // Update all elements with data-lang-key
-                document.querySelectorAll('[data-lang-key]').forEach(el => {
-                    const key = el.getAttribute('data-lang-key');
-                    if (trans[key]) {
-                        el.textContent = trans[key];
-                    }
-                });
-                
-                // Update HTML lang attribute
-                document.documentElement.lang = lang;
-            }
-
-            // Navbar scroll effect
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-
-            // Active link highlighting on scroll
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link[data-section]');
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    if (window.pageYOffset >= sectionTop - 200) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('data-section') === current) {
-                        link.classList.add('active');
-                    }
-                });
-            });
+        <!-- Language Toggle Script -->
+    <script src="{{ asset('js/lang.js') }}"></script>
 
             // Smooth scroll for nav links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {

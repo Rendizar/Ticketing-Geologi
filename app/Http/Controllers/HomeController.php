@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,6 +25,8 @@ class HomeController extends Controller
                       ->take(6)
                       ->get();
 
-        return view('visitor.home', compact('stats', 'events'));
+        $reviews = Review::latest()->take(12)->get();
+
+        return view('visitor.home', compact('stats', 'events', 'reviews'));
     }
 }

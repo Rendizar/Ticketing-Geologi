@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\VisitorController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KnowledgeBaseController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\VisitorController;
 
 // Welcome page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -43,6 +44,10 @@ Route::prefix('contact')->group(function () {
 //     Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
 //     Route::post('/{event}/book', [EventController::class, 'book'])->name('events.book');
 // });
+
+
+// Review routes
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 // Admin routes
 Route::prefix('admin')->group(function () {
