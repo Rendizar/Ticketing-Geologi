@@ -7,6 +7,8 @@
     <title>Gesit - Museum Geologi</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -568,33 +570,6 @@
 
         <!-- Language Toggle Script -->
     <script src="{{ asset('js/lang.js') }}"></script>
-
-            // Smooth scroll for nav links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const href = this.getAttribute('href');
-                    const targetId = href.replace(/^\//, '');
-                    const target = document.querySelector(targetId);
-                    
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                        
-                        // Close mobile menu after click
-                        const navbarCollapse = document.getElementById('navbarNav');
-                        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-                            if (bsCollapse) {
-                                bsCollapse.hide();
-                            }
-                        }
-                    }
-                });
-            });
-        });
     </script>
 
     @yield('scripts')

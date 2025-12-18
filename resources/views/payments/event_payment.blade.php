@@ -58,28 +58,19 @@
     </div>
 </div>
 
-<!-- Midtrans Snap -->
+<!-- Midtrans Snap with Popup Mode -->
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script type="text/javascript">
     var snapToken = '{{ $snapToken }}';
     var orderId = '{{ $orderId }}';
     
-    console.log('Event Ticket - Snap Token:', snapToken);
-    console.log('Event Ticket - Order ID:', orderId);
-    
-    // Wait for everything to load
-    setTimeout(function() {
-        console.log('Snap available?', typeof snap !== 'undefined');
-        
+    window.addEventListener('load', function() {
         var payButton = document.getElementById('pay-button');
-        if (!payButton) {
-            console.error('Button not found!');
-            return;
-        }
+        if (!payButton) return;
         
+        // Check if snap loaded, fallback to redirect if not
         if (typeof snap === 'undefined') {
-            console.error('Snap not loaded, using redirect mode');
-            // Fallback to redirect mode
+            console.warn('Snap not loaded, using redirect fallback');
             payButton.onclick = function() {
                 window.location.href = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/' + snapToken;
             };
@@ -87,34 +78,24 @@
         }
         
         payButton.onclick = function() {
-            console.log('Button clicked, opening snap...');
+            payButton.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Membuka...';
             
-            try {
-                snap.pay(snapToken, {
-                    onSuccess: function(result) {
-                        console.log('success');
-                        window.location.href = '{{ route("event.payment.finish") }}?order_id=' + orderId + '&transaction_status=settlement';
-                    },
-                    onPending: function(result) {
-                        console.log('pending');
-                        alert('Menunggu pembayaran!');
-                    },
-                    onError: function(result) {
-                        console.log('error', result);
-                        alert('Pembayaran gagal!');
-                    },
-                    onClose: function() {
-                        console.log('customer closed the popup');
-                    }
-                });
-            } catch (error) {
-                console.error('Snap.pay failed, using redirect mode:', error);
-                // Fallback to redirect mode
-                window.location.href = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/' + snapToken;
-            }
+            snap.pay(snapToken, {
+                onSuccess: function(result) {
+                    window.location.href = '{{ route("event.payment.finish") }}?order_id=' + orderId + '&transaction_status=settlement';
+                },
+                onPending: function(result) {
+                    alert('Menunggu pembayaran!');
+                },
+                onError: function(result) {
+                    alert('Pembayaran gagal!');
+                    payButton.innerHTML = '<i class="bi bi-lock-fill me-2"></i>BAYAR SEKARANG';
+                },
+                onClose: function() {
+                    payButton.innerHTML = '<i class="bi bi-lock-fill me-2"></i>BAYAR SEKARANG';
+                }
+            });
         };
-        
-        console.log('Payment button initialized');
-    }, 1000);
+    });
 </script>
 @endsection

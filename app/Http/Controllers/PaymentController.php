@@ -59,7 +59,10 @@ class PaymentController extends Controller
                 'price'    => $pending['calculated']['total_harga'],
                 'quantity' => 1,
                 'name'     => 'Tiket Masuk - ' . ucfirst($pending['form_data']['jenis_pemesanan']),
-            ]]
+            ]],
+            'callbacks' => [
+                'finish' => url('/payment/finish?order_id=' . $orderId),
+            ]
         ];
 
         try {
@@ -232,7 +235,10 @@ class PaymentController extends Controller
                 'price'    => $pending['harga_satuan'],
                 'quantity' => $pending['jumlah_tiket'],
                 'name'     => 'Tiket Event: ' . $pending['event_title'],
-            ]]
+            ]],
+            'callbacks' => [
+                'finish' => url('/event/payment/finish?order_id=' . $orderId),
+            ]
         ];
 
         try {

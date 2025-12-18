@@ -300,13 +300,6 @@
             </div>
             
             <div class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-ticket-alt"></i>
-                    Tiket
-                </a>
-            </div>
-            
-            <div class="nav-item">
                 <a href="{{ route('admin.events.index') }}" class="nav-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
                     <i class="fas fa-calendar-alt"></i>
                     Event
