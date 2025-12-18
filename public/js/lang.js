@@ -18,9 +18,9 @@ window.translations = {
         service1_desc: 'Create a new support ticket for your geological inquiries',
         service1_button: 'Create Ticket',
 
-        service2_title: 'Track Status',
-        service2_desc: 'Check the status of your existing support tickets',
-        service2_button: 'Track Ticket',
+        service2_title: 'Reschedule',
+        service2_desc: 'Change your visit date or event for existing tickets',
+        service2_button: 'Reschedule Ticket',
 
         service3_title: 'Mini Games',
         service3_desc: 'Check out the mini games available at the museum!',
@@ -60,9 +60,9 @@ window.translations = {
         service1_desc: 'Buat tiket dukungan baru untuk pertanyaan geologi Anda',
         service1_button: 'Buat Tiket',
 
-        service2_title: 'Lacak Status',
-        service2_desc: 'Periksa status tiket dukungan yang sudah ada',
-        service2_button: 'Lacak Tiket',
+        service2_title: 'Reschedule',
+        service2_desc: 'Ubah tanggal kunjungan atau acara untuk tiket yang sudah ada',
+        service2_button: 'Reschedule Tiket',
 
         service3_title: 'Permainan Mini',
         service3_desc: 'Lihat permainan mini menarik yang tersedia di museum!',

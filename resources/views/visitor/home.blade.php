@@ -83,11 +83,11 @@
                     <div class="col-md-4 col-lg-3">
                         <div class="card h-100 shadow-lg border-0 service-card text-center p-4">
                             <div class="service-icon mb-4">
-                                <i class="fas fa-search fa-4x" style="color: var(--mg-yellow);"></i>
+                                <i class="fas fa-calendar-alt fa-4x" style="color: var(--mg-yellow);"></i>
                             </div>
-                            <h4 class="mb-3" data-lang-key="service2_title">Track Status</h4>
-                            <p class="text-muted" data-lang-key="service2_desc">Check the status of your existing support tickets</p>
-                            <a href="#" class="btn btn-service-yellow mt-auto" data-lang-key="service2_button">Track Ticket</a>
+                            <h4 class="mb-3" data-lang-key="service2_title">Reschedule</h4>
+                            <p class="text-muted" data-lang-key="service2_desc">Change your visit date or event for existing tickets</p>
+                            <a href="{{ route('tickets.reschedule.form') }}" class="btn btn-service-yellow mt-auto" data-lang-key="service2_button">Reschedule Ticket</a>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-3">
