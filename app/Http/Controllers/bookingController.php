@@ -87,4 +87,165 @@ class BookingController extends Controller
         // 4. REDIRECT KE HALAMAN REVIEW PEMBAYARAN
         return redirect()->route('payment.review');
     }
+
+    // Reschedule Methods
+    public function rescheduleForm()
+    {
+        return view('visitor.reschedule.form');
+    }
+
+    public function rescheduleCheck(Request $request)
+    {
+        $request->validate([
+            'booking_id' => 'required|string'
+        ]);
+
+        $bookingId = $request->booking_id;
+
+        // Check in regular bookings
+        $regularBooking = \App\Models\Booking::where('booking_id', $bookingId)
+            ->orWhere('unique_key', $bookingId)
+            ->first();
+
+        if ($regularBooking) {
+            // Check if paid and not past visit date
+            if ($regularBooking->status !== 'paid') {
+                return back()->with('error', 'Tiket belum dibayar atau sudah expired.');
+            }
+            
+            if (\Carbon\Carbon::parse($regularBooking->tanggal_kunjungan)->isPast()) {
+                return back()->with('error', 'Tanggal kunjungan sudah lewat, tidak bisa reschedule.');
+            }
+
+            return redirect()->route('tickets.reschedule.edit', ['booking_id' => $regularBooking->booking_id, 'type' => 'regular']);
+        }
+
+        // Check in event bookings
+        $eventBooking = \App\Models\EventBooking::where('booking_id', $bookingId)
+            ->orWhere('unique_key', $bookingId)
+            ->with('event')
+            ->first();
+
+        if ($eventBooking) {
+            if ($eventBooking->payment_status !== 'paid') {
+                return back()->with('error', 'Tiket event belum dibayar atau sudah expired.');
+            }
+            
+            if (\Carbon\Carbon::parse($eventBooking->event->event_date)->isPast()) {
+                return back()->with('error', 'Event sudah berlangsung, tidak bisa reschedule.');
+            }
+
+            return redirect()->route('tickets.reschedule.edit', ['booking_id' => $eventBooking->booking_id, 'type' => 'event']);
+        }
+
+        return back()->with('error', 'ID Tiket tidak ditemukan.');
+    }
+
+    public function rescheduleEdit(Request $request, $booking_id)
+    {
+        $type = $request->query('type', 'regular');
+
+        if ($type === 'event') {
+            $booking = \App\Models\EventBooking::where('booking_id', $booking_id)
+                ->with('event')
+                ->firstOrFail();
+            
+            // Get available events (exclude past events)
+            $availableEvents = \App\Models\Event::where('is_active', true)
+                ->where('event_date', '>=', now())
+                ->orderBy('event_date', 'asc')
+                ->get();
+
+            return view('visitor.reschedule.edit-event', compact('booking', 'availableEvents'));
+        } else {
+            $booking = \App\Models\Booking::where('booking_id', $booking_id)->firstOrFail();
+            return view('visitor.reschedule.edit-regular', compact('booking'));
+        }
+    }
+
+    public function rescheduleUpdate(Request $request)
+    {
+        $type = $request->input('type');
+
+        if ($type === 'event') {
+            $request->validate([
+                'booking_id' => 'required|exists:event_bookings,booking_id',
+                'new_event_id' => 'required|exists:events,id'
+            ]);
+
+            $booking = \App\Models\EventBooking::where('booking_id', $request->booking_id)->firstOrFail();
+            $oldEvent = $booking->event;
+            $newEvent = \App\Models\Event::findOrFail($request->new_event_id);
+
+            // Check if event is still active and in future
+            if (!$newEvent->is_active || \Carbon\Carbon::parse($newEvent->event_date)->isPast()) {
+                return back()->with('error', 'Event yang dipilih tidak tersedia.');
+            }
+
+            // Calculate price difference if any
+            $oldTotal = $booking->total_harga;
+            $newTotal = $newEvent->price * $booking->jumlah_tiket;
+            $priceDiff = $newTotal - $oldTotal;
+
+            if ($priceDiff > 0) {
+                return back()->with('error', 'Event baru lebih mahal. Hubungi admin untuk upgrade.');
+            }
+
+            // Update booking
+            $booking->event_id = $request->new_event_id;
+            $booking->save();
+
+            // Reload booking with new event
+            $booking->load('event');
+
+            // Generate new PDF ticket
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('email.event-ticket', ['eventBooking' => $booking]);
+            $pdf->setPaper('A4', 'portrait');
+
+            $directory = storage_path('app/public/tickets');
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            $path = $directory . "/{$booking->booking_id}.pdf";
+            $pdf->save($path);
+
+            // Send email with new ticket
+            \Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
+
+            return redirect()->route('tickets.reschedule.form')
+                ->with('success', 'Tiket event berhasil di-reschedule ke: ' . $newEvent->title . '. Email konfirmasi telah dikirim.');
+
+        } else {
+            $request->validate([
+                'booking_id' => 'required|exists:bookings,booking_id',
+                'new_date' => 'required|date|after_or_equal:today'
+            ]);
+
+            $booking = \App\Models\Booking::where('booking_id', $request->booking_id)->firstOrFail();
+            $oldDate = $booking->tanggal_kunjungan;
+
+            // Update tanggal kunjungan
+            $booking->tanggal_kunjungan = $request->new_date;
+            $booking->save();
+
+            // Generate new PDF ticket with updated date
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('email.ticket', ['booking' => $booking]);
+            $pdf->setPaper('A4', 'portrait');
+
+            $directory = storage_path('app/public/tickets');
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            $path = $directory . "/{$booking->booking_id}.pdf";
+            $pdf->save($path);
+
+            // Send email with new ticket
+            \Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
+
+            return redirect()->route('tickets.reschedule.form')
+                ->with('success', 'Tanggal kunjungan berhasil diubah ke: ' . \Carbon\Carbon::parse($request->new_date)->format('d F Y') . '. Email konfirmasi telah dikirim.');
+        }
+    }
 }

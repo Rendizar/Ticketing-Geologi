@@ -139,7 +139,7 @@
                                     <strong>Rp {{ number_format($event->price, 0, ',', '.') }}</strong>
                                 </div>
                             </div>
-                            <a href="#" class="btn btn-event-yellow mt-4 fw-bold">Get Ticket</a>
+                            <a href="{{ route('event.booking.create', $event->id) }}" class="btn btn-event-yellow mt-4 fw-bold">Get Ticket</a>
                         </div>
                     </div>
                 </div>

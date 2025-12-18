@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\EventBooking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -195,5 +196,132 @@ class PaymentController extends Controller
 
         // === KIRIM EMAIL DENGAN LAMPIRAN PDF ===
         \Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
+    }
+
+    // Event Booking Payment Methods
+    public function eventReview()
+    {
+        if (!session('pending_event_booking')) {
+            return redirect()->route('home')->with('error', 'Sesi telah habis. Silakan isi ulang form.');
+        }
+        return view('payments.event_review');
+    }
+
+    public function eventInitiate(Request $request)
+    {
+        $pending = session('pending_event_booking');
+        if (!$pending) {
+            return redirect()->route('home')->with('error', 'Data pemesanan hilang!');
+        }
+
+        $orderId = 'EVT-' . now()->format('Ymd-His') . '-' . strtoupper(substr(Str::uuid(), 0, 8));
+
+        $transaction = [
+            'transaction_details' => [
+                'order_id'     => $orderId,
+                'gross_amount' => $pending['total_harga'],
+            ],
+            'customer_details' => [
+                'first_name' => $pending['nama'],
+                'email'      => $pending['email'],
+                'phone'      => $pending['nomor_telepon'],
+            ],
+            'item_details' => [[
+                'id'       => 'EVENT_TICKET',
+                'price'    => $pending['harga_satuan'],
+                'quantity' => $pending['jumlah_tiket'],
+                'name'     => 'Tiket Event: ' . $pending['event_title'],
+            ]]
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($transaction);
+            session(['current_event_order_id' => $orderId]);
+
+            return view('payments.event_payment', compact('snapToken', 'orderId'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memproses pembayaran: ' . $e->getMessage());
+        }
+    }
+
+    public function eventFinish(Request $request)
+    {
+        $orderId = $request->order_id;
+        $status  = $request->transaction_status;
+
+        if (in_array($status, ['capture', 'settlement'])) {
+            $this->processEventSuccessPayment($orderId);
+            session()->forget(['pending_event_booking', 'current_event_order_id']);
+            return redirect()->route('home')->with('success', 'Pembayaran berhasil! Tiket event telah dikirim ke email Anda.');
+        }
+
+        session()->forget(['pending_event_booking', 'current_event_order_id']);
+        return redirect()->route('home')->with('error', 'Pembayaran gagal atau dibatalkan.');
+    }
+
+    private function processEventSuccessPayment($orderId)
+    {
+        if (EventBooking::where('booking_id', $orderId)->exists()) return;
+
+        $pending = session('pending_event_booking');
+
+        $transaction = \Midtrans\Transaction::status($orderId);
+        $paymentType = $transaction->payment_type ?? 'unknown';
+
+        // Mapping payment type ke bahasa Indonesia
+        $metode = match($paymentType) {
+            'credit_card'   => 'Kartu Kredit',
+            'bank_transfer' => 'Transfer Bank',
+            'echannel'      => 'Mandiri Bill',
+            'gopay'         => 'GoPay',
+            'shopeepay'     => 'ShopeePay',
+            default         => ucwords(str_replace('_', ' ', $paymentType)),
+        };
+
+        $eventBooking = EventBooking::create([
+            'booking_id'        => $orderId,
+            'event_id'          => $pending['event_id'],
+            'nama'              => $pending['nama'],
+            'email'             => $pending['email'],
+            'nomor_telepon'     => $pending['nomor_telepon'],
+            'negara'            => $pending['negara'],
+            'kota_kabupaten'    => $pending['kota_kabupaten'] ?? null,
+            'provinsi'          => $pending['provinsi'] ?? null,
+            'jenis_pemesanan'   => $pending['jenis_pemesanan'],
+            'nama_rombongan'    => $pending['nama_rombongan'] ?? null,
+            'kategori'          => $pending['kategori'],
+            'jumlah_tiket'      => $pending['jumlah_tiket'],
+            'total_harga'       => $pending['total_harga'],
+            'payment_type'      => $paymentType,
+            'transaction_id'    => $orderId,
+            'payment_status'    => 'paid',
+            'unique_key'        => Str::uuid(),
+        ]);
+
+        // Simpan Payment record
+        Payment::create([
+            'booking_id'        => $eventBooking->booking_id,
+            'transaction_id'    => $orderId,
+            'jumlah_pembayaran' => $pending['total_harga'],
+            'metode_pembayaran' => $metode,
+            'status_pembayaran' => 'success',
+            'dibayarkan_pada'   => now(),
+        ]);
+
+        // === GENERATE PDF TIKET EVENT ===
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('email.event-ticket', compact('eventBooking'));
+        $pdf->setPaper('A4', 'portrait');
+
+        // Buat folder kalau belum ada
+        $directory = storage_path('app/public/tickets');
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $path = $directory . "/{$orderId}.pdf";
+        $pdf->save($path);
+
+        // === KIRIM EMAIL DENGAN LAMPIRAN PDF ===
+        \Mail::to($eventBooking->email)->send(new \App\Mail\TicketMail($eventBooking, $path));
     }
 }

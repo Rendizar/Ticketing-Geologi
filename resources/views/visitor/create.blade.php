@@ -123,10 +123,15 @@
                                 <label class="form-label fw-bold fs-6">
                                     Pilih Kategori Individu
                                 </label>
-                                <select class="form-select shadow-sm border-2" id="kategori_individu" name="kategori_individu" 
-                                    style="border-color: var(--mg-yellow);">
-                                    <option value="">Pilih Kategori</option>
-                                </select>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
+                                        <i class="bi bi-person-badge-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                    </span>
+                                    <select class="form-select shadow-sm border-2" id="kategori_individu" name="kategori_individu" 
+                                        style="border-color: var(--mg-yellow);">
+                                        <option value="">Pilih Kategori</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <!-- Asing -->
@@ -140,12 +145,17 @@
                                 <label class="form-label fw-bold fs-6">
                                     Apakah Anda Pelajar?
                                 </label>
-                                <select class="form-select shadow-sm border-2" id="is_pelajar" name="is_pelajar" 
-                                    style="border-color: var(--mg-yellow);">
-                                    <option value="">Pilih</option>
-                                    <option value="pelajar">Ya, Pelajar</option>
-                                    <option value="bukan">Tidak, Umum</option>
-                                </select>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
+                                        <i class="bi bi-patch-question-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                    </span>
+                                    <select class="form-select shadow-sm border-2" id="is_pelajar" name="is_pelajar" 
+                                        style="border-color: var(--mg-yellow);">
+                                        <option value="">Pilih</option>
+                                        <option value="pelajar">Ya, Pelajar</option>
+                                        <option value="bukan">Tidak, Umum</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div id="individu_umum_bukan" style="display:none;" class="alert alert-success border-start border-5 border-success shadow-sm mt-3">
@@ -157,15 +167,20 @@
                                 <label class="form-label fw-bold fs-6">
                                     Pilih Jenjang Pendidikan
                                 </label>
-                                <select class="form-select shadow-sm border-2" id="jenjang_pelajar" name="jenjang_pelajar" 
-                                    style="border-color: var(--mg-yellow);">
-                                    <option value="">Pilih Jenjang</option>
-                                    <option value="sub_tk">TK</option>
-                                    <option value="sub_sd">SD</option>
-                                    <option value="sub_smp">SMP</option>
-                                    <option value="sub_sma">SMA</option>
-                                    <option value="sub_kuliah">Kuliah</option>
-                                </select>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
+                                        <i class="bi bi-mortarboard-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                    </span>
+                                    <select class="form-select shadow-sm border-2" id="jenjang_pelajar" name="jenjang_pelajar" 
+                                        style="border-color: var(--mg-yellow);">
+                                        <option value="">Pilih Jenjang</option>
+                                        <option value="sub_tk">TK</option>
+                                        <option value="sub_sd">SD</option>
+                                        <option value="sub_smp">SMP</option>
+                                        <option value="sub_sma">SMA</option>
+                                        <option value="sub_kuliah">Kuliah</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div id="individu_umum_pelajar_jumlah" style="display:none;" class="alert border-start border-5 shadow-sm mt-3" style="background: #FFF3CD; border-color: var(--mg-yellow) !important;">

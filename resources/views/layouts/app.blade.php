@@ -464,6 +464,11 @@
                         <a class="nav-link" href="/#events" data-section="events" data-lang-key="nav_events">Events</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('tickets.reschedule.form') }}">
+                            Reschedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/#rating-review" data-section="rating-review" data-lang-key="nav_rating">Rating & Review</a>
                     </li>
                     <li class="nav-item ms-lg-3">

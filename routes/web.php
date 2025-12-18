@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EventBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GamesController;
 use App\Http\Controllers\HomeController;
@@ -22,6 +23,12 @@ Route::prefix('tickets')->group(function () {
     Route::post('/create', [BookingController::class, 'store'])->name('tickets.store');
     Route::get('/track', [BookingController::class, 'track'])->name('tickets.track');
     Route::post('/track', [BookingController::class, 'checkStatus'])->name('tickets.check-status');
+    
+    // Reschedule routes
+    Route::get('/reschedule', [BookingController::class, 'rescheduleForm'])->name('tickets.reschedule.form');
+    Route::post('/reschedule/check', [BookingController::class, 'rescheduleCheck'])->name('tickets.reschedule.check');
+    Route::get('/reschedule/edit/{booking_id}', [BookingController::class, 'rescheduleEdit'])->name('tickets.reschedule.edit');
+    Route::post('/reschedule/update', [BookingController::class, 'rescheduleUpdate'])->name('tickets.reschedule.update');
 });
 
 // Booking routes
@@ -29,6 +36,13 @@ Route::prefix('booking')->group(function () {
     Route::post('/', [BookingController::class, 'store'])->name('booking.store');
     Route::post('/payment/callback', [BookingController::class, 'callback'])->name('booking.payment.callback');
     Route::get('/ticket/{booking_id}', [BookingController::class, 'printTicket'])->name('booking.print-ticket');
+});
+
+// Event Booking routes
+Route::prefix('event/booking')->group(function () {
+    Route::get('/{event_id}', [EventBookingController::class, 'create'])->name('event.booking.create');
+    Route::post('/store', [EventBookingController::class, 'store'])->name('event.booking.store');
+    Route::get('/ticket/{booking_id}', [EventBookingController::class, 'printTicket'])->name('event.booking.ticket');
 });
 
 // Games routes
@@ -44,6 +58,11 @@ Route::get('/payment/review', [PaymentController::class, 'review'])->name('payme
 Route::post('/payment/initiate', [PaymentController::class, 'initiate'])->name('payment.initiate');
 Route::get('/payment/finish', [PaymentController::class, 'finish'])->name('payment.finish');
 Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback')->withoutMiddleware('csrf');
+
+// Event Payment routes
+Route::get('/event/payment/review', [PaymentController::class, 'eventReview'])->name('event.payment.review');
+Route::post('/event/payment/initiate', [PaymentController::class, 'eventInitiate'])->name('event.payment.initiate');
+Route::get('/event/payment/finish', [PaymentController::class, 'eventFinish'])->name('event.payment.finish');
 
 // Knowledge Base routes
 Route::prefix('knowledge-base')->group(function () {
