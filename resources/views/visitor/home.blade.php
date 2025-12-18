@@ -134,12 +134,27 @@
                                     <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
                                     <span>{{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}</span>
                                 </div>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center mb-2">
                                     <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
                                     <strong>Rp {{ number_format($event->price, 0, ',', '.') }}</strong>
                                 </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-users me-2" style="color: var(--mg-yellow);"></i>
+                                    <span>
+                                        <strong>{{ $event->available_slots }}</strong> / {{ $event->capacity }} tersisa
+                                        @if($event->available_slots == 0)
+                                            <span class="badge bg-danger ms-1">SOLD OUT</span>
+                                        @elseif($event->available_slots <= 10)
+                                            <span class="badge bg-warning text-dark ms-1">Hampir Habis!</span>
+                                        @endif
+                                    </span>
+                                </div>
                             </div>
-                            <a href="{{ route('event.booking.create', $event->id) }}" class="btn btn-event-yellow mt-4 fw-bold">Get Ticket</a>
+                            @if($event->available_slots > 0)
+                                <a href="{{ route('event.booking.create', $event->id) }}" class="btn btn-event-yellow mt-4 fw-bold">Get Ticket</a>
+                            @else
+                                <button class="btn btn-secondary mt-4 fw-bold" disabled>Sold Out</button>
+                            @endif
                         </div>
                     </div>
                 </div>

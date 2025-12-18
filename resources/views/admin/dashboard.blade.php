@@ -325,95 +325,6 @@
         </div>
     </div>
 
-    <!-- SECTION 4: FORECASTING (Paling Akhir) -->
-    <div class="row g-4 mb-4">
-        <div class="col-xl-8">
-            <div class="detail-card">
-                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-graph-up me-2"></i>
-                        <span>Tren & Forecasting Kunjungan</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-warning active" onclick="changeForecastPeriod(7)">7 Hari</button>
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="changeForecastPeriod(14)">14 Hari</button>
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="changeForecastPeriod(30)">30 Hari</button>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-success" onclick="exportForecastXlsx()" title="Export Prediksi XLSX">
-                            <i class="bi bi-file-earmark-excel me-1"></i>Export XLSX
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <canvas id="forecastChart" height="80"></canvas>
-                    <div class="forecast-info mt-3">
-                        <div class="row text-center">
-                            <div class="col-md-4">
-                                <div class="forecast-metric">
-                                    <i class="bi bi-graph-up-arrow"></i>
-                                    <h5 id="predictedAvg">0</h5>
-                                    <small>Rata-rata Prediksi</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="forecast-metric">
-                                    <i class="bi bi-arrow-up-right"></i>
-                                    <h5 id="growthRate">0%</h5>
-                                    <small>Pertumbuhan</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="forecast-metric">
-                                    <i class="bi bi-percent"></i>
-                                    <h5 id="accuracy">0%</h5>
-                                    <small>Akurasi Model</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-cpu me-2"></i>
-                    AI Insights & Rekomendasi
-                </div>
-                <div class="card-body">
-                    <div class="insight-item">
-                        <div class="insight-icon success">
-                            <i class="bi bi-lightbulb"></i>
-                        </div>
-                        <div class="insight-content">
-                            <h6>Peak Day Prediction</h6>
-                            <p id="peakDayInsight">Memuat prediksi...</p>
-                        </div>
-                    </div>
-                    <div class="insight-item">
-                        <div class="insight-icon warning">
-                            <i class="bi bi-exclamation-triangle"></i>
-                        </div>
-                        <div class="insight-content">
-                            <h6>Capacity Alert</h6>
-                            <p id="capacityInsight">Memuat analisis...</p>
-                        </div>
-                    </div>
-                    <div class="insight-item">
-                        <div class="insight-icon info">
-                            <i class="bi bi-calendar3"></i>
-                        </div>
-                        <div class="insight-content">
-                            <h6>Seasonal Pattern</h6>
-                            <p id="seasonalInsight">Menganalisis pola...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 @endsection
 @section('styles')
@@ -2258,11 +2169,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     console.log('Initializing Advanced Analytics Dashboard...');
-   
+    
     // Create all charts
-    createForecastChart(7);
-    createHeatmapChart();
-    createMovingAverageChart();
     createCategoryChart();
     createPieChart();
     createProvinceChart();
@@ -2272,7 +2180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initYearlyExportSelector();
     
     // Update metrics
-    updateTrendIndicators();
+    // (removed forecasting metrics)
     
     // Check for anomalies
     checkForAnomalies();
@@ -2289,11 +2197,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================================================
 // EXPORT GLOBAL FUNCTIONS (if needed)
 // ============================================================================
-window.changeForecastPeriod = changeForecastPeriod;
-window.exportForecastData = exportForecastData;
 window.loadMonthlySales = loadMonthlySales;
 window.exportMonthlyXlsx = exportMonthlyXlsx;
 window.exportYearlyXlsx = exportYearlyXlsx;
-window.exportForecastXlsx = exportForecastXlsx;
 </script>
 @endsection

@@ -33,7 +33,10 @@
                             </div>
                             <div class="col-md-6 mb-2">
                                 <i class="fas fa-users me-2" style="color: var(--mg-yellow);"></i>
-                                <strong>Kapasitas:</strong> {{ $event->capacity }} orang
+                                <strong>Kapasitas:</strong> {{ $event->available_slots }} / {{ $event->capacity }} tersisa
+                                @if($event->available_slots <= 10 && $event->available_slots > 0)
+                                    <span class="badge bg-warning text-dark ms-2">Hampir Habis!</span>
+                                @endif
                             </div>
                         </div>
                     </div>

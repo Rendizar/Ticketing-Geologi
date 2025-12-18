@@ -39,7 +39,9 @@
 
                     <!-- Payment Button -->
                     <button id="pay-button" class="btn btn-lg w-100 mb-4 fw-bold shadow-lg" 
-                        style="background: var(--mg-yellow); color: var(--mg-black); border: none; border-radius: 50px; padding: 1.2rem;">
+                        style="background: var(--mg-yellow); color: var(--mg-black); border: none; border-radius: 50px; padding: 1.2rem; cursor: pointer;"
+                        onmouseover="this.style.background='#FFB300'" 
+                        onmouseout="this.style.background='var(--mg-yellow)'">
                         <i class="bi bi-lock-fill me-2"></i>BAYAR SEKARANG
                     </button>
 
@@ -57,24 +59,62 @@
 </div>
 
 <!-- Midtrans Snap -->
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key', 'Mid-client-6Z0HFXjsFWq9AAA-') }}"></script>
-<script>
-    document.getElementById('pay-button').addEventListener('click', function() {
-        snap.pay('{{ $snapToken }}', {
-            onSuccess: function(result) {
-                window.location.href = '{{ route("event.payment.finish") }}?order_id={{ $orderId }}&transaction_status=settlement';
-            },
-            onPending: function(result) {
-                alert('Menunggu pembayaran Anda!');
-            },
-            onError: function(result) {
-                alert('Pembayaran gagal!');
-                window.location.href = '{{ route("home") }}';
-            },
-            onClose: function() {
-                alert('Anda menutup popup pembayaran tanpa menyelesaikan pembayaran');
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+<script type="text/javascript">
+    var snapToken = '{{ $snapToken }}';
+    var orderId = '{{ $orderId }}';
+    
+    console.log('Event Ticket - Snap Token:', snapToken);
+    console.log('Event Ticket - Order ID:', orderId);
+    
+    // Wait for everything to load
+    setTimeout(function() {
+        console.log('Snap available?', typeof snap !== 'undefined');
+        
+        var payButton = document.getElementById('pay-button');
+        if (!payButton) {
+            console.error('Button not found!');
+            return;
+        }
+        
+        if (typeof snap === 'undefined') {
+            console.error('Snap not loaded, using redirect mode');
+            // Fallback to redirect mode
+            payButton.onclick = function() {
+                window.location.href = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/' + snapToken;
+            };
+            return;
+        }
+        
+        payButton.onclick = function() {
+            console.log('Button clicked, opening snap...');
+            
+            try {
+                snap.pay(snapToken, {
+                    onSuccess: function(result) {
+                        console.log('success');
+                        window.location.href = '{{ route("event.payment.finish") }}?order_id=' + orderId + '&transaction_status=settlement';
+                    },
+                    onPending: function(result) {
+                        console.log('pending');
+                        alert('Menunggu pembayaran!');
+                    },
+                    onError: function(result) {
+                        console.log('error', result);
+                        alert('Pembayaran gagal!');
+                    },
+                    onClose: function() {
+                        console.log('customer closed the popup');
+                    }
+                });
+            } catch (error) {
+                console.error('Snap.pay failed, using redirect mode:', error);
+                // Fallback to redirect mode
+                window.location.href = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/' + snapToken;
             }
-        });
-    });
+        };
+        
+        console.log('Payment button initialized');
+    }, 1000);
 </script>
 @endsection

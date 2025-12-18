@@ -17,6 +17,11 @@ class EventBookingController extends Controller
         if (!$event->is_active) {
             return redirect()->route('home')->with('error', 'Event ini sudah tidak aktif.');
         }
+
+        // Check if event has available slots
+        if ($event->available_slots <= 0) {
+            return redirect()->route('home')->with('error', 'Maaf, event ini sudah penuh (sold out).');
+        }
         
         return view('event_bookings.create', compact('event'));
     }
@@ -99,6 +104,11 @@ class EventBookingController extends Controller
         // Validate that at least 1 ticket is selected
         if ($jumlah_tiket < 1) {
             return back()->with('error', 'Silakan pilih minimal 1 tiket.')->withInput();
+        }
+
+        // Check if event has enough available slots
+        if (!$event->hasAvailableSlots($jumlah_tiket)) {
+            return back()->with('error', 'Maaf, kapasitas event tidak mencukupi untuk jumlah tiket yang diminta. Sisa kapasitas: ' . $event->available_slots . ' tiket.')->withInput();
         }
 
         // Calculate total price

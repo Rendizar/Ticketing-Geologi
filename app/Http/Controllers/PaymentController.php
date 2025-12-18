@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Event;
 use App\Models\EventBooking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Midtrans\Config;
 use Midtrans\Snap;
-use PDF;
-use Mail;
+use Barryvdh\DomPDF\Facades\Pdf;
 use App\Mail\TicketMail;
 
 class PaymentController extends Controller
@@ -298,9 +299,11 @@ class PaymentController extends Controller
             'unique_key'        => Str::uuid(),
         ]);
 
-        // Simpan Payment record
+        // Simpan Payment record untuk EVENT
         Payment::create([
-            'booking_id'        => $eventBooking->booking_id,
+            'booking_id'        => null, // NULL karena ini event booking
+            'event_booking_id'  => $eventBooking->booking_id, // ID dari event_bookings
+            'booking_type'      => 'event', // Tandai sebagai event booking
             'transaction_id'    => $orderId,
             'jumlah_pembayaran' => $pending['total_harga'],
             'metode_pembayaran' => $metode,
@@ -323,5 +326,11 @@ class PaymentController extends Controller
 
         // === KIRIM EMAIL DENGAN LAMPIRAN PDF ===
         \Mail::to($eventBooking->email)->send(new \App\Mail\TicketMail($eventBooking, $path));
+
+        // === KURANGI AVAILABLE SLOTS EVENT ===
+        $event = Event::find($pending['event_id']);
+        if ($event) {
+            $event->reduceSlots($pending['jumlah_tiket']);
+        }
     }
 }

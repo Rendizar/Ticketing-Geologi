@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
 use Barryvdh\DomPDF\Facades\Pdf;
+use App\Models\Booking;
+use App\Models\Payment;
+use App\Mail\TicketMail;
 
 class BookingController extends Controller
 {

@@ -10,13 +10,17 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'booking_id', 'transaction_id', 'jumlah_pembayaran', 
-        'metode_pembayaran', 'status_pembayaran', 'dibayarkan_pada'
+        'booking_id', 'event_booking_id', 'booking_type', 'transaction_id', 
+        'jumlah_pembayaran', 'metode_pembayaran', 'status_pembayaran', 'dibayarkan_pada'
     ];
 
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id', 'booking_id');
-    // foreign key | refer ke kolom booking_id di bookings
+    }
+
+    public function eventBooking()
+    {
+        return $this->belongsTo(EventBooking::class, 'event_booking_id', 'booking_id');
     }
 }
