@@ -142,6 +142,50 @@
         </div>
     </div>
 
+    <!-- Quick Actions Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="detail-card">
+                <div class="card-header">
+                    <i class="bi bi-lightning-fill me-2"></i>
+                    Aksi Cepat
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3 col-sm-6">
+                            <a href="{{ route('admin.events.create') }}" class="btn btn-primary w-100 py-3" style="border-radius: 0.75rem;">
+                                <i class="bi bi-plus-circle fs-3 d-block mb-2"></i>
+                                <span class="d-block fw-bold">Tambah Event</span>
+                                <small class="d-block text-white-50">Buat event baru</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <a href="{{ route('admin.events.index') }}" class="btn btn-success w-100 py-3" style="border-radius: 0.75rem;">
+                                <i class="bi bi-calendar-check fs-3 d-block mb-2"></i>
+                                <span class="d-block fw-bold">Kelola Event</span>
+                                <small class="d-block text-white-50">Lihat & edit event</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-info w-100 py-3" style="border-radius: 0.75rem;">
+                                <i class="bi bi-ticket-detailed fs-3 d-block mb-2"></i>
+                                <span class="d-block fw-bold">Kelola Tiket</span>
+                                <small class="d-block text-white-50">Lihat pemesanan</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <a href="{{ route('admin.stats') }}" class="btn btn-warning w-100 py-3" style="border-radius: 0.75rem;">
+                                <i class="bi bi-graph-up-arrow fs-3 d-block mb-2"></i>
+                                <span class="d-block fw-bold">Statistik</span>
+                                <small class="d-block text-white-50">Lihat laporan</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SECTION 2: PENJUALAN TIKET PER BULAN -->
     <div class="row g-4 mb-4">
         <div class="col-12">

@@ -97,7 +97,7 @@
                             </div>
                             <h4 class="mb-3" data-lang-key="service3_title">Mini Games</h4>
                             <p class="text-muted" data-lang-key="service3_desc">Check out the mini games available at the museum!</p>
-                            <a href="#" class="btn btn-service-yellow mt-auto" data-lang-key="service3_button">Play Games</a>
+                            <a href="{{ route('games.index') }}" class="btn btn-service-yellow mt-auto" data-lang-key="service3_button">Play Games</a>
                         </div>
                     </div>
                 </div>

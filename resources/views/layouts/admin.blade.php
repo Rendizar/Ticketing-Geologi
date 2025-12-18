@@ -300,21 +300,21 @@
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fas fa-ticket-alt"></i>
                     Tiket
                 </a>
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.events.index') }}" class="nav-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
                     <i class="fas fa-calendar-alt"></i>
                     Event
                 </a>
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.stats') }}" class="nav-link {{ request()->routeIs('admin.stats') ? 'active' : '' }}">
                     <i class="fas fa-chart-bar"></i>
                     Statistik
                 </a>
