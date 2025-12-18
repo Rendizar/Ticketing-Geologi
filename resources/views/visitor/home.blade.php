@@ -279,15 +279,100 @@
     }
 
     .hero-content h1 {
-        font-size: 5.5rem;
-        font-weight: 800;
-        font-family: inherit; /* Use default font like other sections */
+        font-size: 8rem;
+        font-weight: 900;
+        font-family: inherit;
         color: #1a1a1a;
-        text-shadow: 
-            0 2px 4px rgba(255,255,255,0.8),
-            0 4px 8px rgba(255,255,255,0.6);
         letter-spacing: 8px;
         line-height: 1.1;
+        /* 3D Effect with thick yellow/gold outline */
+        text-shadow: 
+            /* Thick yellow outline */
+            -4px -4px 0 #FFD700,
+            -4px -3px 0 #FFD700,
+            -4px -2px 0 #FFD700,
+            -4px -1px 0 #FFD700,
+            -4px 0px 0 #FFD700,
+            -4px 1px 0 #FFD700,
+            -4px 2px 0 #FFD700,
+            -4px 3px 0 #FFD700,
+            -4px 4px 0 #FFD700,
+            -3px -4px 0 #FFD700,
+            -3px -3px 0 #FFD700,
+            -3px -2px 0 #FFD700,
+            -3px -1px 0 #FFD700,
+            -3px 0px 0 #FFD700,
+            -3px 1px 0 #FFD700,
+            -3px 2px 0 #FFD700,
+            -3px 3px 0 #FFD700,
+            -3px 4px 0 #FFD700,
+            -2px -4px 0 #FFD700,
+            -2px -3px 0 #FFD700,
+            -2px -2px 0 #FFD700,
+            -2px -1px 0 #FFD700,
+            -2px 0px 0 #FFD700,
+            -2px 1px 0 #FFD700,
+            -2px 2px 0 #FFD700,
+            -2px 3px 0 #FFD700,
+            -2px 4px 0 #FFD700,
+            -1px -4px 0 #FFD700,
+            -1px -3px 0 #FFD700,
+            -1px -2px 0 #FFD700,
+            -1px -1px 0 #FFD700,
+            -1px 0px 0 #FFD700,
+            -1px 1px 0 #FFD700,
+            -1px 2px 0 #FFD700,
+            -1px 3px 0 #FFD700,
+            -1px 4px 0 #FFD700,
+            0px -4px 0 #FFD700,
+            0px -3px 0 #FFD700,
+            0px -2px 0 #FFD700,
+            0px -1px 0 #FFD700,
+            0px 1px 0 #FFD700,
+            0px 2px 0 #FFD700,
+            0px 3px 0 #FFD700,
+            0px 4px 0 #FFD700,
+            1px -4px 0 #FFD700,
+            1px -3px 0 #FFD700,
+            1px -2px 0 #FFD700,
+            1px -1px 0 #FFD700,
+            1px 0px 0 #FFD700,
+            1px 1px 0 #FFD700,
+            1px 2px 0 #FFD700,
+            1px 3px 0 #FFD700,
+            1px 4px 0 #FFD700,
+            2px -4px 0 #FFD700,
+            2px -3px 0 #FFD700,
+            2px -2px 0 #FFD700,
+            2px -1px 0 #FFD700,
+            2px 0px 0 #FFD700,
+            2px 1px 0 #FFD700,
+            2px 2px 0 #FFD700,
+            2px 3px 0 #FFD700,
+            2px 4px 0 #FFD700,
+            3px -4px 0 #FFD700,
+            3px -3px 0 #FFD700,
+            3px -2px 0 #FFD700,
+            3px -1px 0 #FFD700,
+            3px 0px 0 #FFD700,
+            3px 1px 0 #FFD700,
+            3px 2px 0 #FFD700,
+            3px 3px 0 #FFD700,
+            3px 4px 0 #FFD700,
+            4px -4px 0 #FFD700,
+            4px -3px 0 #FFD700,
+            4px -2px 0 #FFD700,
+            4px -1px 0 #FFD700,
+            4px 0px 0 #FFD700,
+            4px 1px 0 #FFD700,
+            4px 2px 0 #FFD700,
+            4px 3px 0 #FFD700,
+            4px 4px 0 #FFD700,
+            /* 3D depth shadow */
+            6px 6px 0 #FFA500,
+            8px 8px 0 #FF8C00,
+            /* Final shadow for depth */
+            10px 10px 20px rgba(0,0,0,0.3);
     }
 
     .text-subtitle {
