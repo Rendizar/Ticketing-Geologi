@@ -215,7 +215,7 @@
                     Distribusi Kategori Pengunjung
                 </div>
                 <div class="card-body">
-                    <canvas id="categoryChart" height="80"></canvas>
+                    <canvas id="categoryChart" height="350" width="900"></canvas>
                 </div>
             </div>
         </div>
@@ -234,32 +234,7 @@
     </div>
 
     <!-- Heatmap & Moving Average -->
-    <div class="row g-4 mb-4">
-        <!-- Heatmap Kunjungan per Hari -->
-        <div class="col-xl-6">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-bar-chart-fill me-2"></i>
-                    Heatmap Kunjungan (Hari dalam Seminggu)
-                </div>
-                <div class="card-body">
-                    <canvas id="heatmapChart" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-        <!-- Moving Average Chart -->
-        <div class="col-xl-6">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-graph-up me-2"></i>
-                    Moving Average Trend (7 & 30 Hari)
-                </div>
-                <div class="card-body">
-                    <canvas id="movingAverageChart" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Top Provinsi & Detail Pelajar -->
     <div class="row g-4 mb-4">
