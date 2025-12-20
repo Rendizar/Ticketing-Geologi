@@ -53,7 +53,9 @@ class AdminController extends Controller
                 'per_provinsi' => $this->getPerProvinsi(),
                 'avg_daily' => $this->getAvgDaily(),
                 'total_pengunjung' => $this->getTotalPengunjung(),
-                'kunjungan_bulan_ini' => $this->getKunjunganBulanIni()
+                'kunjungan_bulan_ini' => $this->getKunjunganBulanIni(),
+                'trend_hari_ini' => $this->getTrendHariIni(),
+                'trend_per_kategori' => $this->getTrendPerKategori()
             ];
 
             return view('admin.dashboard', $data);
@@ -67,7 +69,10 @@ class AdminController extends Controller
     private function getKunjunganHariIni()
     {
         try {
-            return Booking::whereDate('tanggal_kunjungan', today())
+            // Get today's date in WIB (Asia/Jakarta) timezone
+            $today = Carbon::now('Asia/Jakarta')->toDateString();
+            
+            return Booking::whereDate('tanggal_kunjungan', $today)
                 ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
         } catch (\Exception $e) {
             Log::warning('Error calculating kunjungan_hari_ini: ' . $e->getMessage());
@@ -141,15 +146,20 @@ class AdminController extends Controller
     private function getAvgDaily()
     {
         try {
-            $total_pengunjung = $this->getTotalPengunjung();
-            $first_booking = Booking::min('created_at');
+            $thirtyDaysAgo = Carbon::now('Asia/Jakarta')->subDays(30)->toDateString();
+            $today = Carbon::now('Asia/Jakarta')->toDateString();
             
-            if ($first_booking && $total_pengunjung > 0) {
-                $days = now()->diffInDays($first_booking) + 1;
-                return $days > 0 ? $total_pengunjung / $days : 0;
-            }
+            // Hitung total pengunjung dalam 30 hari terakhir
+            $totalVisits = Booking::whereBetween('tanggal_kunjungan', [$thirtyDaysAgo, $today])
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
             
-            return 0;
+            // Hitung jumlah hari yang memiliki data kunjungan dalam 30 hari terakhir
+            $daysWithData = Booking::whereBetween('tanggal_kunjungan', [$thirtyDaysAgo, $today])
+                ->distinct('tanggal_kunjungan')
+                ->count('tanggal_kunjungan');
+            
+            // Jika tidak ada data, return 0. Jika ada, hitung rata-rata per hari
+            return $daysWithData > 0 ? $totalVisits / $daysWithData : 0;
         } catch (\Exception $e) {
             Log::warning('Error calculating avg_daily: ' . $e->getMessage());
             return 0;
@@ -159,12 +169,98 @@ class AdminController extends Controller
     private function getKunjunganBulanIni()
     {
         try {
-            return Booking::whereMonth('tanggal_kunjungan', now()->month)
-                ->whereYear('tanggal_kunjungan', now()->year)
+            // Get current month and year in WIB (Asia/Jakarta) timezone
+            $now = Carbon::now('Asia/Jakarta');
+            
+            return Booking::whereMonth('tanggal_kunjungan', $now->month)
+                ->whereYear('tanggal_kunjungan', $now->year)
                 ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
         } catch (\Exception $e) {
             Log::warning('Error calculating kunjungan_bulan_ini: ' . $e->getMessage());
             return 0;
+        }
+    }
+
+    private function getTrendHariIni()
+    {
+        try {
+            $today = Carbon::now('Asia/Jakarta')->toDateString();
+            $sevenDaysAgo = Carbon::now('Asia/Jakarta')->subDays(7)->toDateString();
+            
+            // Kunjungan hari ini
+            $todayVisits = Booking::whereDate('tanggal_kunjungan', $today)
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
+            
+            // Rata-rata 7 hari sebelumnya (tidak termasuk hari ini)
+            $avgLast7Days = Booking::whereBetween('tanggal_kunjungan', [$sevenDaysAgo, Carbon::now('Asia/Jakarta')->subDay()->toDateString()])
+                ->select(DB::raw('AVG(daily_total) as avg_total'))
+                ->fromSub(function ($query) use ($sevenDaysAgo) {
+                    $query->select(
+                        'tanggal_kunjungan',
+                        DB::raw('SUM(COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)) as daily_total')
+                    )
+                    ->from('bookings')
+                    ->whereBetween('tanggal_kunjungan', [$sevenDaysAgo, Carbon::now('Asia/Jakarta')->subDay()->toDateString()])
+                    ->groupBy('tanggal_kunjungan');
+                }, 'daily_data')
+                ->value('avg_total') ?? 0;
+            
+            // Hitung persentase perubahan
+            if ($avgLast7Days > 0) {
+                $trend = (($todayVisits - $avgLast7Days) / $avgLast7Days) * 100;
+                return round($trend, 1);
+            }
+            
+            return 0;
+        } catch (\Exception $e) {
+            Log::warning('Error calculating trend_hari_ini: ' . $e->getMessage());
+            return 0;
+        }
+    }
+
+    private function getTrendPerKategori()
+    {
+        try {
+            $today = Carbon::now('Asia/Jakarta');
+            $thirtyDaysAgo = Carbon::now('Asia/Jakarta')->subDays(30);
+            $sixtyDaysAgo = Carbon::now('Asia/Jakarta')->subDays(60);
+            
+            // Data 30 hari terakhir
+            $recent30Days = Booking::whereBetween('tanggal_kunjungan', [$thirtyDaysAgo, $today])
+                ->select(
+                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
+                    DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                )->first();
+            
+            // Data 30 hari sebelumnya (31-60 hari yang lalu)
+            $previous30Days = Booking::whereBetween('tanggal_kunjungan', [$sixtyDaysAgo, $thirtyDaysAgo->copy()->subDay()])
+                ->select(
+                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
+                    DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                )->first();
+            
+            $trends = [
+                'pelajar' => 0,
+                'umum' => 0,
+                'asing' => 0
+            ];
+            
+            // Hitung trend untuk setiap kategori
+            foreach (['pelajar', 'umum', 'asing'] as $category) {
+                $recentValue = $recent30Days->$category ?? 0;
+                $previousValue = $previous30Days->$category ?? 0;
+                
+                if ($previousValue > 0) {
+                    $trends[$category] = round((($recentValue - $previousValue) / $previousValue) * 100, 1);
+                }
+            }
+            
+            return (object)$trends;
+        } catch (\Exception $e) {
+            Log::warning('Error calculating trend_per_kategori: ' . $e->getMessage());
+            return (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0];
         }
     }
 
@@ -178,6 +274,8 @@ class AdminController extends Controller
             'avg_daily' => 0,
             'total_pengunjung' => 0,
             'kunjungan_bulan_ini' => 0,
+            'trend_hari_ini' => 0,
+            'trend_per_kategori' => (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0],
             'error_message' => $errorMessage
         ]);
     }
@@ -335,29 +433,12 @@ class AdminController extends Controller
 
             $start = Carbon::create($year, $month, 1)->startOfDay();
             $end = (clone $start)->endOfMonth()->endOfDay();
-            $daysInMonth = $start->daysInMonth;
 
-            // Fetch grouped sums by day
-            $rows = Booking::whereBetween('tanggal_kunjungan', [$start->toDateString(), $end->toDateString()])
-                ->select(
-                    DB::raw('DAY(tanggal_kunjungan) as day'),
-                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
-                    DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
-                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
-                )
-                ->groupBy(DB::raw('DAY(tanggal_kunjungan)'))
-                ->orderBy(DB::raw('DAY(tanggal_kunjungan)'))
+            // Fetch detail bookings
+            $bookings = Booking::whereBetween('tanggal_kunjungan', [$start->toDateString(), $end->toDateString()])
+                ->orderBy('tanggal_kunjungan')
+                ->orderBy('created_at')
                 ->get();
-
-            // Map rows to day => values
-            $byDay = [];
-            foreach ($rows as $r) {
-                $byDay[(int) $r->day] = [
-                    'pelajar' => (int) $r->pelajar,
-                    'umum' => (int) $r->umum,
-                    'asing' => (int) $r->asing,
-                ];
-            }
 
             $monthName = Carbon::create($year, $month, 1)->locale('id')->translatedFormat('F Y');
             $filename = "Penjualan_Tiket_Bulanan_{$year}_{$month}.xlsx";
@@ -369,22 +450,39 @@ class AdminController extends Controller
 
             // Header
             $sheet->setCellValue('A1', 'LAPORAN PENJUALAN TIKET BULANAN');
-            $sheet->mergeCells('A1:E1');
+            $sheet->mergeCells('A1:O1');
             $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
             $sheet->setCellValue('A2', 'Museum Geologi Bandung');
-            $sheet->mergeCells('A2:E2');
+            $sheet->mergeCells('A2:O2');
             $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('A2')->getFont()->setSize(12);
 
             $sheet->setCellValue('A3', 'Periode: ' . $monthName);
-            $sheet->setCellValue('D3', 'Dicetak: ' . now()->locale('id')->translatedFormat('d F Y H:i'));
-            $sheet->getStyle('A3:E3')->getFont()->setItalic(true);
+            $sheet->setCellValue('M3', 'Dicetak: ' . now()->locale('id')->translatedFormat('d F Y H:i'));
+            $sheet->getStyle('A3:O3')->getFont()->setItalic(true);
 
             // Table header
             $headerRow = 5;
-            $headers = ['Tanggal', 'Pelajar', 'Umum', 'Asing', 'Total'];
+            $headers = [
+                'No',
+                'Tanggal Kunjungan',
+                'Jenis Pemesanan',
+                'TK',
+                'SD',
+                'SMP',
+                'SMA',
+                'Kuliah',
+                'Total Pelajar',
+                'Umum',
+                'Asing',
+                'Negara',
+                'Provinsi',
+                'Kab/Kota',
+                'Total'
+            ];
+            
             $col = 'A';
             foreach ($headers as $header) {
                 $sheet->setCellValue($col . $headerRow, $header);
@@ -392,61 +490,94 @@ class AdminController extends Controller
             }
 
             // Style table header
-            $sheet->getStyle("A{$headerRow}:E{$headerRow}")->applyFromArray([
+            $sheet->getStyle("A{$headerRow}:O{$headerRow}")->applyFromArray([
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFD400']],
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
                 'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
             ]);
 
             // Data rows
             $row = $headerRow + 1;
+            $no = 1;
+            $totalTK = $totalSD = $totalSMP = $totalSMA = $totalKuliah = 0;
             $totalPelajar = $totalUmum = $totalAsing = 0;
 
-            for ($d = 1; $d <= $daysInMonth; $d++) {
-                $date = Carbon::create($year, $month, $d);
-                $p = $byDay[$d]['pelajar'] ?? 0;
-                $u = $byDay[$d]['umum'] ?? 0;
-                $a = $byDay[$d]['asing'] ?? 0;
-                $total = $p + $u + $a;
+            foreach ($bookings as $booking) {
+                $tk = (int) $booking->sub_tk;
+                $sd = (int) $booking->sub_sd;
+                $smp = (int) $booking->sub_smp;
+                $sma = (int) $booking->sub_sma;
+                $kuliah = (int) $booking->sub_kuliah;
+                $pelajar = (int) $booking->jumlah_pelajar;
+                $umum = (int) $booking->jumlah_umum;
+                $asing = (int) $booking->jumlah_asing;
+                $total = $pelajar + $umum + $asing;
 
-                $sheet->setCellValue('A' . $row, $date->locale('id')->translatedFormat('d F Y'));
-                $sheet->setCellValue('B' . $row, $p);
-                $sheet->setCellValue('C' . $row, $u);
-                $sheet->setCellValue('D' . $row, $a);
-                $sheet->setCellValue('E' . $row, $total);
+                $sheet->setCellValue('A' . $row, $no);
+                $sheet->setCellValue('B' . $row, Carbon::parse($booking->tanggal_kunjungan)->locale('id')->translatedFormat('d F Y'));
+                $sheet->setCellValue('C' . $row, ucfirst($booking->jenis_pemesanan ?? 'reguler'));
+                $sheet->setCellValue('D' . $row, $tk);
+                $sheet->setCellValue('E' . $row, $sd);
+                $sheet->setCellValue('F' . $row, $smp);
+                $sheet->setCellValue('G' . $row, $sma);
+                $sheet->setCellValue('H' . $row, $kuliah);
+                $sheet->setCellValue('I' . $row, $pelajar);
+                $sheet->setCellValue('J' . $row, $umum);
+                $sheet->setCellValue('K' . $row, $asing);
+                $sheet->setCellValue('L' . $row, $booking->negara ?? '-');
+                $sheet->setCellValue('M' . $row, $booking->provinsi ?? '-');
+                $sheet->setCellValue('N' . $row, $booking->kota ?? '-');
+                $sheet->setCellValue('O' . $row, $total);
 
-                $totalPelajar += $p;
-                $totalUmum += $u;
-                $totalAsing += $a;
+                $totalTK += $tk;
+                $totalSD += $sd;
+                $totalSMP += $smp;
+                $totalSMA += $sma;
+                $totalKuliah += $kuliah;
+                $totalPelajar += $pelajar;
+                $totalUmum += $umum;
+                $totalAsing += $asing;
 
                 // Zebra striping
-                if ($d % 2 == 0) {
-                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                if ($no % 2 == 0) {
+                    $sheet->getStyle("A{$row}:O{$row}")->applyFromArray([
                         'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F9F9F9']]
                     ]);
                 }
 
                 $row++;
+                $no++;
             }
 
             // Style data area
             $lastRow = $row - 1;
-            $sheet->getStyle("A{$headerRow}:E{$lastRow}")->applyFromArray([
-                'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'CCCCCC']]]
-            ]);
-            $sheet->getStyle("B" . ($headerRow + 1) . ":E{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            if ($lastRow >= $headerRow + 1) {
+                $sheet->getStyle("A{$headerRow}:O{$lastRow}")->applyFromArray([
+                    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'CCCCCC']]]
+                ]);
+                $sheet->getStyle("A" . ($headerRow + 1) . ":O{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            }
 
             // Total row
             $row++;
             $grandTotal = $totalPelajar + $totalUmum + $totalAsing;
             $sheet->setCellValue('A' . $row, 'TOTAL BULANAN');
-            $sheet->setCellValue('B' . $row, $totalPelajar);
-            $sheet->setCellValue('C' . $row, $totalUmum);
-            $sheet->setCellValue('D' . $row, $totalAsing);
-            $sheet->setCellValue('E' . $row, $grandTotal);
+            $sheet->mergeCells("A{$row}:C{$row}");
+            $sheet->setCellValue('D' . $row, $totalTK);
+            $sheet->setCellValue('E' . $row, $totalSD);
+            $sheet->setCellValue('F' . $row, $totalSMP);
+            $sheet->setCellValue('G' . $row, $totalSMA);
+            $sheet->setCellValue('H' . $row, $totalKuliah);
+            $sheet->setCellValue('I' . $row, $totalPelajar);
+            $sheet->setCellValue('J' . $row, $totalUmum);
+            $sheet->setCellValue('K' . $row, $totalAsing);
+            $sheet->setCellValue('L' . $row, '');
+            $sheet->setCellValue('M' . $row, '');
+            $sheet->setCellValue('N' . $row, '');
+            $sheet->setCellValue('O' . $row, $grandTotal);
 
-            $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+            $sheet->getStyle("A{$row}:O{$row}")->applyFromArray([
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '0B0B0B']],
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
@@ -454,11 +585,21 @@ class AdminController extends Controller
             ]);
 
             // Column widths
-            $sheet->getColumnDimension('A')->setWidth(25);
-            $sheet->getColumnDimension('B')->setWidth(15);
+            $sheet->getColumnDimension('A')->setWidth(6);
+            $sheet->getColumnDimension('B')->setWidth(20);
             $sheet->getColumnDimension('C')->setWidth(15);
-            $sheet->getColumnDimension('D')->setWidth(15);
-            $sheet->getColumnDimension('E')->setWidth(15);
+            $sheet->getColumnDimension('D')->setWidth(8);
+            $sheet->getColumnDimension('E')->setWidth(8);
+            $sheet->getColumnDimension('F')->setWidth(8);
+            $sheet->getColumnDimension('G')->setWidth(8);
+            $sheet->getColumnDimension('H')->setWidth(10);
+            $sheet->getColumnDimension('I')->setWidth(12);
+            $sheet->getColumnDimension('J')->setWidth(10);
+            $sheet->getColumnDimension('K')->setWidth(10);
+            $sheet->getColumnDimension('L')->setWidth(15);
+            $sheet->getColumnDimension('M')->setWidth(20);
+            $sheet->getColumnDimension('N')->setWidth(20);
+            $sheet->getColumnDimension('O')->setWidth(12);
 
             return $this->generateXlsxResponse($spreadsheet, $filename);
 

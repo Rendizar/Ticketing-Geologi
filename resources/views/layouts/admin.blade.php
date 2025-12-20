@@ -72,12 +72,29 @@
         }
 
         .sidebar-brand {
-            font-family: 'Montserrat', 'Futura PT', 'Century Gothic', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            color: var(--mg-black);
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            font-family: 'Futura PT', 'Century Gothic', sans-serif;
+            color: #1a1a1a;
+            -webkit-text-stroke: 2px #FFD400;
+            text-stroke: 2px #FFD400;
+            paint-order: stroke fill;
+            text-shadow: 
+                0 1px 0 #FFD400,
+                0 2px 0 #FFD400,
+                0 3px 0 #FFD400,
+                0 4px 0 #FFD400,
+                0 5px 0 #FFD400,
+                0 6px 1px rgba(0,0,0,.1),
+                0 0 5px rgba(0,0,0,.1),
+                0 1px 3px rgba(0,0,0,.3),
+                0 3px 5px rgba(0,0,0,.2),
+                0 5px 10px rgba(0,0,0,.25),
+                0 10px 20px rgba(0,0,0,.2),
+                0 20px 30px rgba(0,0,0,.15);
+            letter-spacing: 0.15em;
+            line-height: 1.1;
+            transform: perspective(500px) rotateX(5deg);
             margin: 0;
         }
 
@@ -147,71 +164,41 @@
             margin-left: 0;
         }
 
-        /* Navbar */
-        .top-navbar {
-            background: rgba(255, 212, 0, 0.98);
-            backdrop-filter: blur(10px);
-            border-bottom: 3px solid var(--mg-black);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            transition: all 0.3s ease;
-        }
-
-        .top-navbar.scrolled {
-            padding: 0.75rem 1.5rem;
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 212, 0, 1);
-        }
-
-        .navbar-toggle {
+        /* Floating Toggle Button */
+        .floating-sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: calc(var(--sidebar-width) + 10px);
+            z-index: 1050;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             background: linear-gradient(135deg, var(--mg-yellow) 0%, #FFB300 100%);
-            border: 2px solid var(--mg-black);
+            border: none;
             color: var(--mg-black);
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .navbar-toggle:hover {
-            background: var(--mg-black);
-            color: var(--mg-yellow);
-            transform: scale(1.05);
-        }
-
-        .navbar-title {
-            font-family: 'Futura PT', 'Century Gothic', 'Montserrat', sans-serif;
             font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--mg-black);
-            letter-spacing: 0.05em;
-            text-shadow: 2px 2px 0px rgba(11, 11, 11, 0.15);
-        }
-
-        .navbar-user {
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 212, 0, 0.4);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .main-content.expanded .floating-sidebar-toggle {
+            left: 10px;
+        }
+
+        .floating-sidebar-toggle:hover {
             background: var(--mg-black);
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-user:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .navbar-user span {
             color: var(--mg-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 212, 0, 0.6);
+        }
+
+        .floating-sidebar-toggle:active {
+            transform: translateY(0);
         }
 
         .user-avatar {
@@ -333,22 +320,10 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <!-- Top Navbar -->
-        <div class="top-navbar">
-            <div class="d-flex align-items-center gap-3">
-                <button class="navbar-toggle" id="sidebarToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <span class="navbar-title">Museum Geologi Bandung</span>
-            </div>
-            
-            <div class="navbar-user">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <span class="fw-bold d-none d-md-inline">Admin</span>
-            </div>
-        </div>
+        <!-- Floating Toggle Button -->
+        <button class="floating-sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
 
         <!-- Content -->
         <div class="content-wrapper">
@@ -364,21 +339,6 @@
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('mainContent');
         const sidebarToggle = document.getElementById('sidebarToggle');
-        const navbar = document.querySelector('.top-navbar');
-
-        // Navbar scroll effect
-        let lastScrollTop = 0;
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            
-            lastScrollTop = scrollTop;
-        });
 
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');

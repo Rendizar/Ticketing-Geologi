@@ -9,22 +9,22 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-3 game-title game-title-outline">
+            <h1 class="display-2 fw-bold mb-4 game-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
                 Geology Crossword Puzzle
             </h1>
-            <p class="fs-3 text-dark opacity-95 game-subtitle">
+            <p class="fs-4 game-subtitle" style="color: #6c6c6c; font-weight: 500;">
                 Fill the grid with correct geology terms!
             </p>
             
             <!-- Score & Timer -->
-            <div class="d-flex justify-content-center gap-4 mt-4">
-                <div class="badge bg-dark border border-danger fs-5 px-4 py-2">
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <div class="badge bg-white border-2 border-danger fs-6 px-4 py-2 shadow-sm">
                     <i class="fas fa-clock text-danger me-2"></i>
-                    Time: <span id="timer" class="text-danger">00:00</span>
+                    <span style="color: #1F2933; font-weight: 600;">Time:</span> <span id="timer" class="text-danger fw-bold">00:00</span>
                 </div>
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2">
-                    <i class="fas fa-check-circle text-warning me-2"></i>
-                    Score: <span id="score" class="text-warning">0</span>/<span id="total" class="text-warning">0</span>
+                <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;">
+                    <i class="fas fa-check-circle me-2" style="color: #FACC15;"></i>
+                    <span style="color: #1F2933; font-weight: 600;">Score:</span> <span id="score" class="fw-bold" style="color: #FACC15;">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="total" class="fw-bold" style="color: #FACC15;">0</span>
                 </div>
             </div>
         </div>
@@ -32,21 +32,21 @@
         <!-- Card Game Utama -->
         <div class="row justify-content-center">
             <div class="col-12 col-xl-11">
-                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden game-card">
-                    <div class="card-body p-4 p-xl-5 text-white">
+                <div class="card bg-white border-0 shadow-lg rounded-4 overflow-hidden game-card">
+                    <div class="card-body p-4 p-xl-5">
 
                         <div class="row g-4 align-items-start">
 
                             <!-- Crossword Grid -->
                             <div class="col-lg-7">
-                                <div class="bg-black bg-opacity-50 p-4 rounded-3 border-warning border-3">
+                                <div class="bg-light p-4 rounded-3 border-2" style="border-color: #FACC15 !important;">
                                     <div id="crossword" class="mx-auto"></div>
                                 </div>
                                 
                                 <!-- Progress Bar -->
                                 <div class="mt-3">
-                                    <label class="form-label text-dark fw-bold mb-2">
-                                        <i class="fas fa-chart-line me-2"></i>Progress Bar
+                                    <label class="form-label fw-bold mb-2" style="color: #1F2933;">
+                                        <i class="fas fa-chart-line me-2" style="color: #FACC15;"></i>Progress Bar
                                     </label>
                                     <div class="progress game-progress">
                                         <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
@@ -59,15 +59,15 @@
 
                             <!-- Clues Section -->
                             <div class="col-lg-5">
-                                <h3 class="text-warning fw-bold mb-4 fs-2">
-                                    <i class="fas fa-lightbulb me-3"></i>Clues
+                                <h3 class="fw-bold mb-4 fs-4" style="color: #1F2933;">
+                                    <i class="fas fa-lightbulb me-2" style="color: #FACC15;"></i>Clues
                                 </h3>
-                                <div class="clues-container bg-black bg-opacity-40 p-4 rounded-3 border-warning border-2">
+                                <div class="clues-container bg-light p-4 rounded-3 border-2" style="border-color: #FACC15 !important;">
                                     
                                     <!-- Across -->
                                     <div class="mb-4">
-                                        <h5 class="text-warning fw-bold mb-3 fs-4">
-                                            <i class="fas fa-arrow-right me-2"></i>Across
+                                        <h5 class="fw-bold mb-3 fs-5" style="color: #1F2933;">
+                                            <i class="fas fa-arrow-right me-2" style="color: #FACC15;"></i>Across
                                         </h5>
                                         <div class="clue-list" id="acrossClues">
                                             <!-- Clues will be generated dynamically -->
@@ -76,8 +76,8 @@
                                     
                                     <!-- Down -->
                                     <div>
-                                        <h5 class="text-warning fw-bold mb-3 fs-4">
-                                            <i class="fas fa-arrow-down me-2"></i>Down
+                                        <h5 class="fw-bold mb-3 fs-5" style="color: #1F2933;">
+                                            <i class="fas fa-arrow-down me-2" style="color: #FACC15;"></i>Down
                                         </h5>
                                         <div class="clue-list" id="downClues">
                                             <!-- Clues will be generated dynamically -->
@@ -87,7 +87,7 @@
                                 
                                 <!-- Hint Button -->
                                 <div class="mt-3">
-                                    <button onclick="giveHint()" class="btn btn-warning btn-sm w-100 fw-bold text-dark">
+                                    <button onclick="giveHint()" class="btn btn-hint w-100 fw-bold">
                                         <i class="fas fa-question-circle me-2"></i><span id="hintText">Get Hint (3 remaining)</span>
                                     </button>
                                 </div>
@@ -98,15 +98,15 @@
                         <div class="text-center mt-5">
                             <div class="d-flex flex-wrap justify-content-center gap-3">
                                 <button onclick="checkAnswers()" 
-                                        class="btn btn-success btn-lg px-5 py-3 fw-bold shadow-lg">
+                                        class="btn btn-check-answer px-4 py-2 fw-bold">
                                     <i class="fas fa-check-double me-2"></i>Check Answers
                                 </button>
                                 <button onclick="revealAnswer()" 
-                                        class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg text-white">
+                                        class="btn btn-reveal-answer px-4 py-2 fw-bold">
                                     <i class="fas fa-eye me-2"></i>Reveal All
                                 </button>
                                 <button onclick="resetPuzzle()" 
-                                        class="btn btn-danger btn-lg px-5 py-3 fw-bold shadow-lg">
+                                        class="btn btn-reset-game px-4 py-2 fw-bold">
                                     <i class="fas fa-redo me-2"></i>Reset
                                 </button>
                             </div>
@@ -122,7 +122,7 @@
         <!-- Tombol Kembali -->
         <div class="text-center mt-5">
             <a href="{{ route('games.index') }}" 
-               class="btn btn-warning btn-lg px-5 py-3 fw-bold text-dark shadow-lg hover-lift">
+               class="btn btn-back-home px-4 py-2 fw-bold">
                 <i class="fas fa-arrow-left me-2"></i>Back to Mini Games
             </a>
         </div>
@@ -135,50 +135,49 @@
 <style>
     /* Theme Variables */
     :root {
-        --game-yellow: #FFD400;
-        --game-black: #1a1a1a;
-        --game-dark: #0a0a0a;
+        --game-yellow: #FACC15;
+        --game-dark: #1F2933;
+        --game-muted: #6c6c6c;
+        --game-light: #f8f9fa;
     }
 
     /* Title Styles */
     .game-title {
-        text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        letter-spacing: 4px;
-    }
-
-    .game-title-outline {
-        color: var(--mg-black);
-        -webkit-text-stroke: 3px var(--game-yellow);
-        text-stroke: 3px var(--game-yellow);
-        paint-order: stroke fill;
+        letter-spacing: 2px;
+        text-shadow: none;
     }
 
     .game-subtitle {
-        text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+        text-shadow: none;
     }
 
     /* Game Card */
     .game-card {
-        border: 5px solid var(--game-yellow) !important;
-        backdrop-filter: blur(18px);
+        transition: all 0.3s ease;
     }
 
     /* Clue Items */
     .clue-item {
-        background: rgba(255,212,0,0.1);
+        background: rgba(250, 204, 21, 0.1);
         transition: all 0.3s ease;
         cursor: pointer;
+        border-radius: 8px;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-left: 3px solid transparent;
     }
 
     .clue-item:hover {
-        background: rgba(255,212,0,0.2);
+        background: rgba(250, 204, 21, 0.2);
+        border-left-color: var(--game-yellow);
         transform: translateX(5px);
     }
 
     /* Progress Bar */
     .game-progress {
-        height: 30px;
-        background: var(--game-black);
+        height: 25px;
+        background: #e9ecef;
+        border-radius: 12px;
     }
 
     /* Clues Container */
@@ -187,16 +186,16 @@
         overflow-y: auto;
     }
 
-    /* Grid Crossword - Responsive & Beautiful */
+    /* Grid Crossword - Modern & Clean */
     #crossword {
         display: grid;
         gap: 3px;
         grid-template-columns: repeat(12, 1fr);
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        background: #ffffff;
         padding: 20px;
-        border-radius: 20px;
-        border: 4px solid #FFD400;
-        box-shadow: 0 0 40px rgba(255,212,0,0.4);
+        border-radius: 15px;
+        border: 2px solid var(--game-yellow);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         max-width: 650px;
         margin: 0 auto;
     }
@@ -204,13 +203,13 @@
     .cw-cell {
         aspect-ratio: 1;
         min-width: 0;
-        background: #1a1a1a;
-        border-radius: 8px;
+        background: #f8f9fa;
+        border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .cw-cell.has-number::before {
@@ -218,8 +217,8 @@
         position: absolute;
         top: 2px;
         left: 4px;
-        font-size: 0.7rem;
-        color: #FFD400;
+        font-size: 0.65rem;
+        color: var(--game-yellow);
         font-weight: bold;
         z-index: 1;
     }
@@ -230,9 +229,9 @@
         text-align: center;
         font-size: clamp(1rem, 2vw, 1.5rem);
         font-weight: bold;
-        background: rgba(255,255,255,0.08);
-        border: 2px solid #FFD400;
-        color: white;
+        background: #ffffff;
+        border: 2px solid #dee2e6;
+        color: #1F2933;
         border-radius: 6px;
         text-transform: uppercase;
         transition: all 0.3s ease;
@@ -240,10 +239,10 @@
     }
 
     .cw-cell input:focus {
-        background: rgba(255,212,0,0.25) !important;
-        border-color: #FFD700;
-        outline: 3px solid rgba(255,212,0,0.4);
-        box-shadow: 0 0 20px rgba(255,212,0,0.6);
+        background: rgba(250, 204, 21, 0.15) !important;
+        border-color: var(--game-yellow);
+        outline: 2px solid rgba(250, 204, 21, 0.3);
+        box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
         transform: scale(1.05);
         z-index: 10;
     }
@@ -284,6 +283,34 @@
         50% { box-shadow: 0 0 25px rgba(0,123,255,1); }
     }
 
+    /* Button Styles - Selaras dengan Home */
+    .btn-hint,
+    .btn-check-answer,
+    .btn-reveal-answer,
+    .btn-reset-game,
+    .btn-back-home {
+        background: var(--game-yellow) !important;
+        color: #000 !important;
+        border: 2px solid var(--game-yellow) !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-hint:hover,
+    .btn-check-answer:hover,
+    .btn-reveal-answer:hover,
+    .btn-reset-game:hover,
+    .btn-back-home:hover {
+        background: transparent !important;
+        color: var(--game-yellow) !important;
+        border-color: var(--game-yellow) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
+    }
+
     /* Responsive Grid */
     @media (max-width: 1200px) {
         #crossword {
@@ -300,15 +327,13 @@
             padding: 10px;
         }
         .cw-cell input { font-size: 1rem; }
-    }
-
-    /* Hover Lift Tombol */
-    .hover-lift {
-        transition: all 0.4s ease;
-    }
-    .hover-lift:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 50px rgba(255,212,0,0.5) !important;
+        .game-title { 
+            font-size: 2rem !important; 
+            letter-spacing: 1px;
+        }
+        .game-subtitle {
+            font-size: 1.1rem !important;
+        }
     }
 
     /* Scrollbar Custom */
@@ -316,17 +341,15 @@
         width: 8px;
     }
     .clues-container::-webkit-scrollbar-track {
-        background: rgba(255,212,0,0.1);
+        background: rgba(250, 204, 21, 0.1);
         border-radius: 10px;
     }
     .clues-container::-webkit-scrollbar-thumb {
-        background: #FFD400;
+        background: var(--game-yellow);
         border-radius: 10px;
     }
-
-    /* Shadow 2XL */
-    .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    .clues-container::-webkit-scrollbar-thumb:hover {
+        background: #e6b800;
     }
 </style>
 @endsection
@@ -340,9 +363,9 @@ const GAME_CONFIG = {
     GRID_SIZE: 12,
     INITIAL_HINTS: 3,
     SWAL_THEME: {
-        background: '#1a1a1a',
-        color: '#fff',
-        confirmButtonColor: '#FFD400'
+        background: '#ffffff',
+        color: '#1F2933',
+        confirmButtonColor: '#FACC15'
     }
 };
 

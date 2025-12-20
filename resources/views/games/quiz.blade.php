@@ -8,22 +8,22 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-3 quiz-title quiz-title-outline">
+            <h1 class="display-2 fw-bold mb-4 quiz-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
                 Rock & Fossil Quiz
             </h1>
-            <p class="fs-3 text-dark opacity-95 quiz-subtitle">
+            <p class="fs-4 quiz-subtitle" style="color: #6c6c6c; font-weight: 500;">
                 Test your knowledge about rocks and fossils!
             </p>
             
             <!-- Score & Progress -->
             <div class="d-flex flex-wrap justify-content-center gap-3 mt-4 px-3">
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2" role="status" aria-live="polite">
-                    <i class="fas fa-star text-warning me-2"></i>
-                    Score: <span id="score" class="text-warning fw-bold" aria-label="Current score">0</span>/<span id="total" class="text-warning">10</span>
+                <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;" role="status" aria-live="polite">
+                    <i class="fas fa-star me-2" style="color: #FACC15;"></i>
+                    <span style="color: #1F2933; font-weight: 600;">Score:</span> <span id="score" class="fw-bold" style="color: #FACC15;" aria-label="Current score">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="total" style="color: #FACC15;">10</span>
                 </div>
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2" role="status" aria-live="polite">
-                    <i class="fas fa-question-circle text-warning me-2"></i>
-                    Question: <span id="currentQ" class="text-warning fw-bold" aria-label="Current question number">1</span>/<span id="totalQ" class="text-warning">10</span>
+                <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;" role="status" aria-live="polite">
+                    <i class="fas fa-question-circle me-2" style="color: #FACC15;"></i>
+                    <span style="color: #1F2933; font-weight: 600;">Question:</span> <span id="currentQ" class="fw-bold" style="color: #FACC15;" aria-label="Current question number">1</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="totalQ" style="color: #FACC15;">10</span>
                 </div>
             </div>
         </div>
@@ -31,13 +31,13 @@
         <!-- Card Game Utama -->
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10 col-xl-8">
-                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden quiz-card">
+                <div class="card bg-white border-0 shadow-lg rounded-4 overflow-hidden quiz-card">
                     <div class="card-body p-4 p-xl-5">
 
                         <div id="quiz">
                             <!-- Question -->
-                            <div class="p-4 rounded-3 border-dark border-3 mb-4 quiz-question-box">
-                                <h2 class="text-center mb-0 fs-3 fs-md-2 fw-bold quiz-question" id="question" role="heading" aria-level="2"></h2>
+                            <div class="p-4 rounded-3 border-2 mb-4 quiz-question-box" style="border-color: #FACC15 !important; background-color: #fffbeb;">
+                                <h2 class="text-center mb-0 fs-3 fs-md-2 fw-bold quiz-question" id="question" role="heading" aria-level="2" style="color: #1F2933;"></h2>
                             </div>
 
                             <!-- Options -->
@@ -49,7 +49,7 @@
                             <!-- Next Button -->
                             <div class="text-center">
                                 <button onclick="nextQuestion()" 
-                                        class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg hover-lift quiz-next-btn" 
+                                        class="btn btn-next-question px-4 py-2 fw-bold" 
                                         id="nextBtn" 
                                         style="display:none;"
                                         aria-label="Go to next question">
@@ -66,7 +66,7 @@
         <!-- Tombol Kembali -->
         <div class="text-center mt-5">
             <a href="{{ route('games.index') }}" 
-               class="btn btn-warning btn-lg px-5 py-3 fw-bold text-dark shadow-lg hover-lift">
+               class="btn btn-back-home px-4 py-2 fw-bold">
                 <i class="fas fa-arrow-left me-2"></i>Back to Mini Games
             </a>
         </div>
@@ -78,85 +78,80 @@
 <style>
     /* Theme Variables */
     :root {
-        --quiz-yellow: #FFC107;
-        --quiz-dark: #1a1a1a;
-        --quiz-border: #FFD400;
+        --quiz-yellow: #FACC15;
+        --quiz-dark: #1F2933;
+        --quiz-muted: #6c6c6c;
+        --quiz-light: #fffbeb;
     }
 
     /* Title Styles */
     .quiz-title {
-        text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        letter-spacing: 4px;
-    }
-
-    .quiz-title-outline {
-        color: var(--mg-black);
-        -webkit-text-stroke: 3px var(--quiz-border);
-        text-stroke: 3px var(--quiz-border);
-        paint-order: stroke fill;
+        letter-spacing: 2px;
+        text-shadow: none;
     }
 
     .quiz-subtitle {
-        text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+        text-shadow: none;
     }
 
     /* Quiz Card */
     .quiz-card {
-        border: 5px solid var(--quiz-border) !important;
-        backdrop-filter: blur(18px);
+        transition: all 0.3s ease;
     }
 
     /* Question Box */
     .quiz-question-box {
-        background: var(--quiz-border);
-        border: 3px solid var(--mg-black) !important;
+        background: var(--quiz-light);
     }
 
     /* Question Text */
     .quiz-question {
-        color: var(--mg-black);
+        color: var(--quiz-dark);
         font-weight: 700;
     }
 
-    /* Next Button */
-    .quiz-next-btn {
-        border-radius: 50px;
+    /* Button Styles - Selaras dengan Home */
+    .btn-next-question,
+    .btn-back-home {
+        background: var(--quiz-yellow) !important;
+        color: #000 !important;
+        border: 2px solid var(--quiz-yellow) !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
     }
 
-    /* Hover Lift Effect */
-    .hover-lift {
-        transition: all 0.4s ease;
-    }
-    .hover-lift:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 50px rgba(255,212,0,0.5) !important;
-    }
-
-    /* Shadow 2XL */
-    .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    .btn-next-question:hover,
+    .btn-back-home:hover {
+        background: transparent !important;
+        color: var(--quiz-yellow) !important;
+        border-color: var(--quiz-yellow) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
     }
 
     /* Option Button Styles */
     .option-btn {
-        background: rgba(255,255,255,0.08);
-        border: 3px solid #FFD400 !important;
-        color: #FFC107;
+        background: #ffffff;
+        border: 2px solid var(--quiz-yellow) !important;
+        color: var(--quiz-dark);
         padding: 1.5rem;
-        border-radius: 15px;
+        border-radius: 12px;
         font-size: 1.1rem;
         font-weight: 600;
         transition: all 0.3s ease;
         cursor: pointer;
         text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .option-btn:hover:not(:disabled) {
-        background: var(--quiz-border);
-        color: var(--mg-black);
-        border-color: var(--mg-black) !important;
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 15px 35px rgba(255,212,0,0.5);
+        background: var(--quiz-yellow);
+        color: #000;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(250, 204, 21, 0.3);
     }
 
     .option-btn:disabled {
@@ -192,9 +187,17 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-        .display-2 { font-size: 2.5rem; }
-        .fs-3 { font-size: 1.2rem !important; }
-        .option-btn { font-size: 1rem; padding: 1.2rem; }
+        .quiz-title { 
+            font-size: 2rem !important;
+            letter-spacing: 1px;
+        }
+        .quiz-subtitle { 
+            font-size: 1.1rem !important;
+        }
+        .option-btn { 
+            font-size: 1rem; 
+            padding: 1.2rem; 
+        }
     }
 </style>
 @endsection
@@ -205,11 +208,11 @@
 <script>
 // Game Configuration
 const QUIZ_CONFIG = {
-    CONFETTI_COLORS: ['#FFD400', '#FFC107', '#FFB300'],
+    CONFETTI_COLORS: ['#FACC15', '#FFC107', '#FFB300'],
     SWAL_THEME: {
-        background: '#1a1a1a',
-        color: '#fff',
-        confirmButtonColor: '#FFD400'
+        background: '#ffffff',
+        color: '#1F2933',
+        confirmButtonColor: '#FACC15'
     },
     SCORE_THRESHOLDS: {
         EXCELLENT: 80,

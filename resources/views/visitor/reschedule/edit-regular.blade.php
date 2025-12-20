@@ -6,18 +6,18 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-lg border-0" style="border-radius: 1.5rem; overflow: hidden;">
+            <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
                 <!-- Header -->
-                <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); border: none;">
-                    <h3 class="mb-0 fw-bold" style="letter-spacing: 1px; text-transform: uppercase; color: #000;">
-                        <i class="fas fa-calendar-alt me-2"></i>Ubah Tanggal Kunjungan
+                <div class="card-header text-center py-5" style="background: #1F2933; border: none;">
+                    <h3 class="mb-0" style="font-family: 'Merriweather', serif; font-weight: 700; color: #ffffff; font-size: 1.75rem;">
+                        Ubah Tanggal Kunjungan
                     </h3>
                 </div>
                 
-                <div class="card-body p-4 p-md-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                <div class="card-body p-4 p-md-5" style="background: #F9FAFB;">
                     <!-- Current Booking Info -->
-                    <div class="alert alert-info mb-4">
-                        <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2"></i>Data Tiket Saat Ini</h5>
+                    <div class="alert mb-4" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                        <h5 class="fw-bold mb-3" style="color: #1F2933; font-size: 1.1rem;"><i class="fas fa-info-circle me-2" style="color: #FACC15;"></i>Data Tiket Saat Ini</h5>
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <strong>ID Tiket:</strong> {{ $booking->booking_id }}
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-md-6 mb-2">
                                 <strong>Tanggal Kunjungan Sekarang:</strong><br>
-                                <span class="badge bg-warning text-dark fs-6">
+                                <span class="badge fs-6" style="background: #FACC15; color: #1F2933; border-radius: 8px; padding: 0.5rem 1rem;">
                                     {{ \Carbon\Carbon::parse($booking->tanggal_kunjungan)->format('d F Y') }}
                                 </span>
                             </div>
@@ -44,7 +44,7 @@
                     </div>
 
                     @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show">
+                    <div class="alert alert-dismissible fade show" style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; color: #991b1b;">
                         <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
@@ -57,29 +57,29 @@
                         
                         <!-- Tanggal Baru -->
                         <div class="mb-4">
-                            <label for="new_date" class="form-label fw-bold fs-5">Pilih Tanggal Kunjungan Baru</label>
+                            <label for="new_date" class="form-label fw-bold" style="color: #1F2933; font-size: 1.1rem;">Pilih Tanggal Kunjungan Baru</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: #FFD700;">
-                                    <i class="bi bi-calendar3" style="color: #FFA500; font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-calendar-alt" style="color: #1F2933; font-size: 1.3rem;"></i>
                                 </span>
-                                <input type="date" class="form-control border-2 @error('new_date') is-invalid @enderror" 
+                                <input type="date" class="form-control @error('new_date') is-invalid @enderror" 
                                     id="new_date" name="new_date" 
                                     min="{{ date('Y-m-d') }}" required
-                                    style="border-color: #FFD700;">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('new_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <small class="text-muted">
+                            <small style="color: #6c6c6c;">
                                 <i class="fas fa-info-circle me-1"></i>
                                 Pilih tanggal minimal hari ini atau setelahnya
                             </small>
                         </div>
 
                         <!-- Important Notes -->
-                        <div class="alert alert-warning">
-                            <h6 class="fw-bold mb-2"><i class="fas fa-exclamation-triangle me-2"></i>Catatan Penting:</h6>
-                            <ul class="mb-0 small">
+                        <div class="alert" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 1.25rem;">
+                            <h6 class="fw-bold mb-2" style="color: #92400e;"><i class="fas fa-exclamation-triangle me-2" style="color: #FACC15;"></i>Catatan Penting:</h6>
+                            <ul class="mb-0" style="color: #78350f; font-size: 0.95rem;">
                                 <li>Reschedule hanya dapat dilakukan 1 kali</li>
                                 <li>Tiket tetap berlaku dengan data pengunjung yang sama</li>
                                 <li>Tidak ada biaya tambahan untuk reschedule</li>
@@ -88,12 +88,11 @@
                         </div>
 
                         <!-- Submit Buttons -->
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-lg fw-bold shadow-lg" 
-                                style="background: #000; color: #FFD700; border: none; border-radius: 0.75rem; padding: 1rem;">
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-lg fw-bold btn-confirm-change">
                                 <i class="fas fa-check me-2"></i>Konfirmasi Perubahan
                             </button>
-                            <a href="{{ route('tickets.reschedule.form') }}" class="btn btn-outline-secondary btn-lg">
+                            <a href="{{ route('tickets.reschedule.form') }}" class="btn btn-lg btn-back-cancel">
                                 <i class="fas fa-arrow-left me-2"></i>Batal
                             </a>
                         </div>
@@ -103,4 +102,41 @@
         </div>
     </div>
 </div>
+
+<style>
+    .btn-confirm-change {
+        background: #FACC15;
+        color: #1F2933;
+        border: 2px solid #FACC15;
+        border-radius: 12px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        font-weight: 700;
+    }
+    
+    .btn-confirm-change:hover {
+        background: #1F2933;
+        color: #FACC15;
+        border-color: #1F2933;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(250, 204, 21, 0.4);
+    }
+    
+    .btn-back-cancel {
+        background: #ffffff;
+        color: #1F2933;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-back-cancel:hover {
+        background: #1F2933;
+        color: #FACC15;
+        border-color: #1F2933;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(31, 41, 51, 0.4);
+    }
+</style>
 @endsection

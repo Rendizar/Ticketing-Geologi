@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Event')
+@section('title', 'Event Management')
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 mb-2" style="font-size: 2.5rem; font-weight: 700;">Kelola Event</h1>
-    <ol class="breadcrumb mb-4" style="font-size: 1rem;">
+    <h1 class="mt-4 mb-2 text-center" style="font-size: 2.5rem; font-weight: 700;">Event Management</h1>
+    <ol class="breadcrumb mb-4 justify-content-center" style="font-size: 1rem;">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Event</li>
     </ol>

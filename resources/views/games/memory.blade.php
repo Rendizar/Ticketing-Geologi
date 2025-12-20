@@ -9,26 +9,26 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-3 memory-title memory-title-outline">
+            <h1 class="display-2 fw-bold mb-4 memory-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
                 Fossil Memory Match
             </h1>
-            <p class="fs-3 text-dark opacity-95 memory-subtitle">
+            <p class="fs-4 memory-subtitle" style="color: #6c6c6c; font-weight: 500;">
                 Find matching pairs of ancient fossils!
             </p>
             
             <!-- Score & Timer -->
-            <div class="d-flex justify-content-center gap-4 mt-4 flex-wrap" role="status" aria-live="polite">
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2">
-                    <i class="fas fa-shoe-prints text-warning me-2" aria-hidden="true"></i>
-                    Moves: <span id="moves" class="text-warning" aria-label="Number of moves">0</span>
+            <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap" role="status" aria-live="polite">
+                <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;">
+                    <i class="fas fa-shoe-prints me-2" style="color: #FACC15;" aria-hidden="true"></i>
+                    <span style="color: #1F2933; font-weight: 600;">Moves:</span> <span id="moves" class="fw-bold" style="color: #FACC15;" aria-label="Number of moves">0</span>
                 </div>
-                <div class="badge bg-dark border border-danger fs-5 px-4 py-2">
+                <div class="badge bg-white border-2 border-danger fs-6 px-4 py-2 shadow-sm">
                     <i class="fas fa-clock text-danger me-2" aria-hidden="true"></i>
-                    Time: <span id="timer" class="text-danger" aria-label="Elapsed time">00:00</span>
+                    <span style="color: #1F2933; font-weight: 600;">Time:</span> <span id="timer" class="text-danger fw-bold" aria-label="Elapsed time">00:00</span>
                 </div>
-                <div class="badge bg-dark border border-warning fs-5 px-4 py-2">
-                    <i class="fas fa-trophy text-warning me-2" aria-hidden="true"></i>
-                    Pairs: <span id="pairs" class="text-warning" aria-label="Matched pairs">0</span>/<span id="totalPairs" class="text-warning">6</span>
+                <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;">
+                    <i class="fas fa-trophy me-2" style="color: #FACC15;" aria-hidden="true"></i>
+                    <span style="color: #1F2933; font-weight: 600;">Pairs:</span> <span id="pairs" class="fw-bold" style="color: #FACC15;" aria-label="Matched pairs">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="totalPairs" style="color: #FACC15;">6</span>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
         <!-- Card Game Utama -->
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10 col-xl-8">
-                <div class="card bg-dark bg-opacity-94 border-0 shadow-2xl rounded-4 overflow-hidden memory-card">
+                <div class="card bg-white border-0 shadow-lg rounded-4 overflow-hidden memory-card">
                     <div class="card-body p-4 p-xl-5">
 
                         <!-- Game Board -->
@@ -44,8 +44,8 @@
 
                         <!-- Progress Bar -->
                         <div class="mt-4 mb-4">
-                            <label class="form-label text-dark fw-bold mb-2">
-                                <i class="fas fa-chart-line me-2"></i>Progress Bar
+                            <label class="form-label fw-bold mb-2" style="color: #1F2933;">
+                                <i class="fas fa-chart-line me-2" style="color: #FACC15;"></i>Progress Bar
                             </label>
                             <div class="progress memory-progress">
                                 <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
@@ -57,8 +57,8 @@
 
                         <!-- Difficulty Selection -->
                         <div class="text-center mb-4">
-                            <h4 class="text-warning mb-3">
-                                <i class="fas fa-sliders-h me-2" aria-hidden="true"></i>Difficulty Level
+                            <h4 class="mb-3" style="color: #1F2933; font-weight: 600;">
+                                <i class="fas fa-sliders-h me-2" style="color: #FACC15;" aria-hidden="true"></i>Difficulty Level
                             </h4>
                             <div class="btn-group" role="group" aria-label="Difficulty level selection">
                                 <button type="button" class="btn btn-outline-success difficulty-btn active" onclick="setDifficulty('easy')" aria-label="Easy mode with 6 pairs">
@@ -76,12 +76,12 @@
                         <!-- Tombol Aksi -->
                         <div class="text-center mt-4">
                             <button onclick="startGame()" 
-                                    class="btn btn-success btn-lg px-5 py-3 me-3 fw-bold shadow-lg hover-lift"
+                                    class="btn btn-new-game px-4 py-2 me-2 fw-bold"
                                     aria-label="Start a new game">
                                 <i class="fas fa-play me-2" aria-hidden="true"></i>New Game
                             </button>
                             <button onclick="resetGame()" 
-                                    class="btn btn-danger btn-lg px-5 py-3 me-3 fw-bold shadow-lg hover-lift"
+                                    class="btn btn-reset-game px-4 py-2 fw-bold"
                                     aria-label="Reset current game">
                                 <i class="fas fa-redo me-2" aria-hidden="true"></i>Reset
                             </button>
@@ -94,7 +94,7 @@
         <!-- Tombol Kembali -->
         <div class="text-center mt-5">
             <a href="{{ route('games.index') }}" 
-               class="btn btn-warning btn-lg px-5 py-3 fw-bold text-dark shadow-lg hover-lift"
+               class="btn btn-back-home px-4 py-2 fw-bold"
                aria-label="Go back to mini games menu">
                 <i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Back to Mini Games
             </a>
@@ -110,39 +110,32 @@
        CSS Variables & Theme
        ======================================== */
     :root {
-        --memory-yellow: #FFD400;
-        --memory-dark: #1a1a1a;
-        --memory-shadow: rgba(0, 0, 0, 0.8);
+        --memory-yellow: #FACC15;
+        --memory-dark: #1F2933;
+        --memory-muted: #6c6c6c;
+        --memory-light: #f8f9fa;
     }
 
     /* Title Styles */
     .memory-title {
-        text-shadow: 0 10px 30px var(--memory-shadow);
-        letter-spacing: 4px;
-    }
-
-    .memory-title-outline {
-        color: var(--mg-black);
-        -webkit-text-stroke: 3px var(--memory-yellow);
-        text-stroke: 3px var(--memory-yellow);
-        paint-order: stroke fill;
+        letter-spacing: 2px;
+        text-shadow: none;
     }
 
     .memory-subtitle {
-        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        text-shadow: none;
     }
 
     /* Memory Card */
     .memory-card {
-        border: 5px solid var(--memory-yellow) !important;
-        backdrop-filter: blur(18px);
+        transition: all 0.3s ease;
     }
 
     /* Progress Bar */
     .memory-progress {
-        height: 35px;
-        background: var(--memory-dark);
-        border: 2px solid var(--memory-yellow);
+        height: 30px;
+        background: #e9ecef;
+        border-radius: 12px;
     }
 
     /* ========================================
@@ -152,10 +145,10 @@
         display: grid;
         gap: 15px;
         padding: 30px;
-        background: linear-gradient(135deg, #0a0a0a 0%, var(--memory-dark) 100%);
-        border-radius: 25px;
-        border: 4px solid var(--memory-yellow);
-        box-shadow: 0 0 50px rgba(255,212,0,0.5);
+        background: #ffffff;
+        border-radius: 20px;
+        border: 2px solid var(--memory-yellow);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         max-width: 800px;
     }
 
@@ -202,31 +195,30 @@
         width: 100%;
         height: 100%;
         backface-visibility: hidden;
-        border-radius: 20px;
+        border-radius: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 4px solid var(--memory-yellow);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        border: 3px solid var(--memory-yellow);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
     .flip-card-front {
-        background: linear-gradient(135deg, var(--memory-yellow) 0%, #FFA500 100%);
-        color: var(--memory-dark);
+        background: linear-gradient(135deg, var(--memory-yellow) 0%, #FFC107 100%);
+        color: #1F2933;
         font-size: 3rem;
         font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
     .flip-card-back {
-        background: linear-gradient(135deg, var(--memory-dark) 0%, #2d2d2d 100%);
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         transform: rotateY(180deg);
         color: var(--memory-yellow);
     }
 
     .flip-card-back i {
         font-size: 3.5rem;
-        filter: drop-shadow(0 0 10px rgba(255,212,0,0.5));
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         animation: float 3s ease-in-out infinite;
     }
 
@@ -270,16 +262,41 @@
         animation: shake 0.5s ease;
     }
 
+    /* Button Styles - Selaras dengan Home */
+    .btn-new-game,
+    .btn-reset-game,
+    .btn-back-home {
+        background: var(--memory-yellow) !important;
+        color: #000 !important;
+        border: 2px solid var(--memory-yellow) !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-new-game:hover,
+    .btn-reset-game:hover,
+    .btn-back-home:hover {
+        background: transparent !important;
+        color: var(--memory-yellow) !important;
+        border-color: var(--memory-yellow) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
+    }
+
     /* Difficulty Buttons */
     .difficulty-btn {
         transition: all 0.3s ease;
         border: 2px solid;
-        font-weight: bold;
+        font-weight: 600;
+        border-radius: 20px;
     }
 
     .difficulty-btn.active {
         transform: scale(1.05);
-        box-shadow: 0 5px 15px rgba(255,212,0,0.4);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
     }
 
     /* ========================================
@@ -308,20 +325,14 @@
         
         .flip-card-front { font-size: 1.5rem; }
         .flip-card-back i { font-size: 2rem; }
-    }
-
-    /* Hover Lift */
-    .hover-lift {
-        transition: all 0.4s ease;
-    }
-    .hover-lift:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 40px rgba(255,212,0,0.5) !important;
-    }
-
-    /* Shadow 2XL */
-    .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        
+        .memory-title { 
+            font-size: 2rem !important;
+            letter-spacing: 1px;
+        }
+        .memory-subtitle {
+            font-size: 1.1rem !important;
+        }
     }
 
     /* ========================================
@@ -348,11 +359,11 @@
 <script>
 // Game Configuration
 const GAME_CONFIG = {
-    CONFETTI_COLORS: ['#FFD400', '#FFA500', '#28a745'],
+    CONFETTI_COLORS: ['#FACC15', '#FFC107', '#28a745'],
     SWAL_THEME: {
-        background: '#1a1a1a',
-        color: '#fff',
-        confirmButtonColor: '#FFD400'
+        background: '#ffffff',
+        color: '#1F2933',
+        confirmButtonColor: '#FACC15'
     },
     RATING_THRESHOLDS: {
         EXCELLENT: 5,

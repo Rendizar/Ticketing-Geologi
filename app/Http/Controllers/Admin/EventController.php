@@ -42,6 +42,7 @@ class EventController extends Controller
             'event_date' => $request->event_date,
             'event_time' => $request->event_time,
             'capacity' => $request->capacity,
+            'available_slots' => $request->capacity,
             'is_active' => true
         ]);
 
@@ -71,6 +72,10 @@ class EventController extends Controller
             $imagePath = $request->file('image')->store('events', 'public');
         }
 
+        // Calculate new available slots if capacity changes
+        $capacityDifference = $request->capacity - $event->capacity;
+        $newAvailableSlots = max(0, $event->available_slots + $capacityDifference);
+
         $event->update([
             'title' => $request->title,
             'description' => $request->description,
@@ -79,6 +84,7 @@ class EventController extends Controller
             'event_date' => $request->event_date,
             'event_time' => $request->event_time,
             'capacity' => $request->capacity,
+            'available_slots' => $newAvailableSlots,
             'is_active' => $request->has('is_active')
         ]);
 

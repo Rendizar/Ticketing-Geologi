@@ -71,10 +71,10 @@
             paint-order: stroke fill;
             text-shadow: 
                 0 1px 0 #FFD400,
-                0 2px 0 #FFC107,
-                0 3px 0 #FFA000,
-                0 4px 0 #FF8F00,
-                0 5px 0 #FF6F00,
+                0 2px 0 #FFD400,
+                0 3px 0 #FFD400,
+                0 4px 0 #FFD400,
+                0 5px 0 #FFD400,
                 0 6px 1px rgba(0,0,0,.1),
                 0 0 5px rgba(0,0,0,.1),
                 0 1px 3px rgba(0,0,0,.3),

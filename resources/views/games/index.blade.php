@@ -9,10 +9,10 @@
 
         <!-- Judul -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-3 games-title games-title-gradient">
+            <h1 class="display-2 fw-bold mb-4 games-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
                 GEOLOGY MINI GAMES
             </h1>
-            <p class="lead fs-2 text-black games-subtitle">
+            <p class="lead fs-4 games-subtitle" style="color: #6c6c6c; font-weight: 500;">
                 Choose a fun & educational game!
             </p>
         </div>
@@ -46,14 +46,14 @@
         ];
         @endphp
 
-        <div class="row g-5 justify-content-center">
+        <div class="row g-4 justify-content-center">
             @foreach($games as $index => $game)
             <!-- Game {{ $index + 1 }}: {{ $game['title'] }} -->
             <div class="col-lg-4 col-md-6">
                 <article class="game-card-wrapper position-relative" 
                          role="article" 
                          aria-label="{{ $game['title'] }} game card">
-                    <div class="game-card h-100 bg-dark bg-opacity-92 rounded-4 overflow-hidden shadow-2xl border-3 border-warning border-opacity-50">
+                    <div class="game-card h-100 bg-white rounded-4 overflow-hidden shadow-lg border-0">
                         
                         <!-- Game Icon (Aspect Ratio 4:3) -->
                         <div class="game-image-container position-relative">
@@ -61,16 +61,17 @@
                                  role="img" 
                                  aria-label="{{ $game['category'] }} game background"></div>
                             <div class="game-icon-overlay position-absolute top-50 start-50 translate-middle text-center w-100">
-                                <i class="fas {{ $game['icon'] }} fa-8x text-warning game-icon" 
+                                <i class="fas {{ $game['icon'] }} fa-7x game-icon" 
+                                   style="color: #FACC15;"
                                    aria-hidden="true"></i>
                             </div>
                         </div>
 
-                        <div class="p-5 text-center text-white">
-                            <h3 class="fw-bold fs-1 text-warning mb-3">{{ $game['title'] }}</h3>
-                            <p class="fs-5 opacity-90 mb-4">{{ $game['description'] }}</p>
+                        <div class="p-4 text-center">
+                            <h3 class="fw-bold fs-4 mb-3" style="color: #1F2933;">{{ $game['title'] }}</h3>
+                            <p class="fs-6 mb-4" style="color: #6c6c6c;">{{ $game['description'] }}</p>
                             <a href="{{ route($game['route']) }}" 
-                               class="btn btn-game-play btn-lg px-5 py-3 fw-bold"
+                               class="btn btn-game-play px-4 py-2 fw-bold"
                                aria-label="Play {{ $game['title'] }} game">
                                 <i class="fas fa-play me-2" aria-hidden="true"></i>Play Now
                             </a>
@@ -84,7 +85,7 @@
         <!-- Back to Home -->
         <div class="text-center mt-5">
             <a href="{{ url('/') }}" 
-               class="btn btn-back-home btn-lg px-5 py-3 fw-bold shadow-lg"
+               class="btn btn-back-home px-4 py-2 fw-bold"
                aria-label="Go back to homepage">
                 <i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Back to Home
             </a>
@@ -99,36 +100,37 @@
        CSS Variables & Theme Colors
        ======================================== */
     :root {
-        --games-yellow: #FFD400;
-        --games-dark: #1a1a1a;
-        --games-shadow: rgba(0, 0, 0, 0.7);
+        --games-yellow: #FACC15;
+        --games-dark: #1F2933;
+        --games-muted: #6c6c6c;
+        --games-shadow: rgba(0, 0, 0, 0.1);
     }
 
     /* ========================================
        Page Title & Subtitle
        ======================================== */
     .games-title {
-        text-shadow: 0 10px 30px var(--games-shadow);
-        letter-spacing: 4px;
-    }
-
-    .games-title-gradient {
-        color: var(--mg-black);
-        -webkit-text-stroke: 3px var(--mg-yellow);
-        text-stroke: 3px var(--mg-yellow);
-        paint-order: stroke fill;
+        letter-spacing: 2px;
+        text-shadow: none;
     }
 
     .games-subtitle {
-        text-shadow: 0 4px 12px var(--games-shadow);
+        text-shadow: none;
+        font-weight: 500;
     }
 
     /* ========================================
        Game Card Structure
        ======================================== */
     .game-card {
-        backdrop-filter: blur(16px);
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.4s ease;
+        background: #ffffff;
+        border-radius: 1.5rem;
+    }
+
+    .game-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
     }
 
     /* Container gambar dengan rasio 4:3 */
@@ -148,11 +150,11 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        transition: all 0.6s ease;
+        transition: all 0.4s ease;
     }
     
     /* ========================================
-       Gradient Backgrounds
+       Gradient Backgrounds - Tetap Dipertahankan
        ======================================== */
     /* Purple to Pink gradient (Crossword) */
     .bg-gradient-1 {
@@ -178,68 +180,63 @@
     }
     
     .game-icon {
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        filter: drop-shadow(0 10px 25px rgba(0,0,0,0.8));
+        transition: all 0.4s ease;
+        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
     }
     
     /* ========================================
        Hover Effects
        ======================================== */
-    
-    .game-card:hover {
-        transform: translateY(-30px) scale(1.06);
-        box-shadow: 0 60px 120px rgba(255,212,0,0.45) !important;
-    }
-    
     .game-card:hover .game-bg {
-        transform: scale(1.15);
-        filter: brightness(0.7);
+        transform: scale(1.08);
     }
     
     .game-card:hover .game-icon {
-        transform: scale(1.3) rotate(5deg);
-        filter: drop-shadow(0 0 50px var(--games-yellow));
+        transform: scale(1.15);
+        filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
     }
 
     /* ========================================
-       Button Styles
+       Button Styles - Selaras dengan Home
        ======================================== */
     /* Play Now button */
     .btn-game-play {
-        background: linear-gradient(135deg, var(--games-yellow) 0%, #FFC107 100%);
+        background: var(--games-yellow) !important;
         color: #000 !important;
-        border: 3px solid var(--games-yellow) !important;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        box-shadow: 0 12px 35px rgba(255,212,0,0.5);
-        transition: all 0.4s ease;
+        border: 2px solid var(--games-yellow) !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
     }
     
     .btn-game-play:hover {
-        background: #000 !important;
+        background: transparent !important;
         color: var(--games-yellow) !important;
         border-color: var(--games-yellow) !important;
-        transform: translateY(-6px) scale(1.1);
-        box-shadow: 0 25px 60px rgba(255,212,0,0.7) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
     }
 
     /* Back to Home button */
     .btn-back-home {
-        background: linear-gradient(135deg, var(--games-yellow) 0%, #FFC107 100%);
+        background: var(--games-yellow) !important;
         color: #000 !important;
-        border: 3px solid var(--games-yellow) !important;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        box-shadow: 0 12px 35px rgba(255,212,0,0.5);
-        transition: all 0.4s ease;
+        border: 2px solid var(--games-yellow) !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
     }
     
     .btn-back-home:hover {
-        background: #000 !important;
+        background: transparent !important;
         color: var(--games-yellow) !important;
         border-color: var(--games-yellow) !important;
-        transform: translateY(-6px) scale(1.05);
-        box-shadow: 0 25px 60px rgba(255,212,0,0.7) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
     }
 
     /* ========================================
@@ -247,29 +244,25 @@
        ======================================== */
     @media (max-width: 768px) {
         .games-title { 
-            font-size: 2.8rem !important; 
+            font-size: 2.5rem !important; 
+            letter-spacing: 1px;
+        }
+        .games-subtitle {
+            font-size: 1.2rem !important;
         }
         .game-icon { 
-            font-size: 6rem !important; 
+            font-size: 5rem !important; 
         }
         .game-card:hover { 
-            transform: translateY(-15px) scale(1.03); 
+            transform: translateY(-5px); 
         }
         .btn-game-play,
         .btn-back-home {
-            font-size: 1rem;
-            padding: 0.75rem 2rem !important;
+            font-size: 0.95rem;
+            padding: 0.6rem 1.5rem !important;
         }
     }
     
-    /* ========================================
-       Utility Classes
-       ======================================== */
-    /* Enhanced shadow for cards */
-    .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
     /* ========================================
        Accessibility - Focus States
        ======================================== */

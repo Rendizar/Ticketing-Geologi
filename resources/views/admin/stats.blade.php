@@ -5,7 +5,7 @@
 <div id="particles-js"></div>
 <div class="container-fluid dashboard-content">
     <div class="row mb-4">
-        <div class="col-12">
+        <div class="col-12 text-center">
             <h1 class="brand-text dashboard-title-outline mb-3">
                 <i class="bi bi-graph-up-arrow me-3"></i>Statistik & Forecasting
             </h1>

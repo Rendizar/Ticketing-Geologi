@@ -6,44 +6,44 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8">
-            <div class="card shadow-lg border-0" style="border-radius: 1.5rem; overflow: hidden;">
+            <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
                 <!-- Header -->
-                <div class="card-header text-center py-4" style="background: linear-gradient(135deg, var(--mg-yellow) 0%, #FFB300 100%); border: none;">
-                    <h3 class="mb-0 fw-bold" style="color: var(--mg-black); letter-spacing: 1px; text-transform: uppercase;">
-                        <i class="fas fa-calendar-check me-2"></i>Pemesanan Tiket Event
+                <div class="card-header text-center py-5" style="background: #1F2933; border: none;">
+                    <h3 class="mb-0" style="font-family: 'Merriweather', serif; font-weight: 700; color: #ffffff; font-size: 1.75rem;">
+                        Pemesanan Tiket Event
                     </h3>
                 </div>
                 
-                <div class="card-body p-4 p-md-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                <div class="card-body p-4 p-md-5" style="background: #F9FAFB;">
                     <!-- Event Info -->
-                    <div class="alert alert-info mb-4">
-                        <h5 class="fw-bold mb-3">{{ $event->title }}</h5>
+                    <div class="alert mb-4" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                        <h5 class="fw-bold mb-3" style="color: #1F2933; font-size: 1.2rem;">{{ $event->title }}</h5>
                         <div class="row">
                             <div class="col-md-6 mb-2">
-                                <i class="fas fa-calendar me-2" style="color: var(--mg-yellow);"></i>
+                                <i class="fas fa-calendar me-2" style="color: #FACC15;"></i>
                                 <strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
                             </div>
                             <div class="col-md-6 mb-2">
-                                <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
+                                <i class="fas fa-clock me-2" style="color: #FACC15;"></i>
                                 <strong>Waktu:</strong> {{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }} WIB
                             </div>
                             <div class="col-md-6 mb-2">
-                                <i class="fas fa-tag me-2" style="color: var(--mg-yellow);"></i>
+                                <i class="fas fa-tag me-2" style="color: #FACC15;"></i>
                                 <strong>Harga:</strong> Rp {{ number_format($event->price, 0, ',', '.') }}/tiket
                             </div>
                             <div class="col-md-6 mb-2">
-                                <i class="fas fa-users me-2" style="color: var(--mg-yellow);"></i>
+                                <i class="fas fa-users me-2" style="color: #FACC15;"></i>
                                 <strong>Kapasitas:</strong> {{ $event->available_slots }} / {{ $event->capacity }} tersisa
                                 @if($event->available_slots <= 10 && $event->available_slots > 0)
-                                    <span class="badge bg-warning text-dark ms-2">Hampir Habis!</span>
+                                    <span class="badge ms-2" style="background: #FACC15; color: #1F2933; border-radius: 8px; padding: 0.35rem 0.75rem;">Hampir Habis!</span>
                                 @endif
                             </div>
                         </div>
                     </div>
 
                     @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
+                    <div class="alert" style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; color: #991b1b; padding: 1rem;">
+                        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                     </div>
                     @endif
 
@@ -53,15 +53,15 @@
                         
                         <!-- Nama -->
                         <div class="mb-4">
-                            <label for="nama" class="form-label fw-bold fs-6">Nama Lengkap</label>
+                            <label for="nama" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Nama Lengkap</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-person-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-user" style="color: #1F2933; font-size: 1.2rem;"></i>
                                 </span>
-                                <input type="text" class="form-control border-2 @error('nama') is-invalid @enderror" 
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" 
                                     id="nama" name="nama" value="{{ old('nama') }}" 
                                     placeholder="Masukkan nama lengkap" required
-                                    style="border-color: var(--mg-yellow);">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('nama')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -70,15 +70,15 @@
 
                         <!-- Email -->
                         <div class="mb-4">
-                            <label for="email" class="form-label fw-bold fs-6">Email</label>
+                            <label for="email" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Email</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-envelope-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-envelope" style="color: #1F2933; font-size: 1.2rem;"></i>
                                 </span>
-                                <input type="email" class="form-control border-2 @error('email') is-invalid @enderror" 
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" 
                                     id="email" name="email" value="{{ old('email') }}" 
                                     placeholder="contoh@email.com" required
-                                    style="border-color: var(--mg-yellow);">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -87,14 +87,14 @@
 
                         <!-- Negara Asal -->
                         <div class="mb-4">
-                            <label for="negara" class="form-label fw-bold fs-6">Negara Asal</label>
+                            <label for="negara" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Negara Asal</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-globe-americas" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-globe" style="color: #1F2933; font-size: 1.2rem;"></i>
                                 </span>
-                                <select class="form-select border-2 @error('negara') is-invalid @enderror" 
+                                <select class="form-select @error('negara') is-invalid @enderror" 
                                     id="negara" name="negara" required
-                                    style="border-color: var(--mg-yellow);">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                     <option value="">Pilih Negara</option>
                                 </select>
                                 @error('negara')
@@ -105,15 +105,15 @@
 
                         <!-- Nomor Telepon -->
                         <div class="mb-4">
-                            <label for="nomor_telepon" class="form-label fw-bold fs-6">Nomor Telepon</label>
+                            <label for="nomor_telepon" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Nomor Telepon</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-phone-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-phone" style="color: #1F2933; font-size: 1.2rem;"></i>
                                 </span>
-                                <input type="text" class="form-control border-2 @error('nomor_telepon') is-invalid @enderror" 
+                                <input type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" 
                                     id="nomor_telepon" name="nomor_telepon" value="{{ old('nomor_telepon') }}" 
                                     placeholder="08123456789" required
-                                    style="border-color: var(--mg-yellow);">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('nomor_telepon')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -122,14 +122,14 @@
 
                         <!-- Jenis Pemesanan -->
                         <div class="mb-4">
-                            <label for="jenis_pemesanan" class="form-label fw-bold fs-6">Jenis Pemesanan</label>
+                            <label for="jenis_pemesanan" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Jenis Pemesanan</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-ticket-detailed-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-ticket-alt" style="color: #1F2933; font-size: 1.2rem;"></i>
                                 </span>
-                                <select class="form-select border-2 @error('jenis_pemesanan') is-invalid @enderror" 
+                                <select class="form-select @error('jenis_pemesanan') is-invalid @enderror" 
                                     id="jenis_pemesanan" name="jenis_pemesanan" required
-                                    style="border-color: var(--mg-yellow);">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                     <option value="">Pilih Jenis Pemesanan</option>
                                     <option value="individu" {{ old('jenis_pemesanan') == 'individu' ? 'selected' : '' }}>Individu</option>
                                     <option value="rombongan" {{ old('jenis_pemesanan') == 'rombongan' ? 'selected' : '' }}>Rombongan</option>
@@ -142,51 +142,51 @@
 
                         <!-- Nama Rombongan -->
                         <div class="mb-4" id="nama_rombongan_group" style="display:none;">
-                            <label for="nama_rombongan" class="form-label fw-bold fs-6">Nama Rombongan / Instansi</label>
+                            <label for="nama_rombongan" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Nama Rombongan / Instansi</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                    <i class="bi bi-buildings-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                    <i class="fas fa-building" style="color: #1F2933; font-size: 1.2rem;"></i>
                                 </span>
-                                <input type="text" class="form-control border-2" id="nama_rombongan" name="nama_rombongan" 
+                                <input type="text" class="form-control" id="nama_rombongan" name="nama_rombongan" 
                                     placeholder="Nama sekolah / perusahaan" value="{{ old('nama_rombongan') }}"
-                                    style="border-color: var(--mg-yellow);">
+                                    style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                             </div>
                         </div>
 
                         <!-- Jenis Pengunjung Dinamis -->
                         <div class="mb-4" id="jenis_pengunjung_group" style="display:none;">
-                            <label class="form-label fw-bold fs-6">Jenis Pengunjung</label>
+                            <label class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Jenis Pengunjung</label>
 
                             <!-- Individu -->
-                            <div id="pengunjung_individu" style="display:none;" class="p-4 rounded-3 shadow-sm" style="background: rgba(255,255,255,0.7); border-left: 5px solid var(--mg-yellow);">
+                            <div id="pengunjung_individu" style="display:none;" class="p-4 rounded-3" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold fs-6">Pilih Kategori Individu</label>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Pilih Kategori Individu</label>
                                     <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                            <i class="bi bi-person-badge-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                        <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                            <i class="fas fa-user-tag" style="color: #1F2933; font-size: 1.2rem;"></i>
                                         </span>
-                                        <select class="form-select shadow-sm border-2" id="kategori_individu" name="kategori_individu" 
-                                            style="border-color: var(--mg-yellow);">
+                                        <select class="form-select" id="kategori_individu" name="kategori_individu" 
+                                            style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                             <option value="">Pilih Kategori</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <!-- Asing -->
-                                <div id="individu_asing" style="display:none;" class="alert alert-info border-start border-5 border-primary shadow-sm">
+                                <div id="individu_asing" style="display:none;" class="alert" style="background: #dbeafe; border: 1px solid #93c5fd; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
                                     <strong>Kategori:</strong> Asing, <strong>Jumlah:</strong> 1
                                     <input type="hidden" id="jumlah_asing" name="jumlah_asing" value="1">
                                 </div>
 
                                 <!-- Umum -->
                                 <div id="individu_umum" style="display:none;">
-                                    <label class="form-label fw-bold fs-6">Apakah Anda Pelajar?</label>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem; margin-top: 1rem;">Apakah Anda Pelajar?</label>
                                     <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                            <i class="bi bi-patch-question-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                        <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                            <i class="fas fa-question-circle" style="color: #1F2933; font-size: 1.2rem;"></i>
                                         </span>
-                                        <select class="form-select shadow-sm border-2" id="is_pelajar" name="is_pelajar" 
-                                            style="border-color: var(--mg-yellow);">
+                                        <select class="form-select" id="is_pelajar" name="is_pelajar" 
+                                            style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                             <option value="">Pilih</option>
                                             <option value="pelajar">Ya, Pelajar</option>
                                             <option value="bukan">Tidak, Umum</option>
@@ -194,19 +194,19 @@
                                     </div>
                                 </div>
 
-                                <div id="individu_umum_bukan" style="display:none;" class="alert alert-success border-start border-5 border-success shadow-sm mt-3">
+                                <div id="individu_umum_bukan" style="display:none;" class="alert" style="background: #d1fae5; border: 1px solid #86efac; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
                                     <strong>Kategori:</strong> Umum (Bukan Pelajar), <strong>Jumlah:</strong> 1
                                     <input type="hidden" id="jumlah_umum" name="jumlah_umum" value="1">
                                 </div>
 
                                 <div id="individu_umum_pelajar" style="display:none;" class="mt-3">
-                                    <label class="form-label fw-bold fs-6">Pilih Jenjang Pendidikan</label>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Pilih Jenjang Pendidikan</label>
                                     <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-white border-2" style="border-color: var(--mg-yellow);">
-                                            <i class="bi bi-mortarboard-fill" style="color: var(--mg-black); font-size: 1.5rem;"></i>
+                                        <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
+                                            <i class="fas fa-graduation-cap" style="color: #1F2933; font-size: 1.2rem;"></i>
                                         </span>
-                                        <select class="form-select shadow-sm border-2" id="jenjang_pelajar" name="jenjang_pelajar" 
-                                            style="border-color: var(--mg-yellow);">
+                                        <select class="form-select" id="jenjang_pelajar" name="jenjang_pelajar" 
+                                            style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                             <option value="">Pilih Jenjang</option>
                                             <option value="sub_tk">TK</option>
                                             <option value="sub_sd">SD</option>
@@ -217,7 +217,7 @@
                                     </div>
                                 </div>
 
-                                <div id="individu_umum_pelajar_jumlah" style="display:none;" class="alert border-start border-5 shadow-sm mt-3" style="background: #FFF3CD; border-color: var(--mg-yellow) !important;">
+                                <div id="individu_umum_pelajar_jumlah" style="display:none;" class="alert mt-3" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
                                     <span id="info_pelajar"><strong>Kategori:</strong> Pelajar, <strong>Jumlah:</strong> 1</span>
                                     <input type="hidden" id="jumlah_pelajar" name="jumlah_pelajar" value="1">
                                     <input type="hidden" id="sub_tk" name="sub_tk" value="0">
@@ -229,17 +229,17 @@
                             </div>
 
                             <!-- Rombongan -->
-                            <div id="pengunjung_rombongan" style="display:none;" class="p-4 rounded-3 shadow-sm" style="background: rgba(255,255,255,0.7); border-left: 5px solid #28a745;">
+                            <div id="pengunjung_rombongan" style="display:none;" class="p-4" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold fs-6">Jumlah Pelajar</label>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Pelajar</label>
                                     <div class="row g-3">
                                         @foreach(['tk'=>'TK','sd'=>'SD','smp'=>'SMP','sma'=>'SMA','kuliah'=>'Kuliah'] as $k=>$v)
                                         <div class="col-6 col-md-4">
-                                            <label class="fw-bold mb-2">{{ $v }}</label>
-                                            <div class="input-group shadow-sm">
-                                                <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',-1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">−</button>
-                                                <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" oninput="validateNumberInput(this)" style="border-color: var(--mg-yellow);">
-                                                <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">+</button>
+                                            <label class="fw-bold mb-2" style="color: #1F2933;">{{ $v }}</label>
+                                            <div class="input-group">
+                                                <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
+                                                <input type="number" class="form-control text-center fw-bold" id="rombongan_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" oninput="validateNumberInput(this)" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                                <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                             </div>
                                         </div>
                                         @endforeach
@@ -247,32 +247,31 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold fs-6">Jumlah Umum</label>
-                                    <div class="input-group shadow-sm" style="max-width:250px;">
-                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',-1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">−</button>
-                                        <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_jumlah_umum" name="jumlah_umum" value="0" min="0" oninput="validateNumberInput(this)" style="border-color: var(--mg-yellow);">
-                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">+</button>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Umum</label>
+                                    <div class="input-group" style="max-width:250px;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
+                                        <input type="number" class="form-control text-center fw-bold" id="rombongan_jumlah_umum" name="jumlah_umum" value="0" min="0" oninput="validateNumberInput(this)" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold fs-6">Jumlah Asing</label>
-                                    <div class="input-group shadow-sm" style="max-width:250px;">
-                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',-1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">−</button>
-                                        <input type="number" class="form-control text-center fw-bold border-2" id="rombongan_jumlah_asing" name="jumlah_asing" value="0" min="0" oninput="validateNumberInput(this)" style="border-color: var(--mg-yellow);">
-                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',1)" style="background-color: var(--mg-black); color: var(--mg-yellow); border: 2px solid var(--mg-yellow); min-width: 45px; font-size: 2rem; line-height: 1;">+</button>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Asing</label>
+                                    <div class="input-group" style="max-width:250px;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
+                                        <input type="number" class="form-control text-center fw-bold" id="rombongan_jumlah_asing" name="jumlah_asing" value="0" min="0" oninput="validateNumberInput(this)" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-lg fw-bold shadow-lg" 
-                                style="background: var(--mg-yellow); color: var(--mg-black); border: none; border-radius: 0.75rem; padding: 1rem;">
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-lg fw-bold btn-submit-event" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px;">
                                 <i class="fas fa-arrow-right me-2"></i>Lanjut ke Pembayaran
                             </button>
-                            <a href="{{ route('home') }}" class="btn btn-outline-secondary btn-lg">
+                            <a href="{{ route('home') }}" class="btn btn-lg btn-back-event" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px; text-decoration: none;">
                                 <i class="fas fa-arrow-left me-2"></i>Kembali
                             </a>
                         </div>
@@ -489,4 +488,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<style>
+    .btn-submit-event {
+        background: #FACC15;
+        color: #1F2933;
+        border: 2px solid #FACC15;
+        transition: all 0.3s ease;
+        font-weight: 700;
+    }
+    
+    .btn-submit-event:hover {
+        background: #1F2933;
+        color: #FACC15;
+        border-color: #1F2933;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(250, 204, 21, 0.4);
+    }
+    
+    .btn-back-event {
+        background: #ffffff;
+        color: #1F2933;
+        border: 2px solid #E5E7EB;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-back-event:hover {
+        background: #1F2933;
+        color: #FACC15;
+        border-color: #1F2933;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(31, 41, 51, 0.4);
+    }
+</style>
 @endsection

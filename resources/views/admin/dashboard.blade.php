@@ -5,8 +5,8 @@
 <div id="particles-js"></div>
 <div class="container-fluid dashboard-content">
     <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="brand-text dashboard-title-outline mb-3">
+        <div class="col-12 text-center">
+            <h1 class="brand-text mb-3">
                 <i class="bi bi-graph-up-arrow me-3"></i>Dashboard Analytics
             </h1>
             <p class="subtitle-text"><strong>Sistem Analitik & Forecasting Museum Geologi Bandung</strong></p>
@@ -25,9 +25,11 @@
                     <h2 class="stat-number">{{ number_format($kunjungan_hari_ini) }}</h2>
                     <p class="stat-label">Kunjungan Hari Ini</p>
                     <div class="stat-date">{{ now()->format('d F Y') }}</div>
-                    <div class="trend-indicator positive">
-                        <i class="bi bi-arrow-up"></i> <span id="todayTrend">+0%</span>
+                    <div class="trend-indicator {{ $trend_hari_ini >= 0 ? 'positive' : 'negative' }}">
+                        <i class="bi bi-arrow-{{ $trend_hari_ini >= 0 ? 'up' : 'down' }}"></i> 
+                        <span>{{ $trend_hari_ini >= 0 ? '+' : '' }}{{ number_format($trend_hari_ini, 1) }}%</span>
                     </div>
+                    <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs rata-rata 7 hari</div>
                 </div>
             </div>
         </div>
@@ -41,9 +43,11 @@
                     <h2 class="stat-number">{{ number_format($total_per_kategori->pelajar ?? 0) }}</h2>
                     <p class="stat-label">Total Pelajar</p>
                     <div class="stat-date">Semua Jenjang</div>
-                    <div class="trend-indicator positive">
-                        <i class="bi bi-arrow-up"></i> <span id="studentTrend">+0%</span>
+                    <div class="trend-indicator {{ $trend_per_kategori->pelajar >= 0 ? 'positive' : 'negative' }}">
+                        <i class="bi bi-arrow-{{ $trend_per_kategori->pelajar >= 0 ? 'up' : 'down' }}"></i> 
+                        <span>{{ $trend_per_kategori->pelajar >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->pelajar, 1) }}%</span>
                     </div>
+                    <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs 30 hari lalu</div>
                 </div>
             </div>
         </div>
@@ -57,9 +61,11 @@
                     <h2 class="stat-number">{{ number_format($total_per_kategori->umum ?? 0) }}</h2>
                     <p class="stat-label">Total Umum</p>
                     <div class="stat-date">Pengunjung Dewasa</div>
-                    <div class="trend-indicator positive">
-                        <i class="bi bi-arrow-up"></i> <span id="publicTrend">+0%</span>
+                    <div class="trend-indicator {{ $trend_per_kategori->umum >= 0 ? 'positive' : 'negative' }}">
+                        <i class="bi bi-arrow-{{ $trend_per_kategori->umum >= 0 ? 'up' : 'down' }}"></i> 
+                        <span>{{ $trend_per_kategori->umum >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->umum, 1) }}%</span>
                     </div>
+                    <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs 30 hari lalu</div>
                 </div>
             </div>
         </div>
@@ -73,9 +79,11 @@
                     <h2 class="stat-number">{{ number_format($total_per_kategori->asing ?? 0) }}</h2>
                     <p class="stat-label">Wisatawan Asing</p>
                     <div class="stat-date">Mancanegara</div>
-                    <div class="trend-indicator positive">
-                        <i class="bi bi-arrow-up"></i> <span id="foreignTrend">+0%</span>
+                    <div class="trend-indicator {{ $trend_per_kategori->asing >= 0 ? 'positive' : 'negative' }}">
+                        <i class="bi bi-arrow-{{ $trend_per_kategori->asing >= 0 ? 'up' : 'down' }}"></i> 
+                        <span>{{ $trend_per_kategori->asing >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->asing, 1) }}%</span>
                     </div>
+                    <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs 30 hari lalu</div>
                 </div>
             </div>
         </div>
@@ -97,6 +105,7 @@
                         <div class="stat-content">
                             <h3 class="stat-value">{{ number_format($avg_daily, 1) }}</h3>
                             <p class="stat-desc">pengunjung/hari</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">30 hari terakhir</p>
                         </div>
                     </div>
                 </div>
@@ -135,50 +144,6 @@
                         <div class="stat-content">
                             <h3 class="stat-value">{{ number_format($total_pengunjung ?? 0) }}</h3>
                             <p class="stat-desc">pengunjung</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions Section -->
-    <div class="row g-4 mb-4">
-        <div class="col-12">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-lightning-fill me-2"></i>
-                    Aksi Cepat
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-3 col-sm-6">
-                            <a href="{{ route('admin.events.create') }}" class="btn btn-primary w-100 py-3" style="border-radius: 0.75rem;">
-                                <i class="bi bi-plus-circle fs-3 d-block mb-2"></i>
-                                <span class="d-block fw-bold">Tambah Event</span>
-                                <small class="d-block text-white-50">Buat event baru</small>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <a href="{{ route('admin.events.index') }}" class="btn btn-success w-100 py-3" style="border-radius: 0.75rem;">
-                                <i class="bi bi-calendar-check fs-3 d-block mb-2"></i>
-                                <span class="d-block fw-bold">Kelola Event</span>
-                                <small class="d-block text-white-50">Lihat & edit event</small>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-info w-100 py-3" style="border-radius: 0.75rem;">
-                                <i class="bi bi-ticket-detailed fs-3 d-block mb-2"></i>
-                                <span class="d-block fw-bold">Kelola Tiket</span>
-                                <small class="d-block text-white-50">Lihat pemesanan</small>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <a href="{{ route('admin.stats') }}" class="btn btn-warning w-100 py-3" style="border-radius: 0.75rem;">
-                                <i class="bi bi-graph-up-arrow fs-3 d-block mb-2"></i>
-                                <span class="d-block fw-bold">Statistik</span>
-                                <small class="d-block text-white-50">Lihat laporan</small>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -368,7 +333,7 @@
     }
     
     .brand-text i {
-        color: var(--mg-yellow);
+        color: var(--mg-black);
     }
     .subtitle-text {
         color: var(--mg-muted);
@@ -379,7 +344,7 @@
     .stat-card {
         background: linear-gradient(135deg, var(--mg-yellow) 0%, #f7c600 100%) !important;
         color: var(--mg-black) !important;
-        border: 3px solid var(--mg-black) !important;
+        border: none !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         border-radius: 1.25rem;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -461,7 +426,7 @@
         transition: all 0.3s ease;
     }
     .stat-card:hover .icon-wrapper {
-        transform: scale(1.1) rotate(360deg);
+        transform: scale(1.1);
     }
     .icon-wrapper i {
         font-size: 2.2rem;
@@ -512,14 +477,12 @@
         transform: translateY(-5px);
     }
     .detail-card .card-header {
-        background: linear-gradient(135deg, var(--mg-black) 0%, #1a1a1a 100%);
-        color: var(--mg-yellow);
-        border-bottom: 3px solid var(--mg-yellow);
+        background: linear-gradient(135deg, var(--mg-yellow) 0%, #ffc107 100%);
+        color: var(--mg-black);
+        padding: 1.25rem;
         font-weight: 700;
-        font-size: 1.15rem;
-        letter-spacing: 0.05em;
-        border-radius: 1.25rem 1.25rem 0 0 !important;
-        padding: 1.25rem 1.5rem;
+        font-size: 1.1rem;
+        border-bottom: none;
     }
     .detail-card .card-body {
         padding: 1.5rem;
@@ -1190,7 +1153,6 @@ function createForecastChart(days = 7) {
    
     updateForecastMetrics(ensemble, historicalData);
     updateAIInsights(ensemble, days);
-    updateTrendIndicators();
    
     if (forecastChart) forecastChart.destroy();
    
@@ -1967,53 +1929,7 @@ function updateAIInsights(forecast, days) {
     document.getElementById('seasonalInsight').textContent =
         `Pola musiman: Weekend ${weekendBoost}% lebih ramai. Rata-rata weekday: ${Math.round(avgWeekday).toLocaleString('id-ID')}, weekend: ${Math.round(avgWeekend).toLocaleString('id-ID')}`;
 }
-function updateTrendIndicators() {
-    // Today's trend
-    if (historicalData.length >= 2) {
-        const todayValue = historicalData[historicalData.length - 1];
-        const yesterdayValue = historicalData[historicalData.length - 2];
-        const todayTrend = yesterdayValue !== 0
-            ? ((todayValue - yesterdayValue) / yesterdayValue * 100).toFixed(1)
-            : 0;
-       
-        const todayTrendElement = document.getElementById('todayTrend');
-        todayTrendElement.textContent = (todayTrend >= 0 ? '+' : '') + todayTrend + '%';
-       
-        const todayTrendParent = todayTrendElement.closest('.trend-indicator');
-        if (todayTrend >= 0) {
-            todayTrendParent.classList.remove('negative');
-            todayTrendParent.classList.add('positive');
-        } else {
-            todayTrendParent.classList.remove('positive');
-            todayTrendParent.classList.add('negative');
-        }
-    }
-   
-    // Weekly trends
-    if (historicalData.length >= 14) {
-        const recentWeek = historicalData.slice(-7).reduce((a, b) => a + b, 0) / 7;
-        const previousWeek = historicalData.slice(-14, -7).reduce((a, b) => a + b, 0) / 7;
-       
-        const weeklyTrend = previousWeek !== 0
-            ? ((recentWeek - previousWeek) / previousWeek * 100).toFixed(1)
-            : 0;
-       
-        // Update all category trends
-        ['studentTrend', 'publicTrend', 'foreignTrend'].forEach(id => {
-            const element = document.getElementById(id);
-            element.textContent = (weeklyTrend >= 0 ? '+' : '') + weeklyTrend + '%';
-           
-            const parent = element.closest('.trend-indicator');
-            if (weeklyTrend >= 0) {
-                parent.classList.remove('negative');
-                parent.classList.add('positive');
-            } else {
-                parent.classList.remove('positive');
-                parent.classList.add('negative');
-            }
-        });
-    }
-}
+
 // ============================================================================
 // CHANGE FORECAST PERIOD FUNCTION
 // ============================================================================
@@ -2067,7 +1983,6 @@ function startRealTimeUpdates() {
         createForecastChart(currentForecastPeriod);
         createHeatmapChart();
         createMovingAverageChart();
-        updateTrendIndicators();
        
     }, 60000); // Update every minute
 }

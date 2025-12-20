@@ -22,7 +22,7 @@
                         Explore the Geology Museum of Bandung with ease.<br>
                         Book tickets, attend events, and enjoy the ultimate virtual tour experience.
                     </p>
-                    <a href="#banner" class="btn btn-lg btn-service-yellow fw-bold px-5 py-3 animate__animated animate__fadeInUp" style="animation-delay: 0.8s;" data-lang-key="hero_button">
+                    <a href="#banner" class="btn btn-lg btn-service-yellow fw-bold px-5 py-3 animate__animated animate__fadeInUp" style="animation-delay: 0.8s; color: #000000 !important;" data-lang-key="hero_button">
                         Get Started
                     </a>
                 </div>
@@ -33,7 +33,7 @@
         </section>
 
         <!-- BANNER SECTION -->
-        <section id="banner" class="min-vh-100 d-flex align-items-center position-relative overflow-hidden">
+        <section id="banner" class="min-vh-100 d-flex align-items-center position-relative overflow-hidden scroll-reveal">
             <div class="container-fluid px-0 w-100">
                 <div id="bannerCarousel" class="carousel slide h-100" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -66,9 +66,14 @@
         </section>
 
         <!-- SERVICES SECTION -->
-        <section id="services" class="min-vh-100 d-flex align-items-center bg-light py-5 position-relative">
-            <div class="container">
-                <h2 class="text-center mb-5 display-4 fw-bold" data-lang-key="services_title">Our Services</h2>
+        <section id="services" class="min-vh-100 d-flex align-items-center py-5 position-relative scroll-reveal" style="overflow: hidden;">
+            <!-- Background Image -->
+            <div class="section-bg" style="position: absolute; inset: 0; background-image: url('{{ asset('images/section1.png') }}'); background-size: cover; background-position: center;"></div>
+            <!-- Dark Overlay with Fade -->
+            <div class="section-overlay" style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 15%, rgba(0, 0, 0, 0.4) 85%, rgba(0, 0, 0, 0.7) 100%);"></div>
+            <!-- Content -->
+            <div class="container position-relative" style="z-index: 2;">
+                <h2 class="text-center mb-5 display-4 fw-bold" style="font-family: 'Merriweather', serif !important; color: #ffffff !important;" data-lang-key="services_title">Our Services</h2>
                 <div class="row g-5 justify-content-center">
                     <div class="col-md-4 col-lg-3">
                         <div class="card h-100 shadow-lg border-0 service-card text-center p-4">
@@ -108,9 +113,9 @@
         </section>
 
         <!-- UPCOMING EVENTS SECTION -->
-<section id="events" class="min-vh-100 d-flex align-items-center py-5 position-relative">
+<section id="events" class="min-vh-100 d-flex align-items-center py-5 position-relative scroll-reveal">
     <div class="container">
-        <h2 class="text-center mb-5 display-4 fw-bold">Upcoming Events</h2>
+        <h2 class="text-center mb-5 display-4 fw-bold" style="font-family: 'Merriweather', serif !important;">Upcoming Events</h2>
 
         <div class="row g-5 justify-content-center">
             @forelse($events as $event)
@@ -122,7 +127,7 @@
                              style="height: 250px; object-fit: cover;">
                         <div class="card-body d-flex flex-column p-4">
                             <h5 class="card-title fw-bold">{{ $event->title }}</h5>
-                            <p class="card-text flex-grow-1 text-muted">
+                            <p class="card-text grow text-muted">
                                 {{ Str::limit($event->description, 120) }}
                             </p>
                             <div class="event-details mt-3 text-muted">
@@ -165,48 +170,59 @@
             @endforelse
         </div>
     </div>
+    <a href="#rating-review" class="section-arrow">
+        <i class="fas fa-chevron-down"></i>
+    </a>
 </section>
 
 
         <!-- RATING & REVIEW FORM SECTION -->
-        <section id="rating-review" class="min-vh-100 d-flex align-items-center bg-light py-5 position-relative">
-            <div class="container">
-                <h2 class="text-center mb-5 display-4 fw-bold" data-lang-key="rating_title">Rate Your Experience</h2>
+        <section id="rating-review" class="min-vh-100 d-flex align-items-center py-5 position-relative scroll-reveal" style="overflow: hidden;">
+            <!-- Background Image -->
+            <div class="section-bg" style="position: absolute; inset: 0; background-image: url('{{ asset('images/section2.png') }}'); background-size: cover; background-position: center;"></div>
+            <!-- Dark Overlay with Fade -->
+            <div class="section-overlay" style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 15%, rgba(0, 0, 0, 0.4) 85%, rgba(0, 0, 0, 0.7) 100%);"></div>
+            <!-- Content -->
+            <div class="container position-relative" style="z-index: 2;">
+                <h2 class="text-center mb-5 display-4 fw-bold" style="font-family: 'Merriweather', serif !important; color: #ffffff !important;" data-lang-key="rating_title">Rate Your Experience</h2>
                 <div class="row justify-content-center">
-                    <div class="col-lg-7 col-xl-6">
-                        <div class="card shadow-lg mb-5">
-                            <div class="card-body text-center py-5">
-                                <h4 class="mb-5" data-lang-key="rating_question">How was your experience?</h4>
-                                <div class="stars-container mb-4" id="starsContainer">
-                                    <i class="fas fa-star" data-rating="1"></i>
-                                    <i class="fas fa-star" data-rating="2"></i>
-                                    <i class="fas fa-star" data-rating="3"></i>
-                                    <i class="fas fa-star" data-rating="4"></i>
-                                    <i class="fas fa-star" data-rating="5"></i>
-                                </div>
-                                <p id="ratingText" class="fs-3 fw-bold text-dark">&nbsp;</p>
-                                <input type="hidden" id="selectedRating" value="0">
-                            </div>
-                        </div>
-                        <div class="card shadow-lg">
-                            <div class="card-body p-5">
-                                <h4 class="text-center mb-4" data-lang-key="review_title">Write Your Review</h4>
-                                <form id="reviewForm">
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control" id="reviewName" data-lang-placeholder="review_name" placeholder="Your Name" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="email" class="form-control" id="reviewEmail" data-lang-placeholder="review_email" placeholder="Your Email" required>
-                                        </div>
-                                        <div class="col-12">
-                                            <textarea class="form-control" id="reviewText" rows="6" data-lang-placeholder="review_text" placeholder="Share your experience..." required></textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-review-yellow w-100 py-3 fw-bold" data-lang-key="review_button">Submit Review</button>
-                                        </div>
+                    <div class="col-lg-8 col-xl-7">
+                        <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+                            <div class="card-body p-4 p-md-5">
+                                <!-- Rating Section -->
+                                <div class="text-center mb-4 pb-4" style="border-bottom: 1px solid #e5e7eb;">
+                                    <h4 class="mb-4" style="color: #1F2933; font-weight: 600;" data-lang-key="rating_question">How was your experience?</h4>
+                                    <div class="stars-container d-flex justify-content-center gap-2 mb-3" id="starsContainer">
+                                        <i class="fas fa-star" data-rating="1"></i>
+                                        <i class="fas fa-star" data-rating="2"></i>
+                                        <i class="fas fa-star" data-rating="3"></i>
+                                        <i class="fas fa-star" data-rating="4"></i>
+                                        <i class="fas fa-star" data-rating="5"></i>
                                     </div>
-                                </form>
+                                    <p id="ratingText" class="fs-6 fw-semibold mb-0" style="color: #9CA3AF; min-height: 24px;">&nbsp;</p>
+                                    <input type="hidden" id="selectedRating" value="0">
+                                </div>
+                                
+                                <!-- Review Form -->
+                                <div class="pt-2">
+                                    <h5 class="mb-4 text-center" style="color: #1F2933; font-weight: 600;" data-lang-key="review_title">Share Your Thoughts</h5>
+                                    <form id="reviewForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control modern-input" id="reviewName" data-lang-placeholder="review_name" placeholder="Your Name" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="email" class="form-control modern-input" id="reviewEmail" data-lang-placeholder="review_email" placeholder="Your Email" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <textarea class="form-control modern-input" id="reviewText" rows="5" data-lang-placeholder="review_text" placeholder="Share your experience with us..." required></textarea>
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-review-yellow w-100 py-3 fw-semibold" data-lang-key="review_button" style="border-radius: 12px; transition: all 0.3s ease;">Submit Review</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -218,25 +234,35 @@
         </section>
 
         <!-- CUSTOMER REVIEWS SECTION -->
-        <section id="customer-reviews" class="min-vh-100 d-flex align-items-center py-5 position-relative">
+        <section id="customer-reviews" class="min-vh-100 d-flex align-items-center py-5 position-relative scroll-reveal">
             <div class="container">
-                <h2 class="text-center mb-5 display-4 fw-bold" data-lang-key="reviews_title">Customer Reviews</h2>
-                <div id="reviewsSlider" class="reviews-slider position-relative">
+                <div class="text-center mb-5">
+                    <h2 class="display-4 fw-bold mb-3" style="font-family: 'Merriweather', serif !important; color: #1F2933;" data-lang-key="reviews_title">Customer Reviews</h2>
+                    <p class="text-muted fs-5" style="max-width: 600px; margin: 0 auto;">Hear what our visitors say about their geology adventure</p>
+                </div>
+                <div id="reviewsContainer" class="reviews-container">
                     @if(($reviews ?? collect())->count())
-                        <div class="reviews-track d-flex gap-4" id="reviewsTrack">
+                        <div class="row g-4" id="reviewsGrid">
                             @foreach(($reviews ?? collect()) as $review)
-                                <div class="review-slide flex-shrink-0">
-                                    <div class="review-card p-4 shadow-sm h-100 border-start border-4 border-warning bg-white">
-                                        <div class="review-rating mb-2">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="modern-review-card h-100">
+                                        <div class="quote-icon">
+                                            <i class="fas fa-quote-left"></i>
+                                        </div>
+                                        <div class="review-rating mb-3">
                                             @for ($i = 1; $i <= 5; $i++)
-                                                <i class="{{ $i <= $review->rating ? 'fas fa-star text-warning' : 'far fa-star text-muted' }}"></i>
+                                                <i class="fas fa-star {{ $i <= $review->rating ? 'star-filled' : 'star-empty' }}"></i>
                                             @endfor
                                         </div>
-                                        <div class="review-author fw-bold">{{ $review->name }}</div>
-                                        <div class="review-email text-muted small mb-2">{{ $review->email }}</div>
-                                        <div class="review-text mb-3">{{ $review->text }}</div>
-                                        <div class="review-date text-muted small">
-                                            {{ optional($review->created_at)->diffForHumans() }}
+                                        <p class="review-text mb-4">{{ $review->text }}</p>
+                                        <div class="d-flex align-items-center mt-auto">
+                                            <div class="review-avatar">
+                                                {{ strtoupper(substr($review->name, 0, 1)) }}
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="review-author">{{ $review->name }}</div>
+                                                <div class="review-date">{{ optional($review->created_at)->diffForHumans() }}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -244,6 +270,9 @@
                         </div>
                     @else
                         <div class="reviews-placeholder text-center text-muted py-5" id="reviewsPlaceholder">
+                            <div class="mb-4">
+                                <i class="fas fa-comments" style="font-size: 4rem; color: #E5E7EB;"></i>
+                            </div>
                             <p class="fs-3" data-lang-key="reviews_empty">No reviews yet. Be the first to review!</p>
                         </div>
                     @endif
@@ -256,6 +285,17 @@
 
 @section('styles')
 <style>
+    /* Import Merriweather Font */
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap');
+    
+    /* Import Open Sans Font */
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    /* Apply Open Sans to all text by default */
+    body, p, span, a, button, input, textarea, select, .btn, .card-text, .lead, h3, h4, h5, h6, .text-muted, .form-control, .badge {
+        font-family: 'Open Sans', sans-serif !important;
+    }
+
     /* IMPROVED HERO SECTION STYLING - Better Readability */
     .hero-section {
         background: transparent !important;
@@ -279,100 +319,29 @@
     }
 
     .hero-content h1 {
-        font-size: 8rem;
+        font-size: clamp(2.5rem, 7vw, 8rem);
         font-weight: 900;
-        font-family: inherit;
+        font-family: 'Futura PT', 'Century Gothic', sans-serif;
         color: #1a1a1a;
-        letter-spacing: 8px;
-        line-height: 1.1;
-        /* 3D Effect with thick yellow/gold outline */
+        -webkit-text-stroke: 3px #FFD400;
+        text-stroke: 3px #FFD400;
+        paint-order: stroke fill;
         text-shadow: 
-            /* Thick yellow outline */
-            -4px -4px 0 #FFD700,
-            -4px -3px 0 #FFD700,
-            -4px -2px 0 #FFD700,
-            -4px -1px 0 #FFD700,
-            -4px 0px 0 #FFD700,
-            -4px 1px 0 #FFD700,
-            -4px 2px 0 #FFD700,
-            -4px 3px 0 #FFD700,
-            -4px 4px 0 #FFD700,
-            -3px -4px 0 #FFD700,
-            -3px -3px 0 #FFD700,
-            -3px -2px 0 #FFD700,
-            -3px -1px 0 #FFD700,
-            -3px 0px 0 #FFD700,
-            -3px 1px 0 #FFD700,
-            -3px 2px 0 #FFD700,
-            -3px 3px 0 #FFD700,
-            -3px 4px 0 #FFD700,
-            -2px -4px 0 #FFD700,
-            -2px -3px 0 #FFD700,
-            -2px -2px 0 #FFD700,
-            -2px -1px 0 #FFD700,
-            -2px 0px 0 #FFD700,
-            -2px 1px 0 #FFD700,
-            -2px 2px 0 #FFD700,
-            -2px 3px 0 #FFD700,
-            -2px 4px 0 #FFD700,
-            -1px -4px 0 #FFD700,
-            -1px -3px 0 #FFD700,
-            -1px -2px 0 #FFD700,
-            -1px -1px 0 #FFD700,
-            -1px 0px 0 #FFD700,
-            -1px 1px 0 #FFD700,
-            -1px 2px 0 #FFD700,
-            -1px 3px 0 #FFD700,
-            -1px 4px 0 #FFD700,
-            0px -4px 0 #FFD700,
-            0px -3px 0 #FFD700,
-            0px -2px 0 #FFD700,
-            0px -1px 0 #FFD700,
-            0px 1px 0 #FFD700,
-            0px 2px 0 #FFD700,
-            0px 3px 0 #FFD700,
-            0px 4px 0 #FFD700,
-            1px -4px 0 #FFD700,
-            1px -3px 0 #FFD700,
-            1px -2px 0 #FFD700,
-            1px -1px 0 #FFD700,
-            1px 0px 0 #FFD700,
-            1px 1px 0 #FFD700,
-            1px 2px 0 #FFD700,
-            1px 3px 0 #FFD700,
-            1px 4px 0 #FFD700,
-            2px -4px 0 #FFD700,
-            2px -3px 0 #FFD700,
-            2px -2px 0 #FFD700,
-            2px -1px 0 #FFD700,
-            2px 0px 0 #FFD700,
-            2px 1px 0 #FFD700,
-            2px 2px 0 #FFD700,
-            2px 3px 0 #FFD700,
-            2px 4px 0 #FFD700,
-            3px -4px 0 #FFD700,
-            3px -3px 0 #FFD700,
-            3px -2px 0 #FFD700,
-            3px -1px 0 #FFD700,
-            3px 0px 0 #FFD700,
-            3px 1px 0 #FFD700,
-            3px 2px 0 #FFD700,
-            3px 3px 0 #FFD700,
-            3px 4px 0 #FFD700,
-            4px -4px 0 #FFD700,
-            4px -3px 0 #FFD700,
-            4px -2px 0 #FFD700,
-            4px -1px 0 #FFD700,
-            4px 0px 0 #FFD700,
-            4px 1px 0 #FFD700,
-            4px 2px 0 #FFD700,
-            4px 3px 0 #FFD700,
-            4px 4px 0 #FFD700,
-            /* 3D depth shadow */
-            6px 6px 0 #FFA500,
-            8px 8px 0 #FF8C00,
-            /* Final shadow for depth */
-            10px 10px 20px rgba(0,0,0,0.3);
+            0 1px 0 #FFD400,
+            0 2px 0 #FFD400,
+            0 3px 0 #FFD400,
+            0 4px 0 #FFD400,
+            0 5px 0 #FFD400,
+            0 6px 1px rgba(0,0,0,.1),
+            0 0 5px rgba(0,0,0,.1),
+            0 1px 3px rgba(0,0,0,.3),
+            0 3px 5px rgba(0,0,0,.2),
+            0 5px 10px rgba(0,0,0,.25),
+            0 10px 20px rgba(0,0,0,.2),
+            0 20px 30px rgba(0,0,0,.15);
+        letter-spacing: 0.15em;
+        line-height: 1.1;
+        transform: perspective(500px) rotateX(5deg);
     }
 
     .text-subtitle {
@@ -399,30 +368,33 @@
         text-shadow: none;
     }
 
-    /* Enhanced button with better visibility */
+
+    /* Section Title with Yellow Outline */
+    .section-title-outline {
+        -webkit-text-stroke: 2px #FFD400;
+        text-stroke: 2px #FFD400;
+        paint-order: stroke fill;
+        color: #1a1a1a;
+    }
+
+    /* Enhanced button - sama dengan btn-login */
     .btn-service-yellow {
-        background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%) !important;
+        background: #FACC15 !important;
         color: #000000 !important;
-        border: 3px solid #FFD54F !important;
-        font-weight: 800 !important;
-        font-size: 1.1rem;
-        letter-spacing: 1px;
-        text-shadow: none;
-        box-shadow: 
-            0 8px 25px rgba(255,193,7,0.4),
-            0 0 40px rgba(255,193,7,0.3),
-            inset 0 1px 0 rgba(255,255,255,0.3);
+        border: 2px solid #FACC15 !important;
+        font-weight: 700;
         transition: all 0.3s ease;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        padding: 0.75rem 2rem;
     }
 
     .btn-service-yellow:hover {
-        background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%) !important;
-        color: #FFC107 !important;
-        border-color: #FFC107 !important;
-        transform: scale(1.05) translateY(-3px);
-        box-shadow: 
-            0 15px 40px rgba(255,193,7,0.5),
-            0 0 60px rgba(255,193,7,0.4);
+        background: transparent !important;
+        color: #FACC15 !important;
+        border-color: #FACC15 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
     }
 
     .scroll-indicator {
@@ -448,23 +420,122 @@
     }
 
     /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .hero-content h1 {
+            font-size: 4rem;
+            letter-spacing: 6px;
+        }
+        
+        .hero-content h2 {
+            font-size: 1.5rem;
+        }
+        
+        .btn-service-yellow,
+        .btn-event-yellow,
+        .btn-review-yellow {
+            font-size: 1rem;
+            padding: 0.6rem 1.5rem;
+        }
+        
+        .section-arrow i {
+            font-size: 2rem;
+        }
+    }
+
     @media (max-width: 768px) {
         .hero-content h1 {
             font-size: 3rem;
             letter-spacing: 4px;
+            -webkit-text-stroke: 2px #FFD400;
+            text-stroke: 2px #FFD400;
         }
         
         .hero-content h2 {
-            font-size: 2rem;
+            font-size: 1.3rem;
             letter-spacing: 2px;
         }
         
         .hero-content .lead {
-            font-size: 1.1rem;
+            font-size: 1rem;
+            padding: 0 1rem;
         }
         
         .hero-content {
-            padding: 1.5rem;
+            padding: 1rem;
+        }
+        
+        .service-card,
+        .event-card {
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-service-yellow,
+        .btn-event-yellow,
+        .btn-review-yellow {
+            font-size: 0.95rem;
+            padding: 0.5rem 1.2rem;
+        }
+        
+        .display-4 {
+            font-size: 2rem !important;
+        }
+        
+        .section-arrow i {
+            font-size: 1.8rem;
+        }
+        
+        .stars-container i {
+            font-size: 2rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .hero-content h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            -webkit-text-stroke: 1.5px #FFD400;
+            text-stroke: 1.5px #FFD400;
+        }
+        
+        .hero-content h2 {
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        
+        .hero-content .lead {
+            font-size: 0.9rem;
+        }
+        
+        .btn-service-yellow,
+        .btn-event-yellow,
+        .btn-review-yellow {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .display-4 {
+            font-size: 1.75rem !important;
+        }
+        
+        .card-body {
+            padding: 1rem !important;
+        }
+        
+        h4 {
+            font-size: 1.1rem;
+        }
+        
+        .section-arrow i {
+            font-size: 1.5rem;
+        }
+        
+        .stars-container i {
+            font-size: 1.8rem;
+        }
+        
+        .review-slide {
+            flex: 0 0 calc(100% - 1rem);
         }
     }
 
@@ -544,11 +615,18 @@
         transform: scale(1.18);
     }
 
-    /* Buttons (semua jenis) */
+    /* Buttons - sama dengan btn-login di login.blade.php */
     .btn-service-yellow,
     .btn-event-yellow,
     .btn-review-yellow {
-        transition: all 0.35s ease;
+        background: var(--mg-yellow) !important;
+        color: var(--mg-black) !important;
+        border: 2px solid var(--mg-yellow) !important;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        padding: 0.75rem 2rem;
         position: relative;
         overflow: hidden;
     }
@@ -556,8 +634,11 @@
     .btn-service-yellow:hover,
     .btn-event-yellow:hover,
     .btn-review-yellow:hover {
-        transform: scale(1.08);
-        box-shadow: 0 10px 25px rgba(255,193,7,0.4);
+        background: var(--mg-black) !important;
+        color: var(--mg-yellow) !important;
+        border-color: var(--mg-black) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     /* Banner Section - Add padding to prevent cropping */
@@ -578,26 +659,48 @@
 
     /* Stars Rating */
     .stars-container i {
-        font-size: 3.8rem;
-        transition: all 0.3s ease;
-        filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
-        color: #c6c6c6;
+        font-size: 2.8rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: #e5e7eb;
         cursor: pointer;
+        filter: none;
     }
 
     .stars-container i.selected,
     .stars-container i.active {
-        color: var(--mg-yellow) !important;
-        filter: drop-shadow(0 0 20px rgba(255,193,7,0.6));
+        color: #FACC15 !important;
+        filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.4));
     }
 
     .stars-container i:hover {
-        transform: scale(1.35) translateY(-8px);
+        transform: scale(1.2) translateY(-4px);
+        color: #FACC15;
+    }
+    
+    /* Modern Input Styling */
+    .modern-input {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+    
+    .modern-input:focus {
+        border-color: #FACC15;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.1);
+        outline: none;
+    }
+    
+    .modern-input::placeholder {
+        color: #9CA3AF;
     }
 
-    /* Review Card (setelah submit) */
+    /* Review Card (setelah submit) - optimized untuk performance */
     .review-card {
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-left-color 0.3s ease;
         border-radius: 0.8rem;
     }
 
@@ -605,15 +708,7 @@
         transform: translateY(-10px);
         box-shadow: 0 15px 30px rgba(0,0,0,0.12);
         border-left-color: #ffb300;
-    }
-
-    /* Button hover color tetap dipertahankan + ditambah glow */
-    .btn-service-yellow:hover,
-    .btn-event-yellow:hover,
-    .btn-review-yellow:hover {
-        background: var(--mg-black) !important;
-        color: var(--mg-yellow) !important;
-        border-color: var(--mg-black) !important;
+        will-change: transform;
     }
 
     /* Tambahan kecil biar lebih modern */
@@ -623,55 +718,120 @@
     }
 
     h2.display-4 {
-        background: linear-gradient(90deg, #000000, #000000);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        font-family: 'Merriweather', serif !important;
+    }
+    
+    /* White text for sections with background images */
+    #services h2.display-4,
+    #rating-review h2.display-4 {
+        color: #ffffff !important;
+        background: none !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* Reviews slider */
-    .reviews-slider {
-        overflow: hidden;
-        width: 100%;
-        max-width: 1100px;
+    /* Modern Reviews Section */
+    .reviews-container {
+        max-width: 1200px;
         margin: 0 auto;
     }
-
-        .reviews-track {
-            width: max-content;
-            display: flex;
-            gap: 1.5rem;
-            padding-bottom: 0.5rem;
-            will-change: transform;
-        }
-
-    .review-slide {
-        flex: 0 0 calc(100% - 2rem);
-        max-width: 420px;
+    
+    .modern-review-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(31, 41, 51, 0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border: 1px solid rgba(229, 231, 235, 0.5);
     }
-
-    @media (min-width: 768px) {
-        .review-slide {
-            flex: 0 0 360px;
-        }
+    
+    .modern-review-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(31, 41, 51, 0.12);
+        border-color: rgba(250, 204, 21, 0.3);
     }
-
-    @media (min-width: 1200px) {
-        .review-slide {
-            flex: 0 0 420px;
-        }
+    
+    .quote-icon {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        color: rgba(250, 204, 21, 0.15);
+        font-size: 2.5rem;
+    }
+    
+    .modern-review-card .review-rating {
+        display: flex;
+        gap: 0.25rem;
+    }
+    
+    .modern-review-card .review-rating .star-filled {
+        color: #FACC15;
+        font-size: 1rem;
+    }
+    
+    .modern-review-card .review-rating .star-empty {
+        color: #E5E7EB;
+        font-size: 1rem;
+    }
+    
+    .modern-review-card .review-text {
+        color: #4B5563;
+        font-size: 1rem;
+        line-height: 1.7;
+        font-style: italic;
+        flex-grow: 1;
+    }
+    
+    .review-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #FACC15 0%, #F59E0B 100%);
+        color: #1F2933;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+    
+    .modern-review-card .review-author {
+        font-weight: 600;
+        color: #1F2933;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .modern-review-card .review-date {
+        font-size: 0.875rem;
+        color: #9CA3AF;
+    }
+    
+    /* Scroll Reveal Animation */
+    .scroll-reveal {
+        opacity: 0;
+        transform: translateY(80px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    
+    .scroll-reveal.revealed {
+        opacity: 1;
+        transform: translateY(0);
     }
 </style>
 @endsection
 
 @section('scripts')
 <script>
-    // Script untuk carousel auto-slide dengan interval 5 detik (5000 ms)
+    // Script untuk carousel auto-slide dengan interval 6 detik (6000 ms)
     document.addEventListener('DOMContentLoaded', function() {
         var carousel = document.getElementById('bannerCarousel');
         if (carousel) {
             var bsCarousel = new bootstrap.Carousel(carousel, {
-                interval: 5000,  // 5 detik
+                interval: 6000,  // 6 detik
                 wrap: true
             });
         }
@@ -719,82 +879,6 @@
                     ratingText.textContent = r + ' / 5 — ' + texts[r-1];
                 });
             });
-        }
-
-        // Reviews slider autoplay
-        var reviewsSlider = document.getElementById('reviewsSlider');
-        var reviewsTrack = document.getElementById('reviewsTrack');
-        var sliderAnimationId;
-        var sliderSpeed = 0.35; // px per frame
-        var trackOffset = 0;
-        var trackGap = 0;
-
-        function updateTrackGap() {
-            if (!reviewsTrack) return;
-            var styles = window.getComputedStyle(reviewsTrack);
-            var gapValue = parseFloat(styles.columnGap || styles.gap || 0);
-            trackGap = isNaN(gapValue) ? 0 : gapValue;
-        }
-
-        function runReviewsSlider() {
-            if (!reviewsSlider || !reviewsTrack) return;
-            if (reviewsTrack.children.length < 2) {
-                reviewsTrack.style.transform = 'translateX(0)';
-                return;
-            }
-
-            if (reviewsSlider.dataset.paused === 'true') {
-                sliderAnimationId = requestAnimationFrame(runReviewsSlider);
-                return;
-            }
-
-            trackOffset -= sliderSpeed;
-            var firstSlide = reviewsTrack.children[0];
-
-            if (firstSlide) {
-                var firstWidth = firstSlide.getBoundingClientRect().width;
-                if (-trackOffset >= firstWidth + trackGap) {
-                    trackOffset += firstWidth + trackGap;
-                    reviewsTrack.appendChild(firstSlide);
-                }
-            }
-
-            reviewsTrack.style.transform = 'translateX(' + trackOffset + 'px)';
-            sliderAnimationId = requestAnimationFrame(runReviewsSlider);
-        }
-
-        function initReviewsSlider() {
-            reviewsTrack = document.getElementById('reviewsTrack');
-
-            if (sliderAnimationId) cancelAnimationFrame(sliderAnimationId);
-
-            if (!reviewsSlider || !reviewsTrack) return;
-            if (reviewsTrack.children.length < 2) {
-                reviewsTrack.style.transform = 'translateX(0)';
-                return;
-            }
-
-            trackOffset = 0;
-            reviewsTrack.style.transform = 'translateX(0)';
-            updateTrackGap();
-            sliderAnimationId = requestAnimationFrame(runReviewsSlider);
-        }
-
-        if (reviewsSlider) {
-            reviewsSlider.dataset.paused = 'false';
-            ['mouseenter', 'touchstart'].forEach(function(evt) {
-                reviewsSlider.addEventListener(evt, function() {
-                    reviewsSlider.dataset.paused = 'true';
-                });
-            });
-            ['mouseleave', 'touchend'].forEach(function(evt) {
-                reviewsSlider.addEventListener(evt, function() {
-                    reviewsSlider.dataset.paused = 'false';
-                });
-            });
-
-            initReviewsSlider();
-            window.addEventListener('resize', initReviewsSlider);
         }
 
         // === Review form submission (server-side via AJAX) ===
@@ -848,44 +932,62 @@
                 .then(data => {
                     alert(data.message || 'Thank you! Your review has been saved.');
 
+                    var reviewName = data.review?.name || name;
+                    var reviewInitial = reviewName.charAt(0).toUpperCase();
+                    
+                    var stars = '';
+                    for (var i = 1; i <= 5; i++) {
+                        stars += '<i class="fas fa-star ' + (i <= rating ? 'star-filled' : 'star-empty') + '"></i>';
+                    }
+                    
                     var col = document.createElement('div');
-                    col.className = 'review-slide flex-shrink-0';
+                    col.className = 'col-lg-4 col-md-6';
                     col.innerHTML = `
-                        <div class="review-card p-4 shadow-sm h-100 border-start border-4 border-warning bg-white">
-                            <div class="review-rating mb-2">
-                                ${'<i class="fas fa-star text-warning"></i>'.repeat(rating)}
-                                ${'<i class="far fa-star text-muted"></i>'.repeat(5 - rating)}
+                        <div class="modern-review-card h-100">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
                             </div>
-                            <div class="review-author fw-bold">${data.review?.name || name}</div>
-                            <div class="review-email text-muted small mb-2">${data.review?.email || email}</div>
-                            <div class="review-text mb-3">${data.review?.text || text}</div>
-                            <div class="review-date text-muted small">baru saja</div>
+                            <div class="review-rating mb-3">
+                                ${stars}
+                            </div>
+                            <p class="review-text mb-4">${data.review?.text || text}</p>
+                            <div class="d-flex align-items-center mt-auto">
+                                <div class="review-avatar">
+                                    ${reviewInitial}
+                                </div>
+                                <div class="ms-3">
+                                    <div class="review-author">${reviewName}</div>
+                                    <div class="review-date">baru saja</div>
+                                </div>
+                            </div>
                         </div>
                     `;
 
                     var placeholder = document.getElementById('reviewsPlaceholder');
                     if (placeholder) placeholder.remove();
 
-                    var sliderWrapper = document.getElementById('reviewsSlider');
-                    var track = document.getElementById('reviewsTrack');
+                    var container = document.getElementById('reviewsContainer');
+                    var grid = document.getElementById('reviewsGrid');
 
-                    if (!track) {
-                        track = document.createElement('div');
-                        track.className = 'reviews-track d-flex gap-4';
-                        track.id = 'reviewsTrack';
-                        if (sliderWrapper) {
-                            sliderWrapper.innerHTML = '';
-                            sliderWrapper.appendChild(track);
+                    if (!grid) {
+                        grid = document.createElement('div');
+                        grid.className = 'row g-4';
+                        grid.id = 'reviewsGrid';
+                        if (container) {
+                            container.innerHTML = '';
+                            container.appendChild(grid);
                         }
                     }
 
-                    track.insertBefore(col, track.firstChild);
-                    initReviewsSlider();
+                    grid.insertBefore(col, grid.firstChild);
 
                     reviewForm.reset();
                     document.getElementById('selectedRating').value = 0;
                     ratingText.textContent = '';
-                    stars.forEach(function(s) { s.classList.remove('selected'); });
+                    
+                    // Reset star selection in the rating input
+                    var starsInContainer = starsContainer ? Array.from(starsContainer.querySelectorAll('i[data-rating]')) : [];
+                    starsInContainer.forEach(function(s) { s.classList.remove('selected'); });
                 })
                 .catch(error => {
                     console.error(error);
@@ -896,5 +998,24 @@
 
         
     });
+    
+    // Scroll Reveal Animation
+    function revealOnScroll() {
+        const reveals = document.querySelectorAll('.scroll-reveal');
+        
+        reveals.forEach(element => {
+            const windowHeight = window.innerHeight;
+            const elementTop = element.getBoundingClientRect().top;
+            const revealPoint = 150;
+            
+            if (elementTop < windowHeight - revealPoint) {
+                element.classList.add('revealed');
+            }
+        });
+    }
+    
+    // Trigger on load and scroll
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
 </script>
 @endsection
