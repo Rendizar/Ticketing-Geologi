@@ -1392,13 +1392,18 @@ function createMovingAverageChart() {
 }
 function createCategoryChart() {
     const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    // Simpan nilai asli untuk tooltip. Gunakan nilai kecil (display) ketika data = 0 supaya bar tetap tergambar.
+    const realCategoryData = [pelajarTotal, umumTotal, asingTotal];
+    const minDisplay = 0.5;
+    const displayData = realCategoryData.map(v => (v > 0 ? v : minDisplay));
+
     new Chart(categoryCtx, {
         type: 'bar',
         data: {
             labels: ['Pelajar', 'Umum', 'Asing'],
             datasets: [{
                 label: 'Jumlah Pengunjung',
-                data: [pelajarTotal, umumTotal, asingTotal],
+                data: displayData,
                 backgroundColor: [
                     'rgba(76, 175, 80, 0.8)',
                     'rgba(33, 150, 243, 0.8)',
@@ -1410,31 +1415,26 @@ function createCategoryChart() {
                     'rgb(255, 87, 34)'
                 ],
                 borderWidth: 3,
-                borderRadius: 10
+                borderRadius: 10,
+                maxBarThickness: 140
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'nearest', intersect: false },
             plugins: {
-                legend: {
-                    display: false
-                },
+                legend: { display: false },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    titleFont: {
-                        size: 14,
-                        weight: 'bold'
-                    },
-                    bodyFont: {
-                        size: 13
-                    },
                     borderColor: '#FFD400',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
-                            return context.label + ': ' + context.parsed.y.toLocaleString('id-ID') + ' pengunjung';
+                            const idx = context.dataIndex || 0;
+                            const real = realCategoryData[idx] || 0;
+                            return context.label + ': ' + real.toLocaleString('id-ID') + ' pengunjung';
                         }
                     }
                 }
@@ -1442,29 +1442,17 @@ function createCategoryChart() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' },
                     ticks: {
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        },
-                        callback: function(value) {
-                            return value.toLocaleString('id-ID');
-                        }
+                        font: { size: 12, weight: 'bold' },
+                        callback: function(value) { return value.toLocaleString('id-ID'); }
                     }
                 },
                 x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            size: 13,
-                            weight: 'bold'
-                        }
-                    }
+                    grid: { display: false },
+                    ticks: { font: { size: 13, weight: 'bold' } },
+                    categoryPercentage: 0.6,
+                    barPercentage: 0.9
                 }
             }
         }
