@@ -92,11 +92,11 @@ class PaymentController extends Controller
 
         if (in_array($status, ['capture', 'settlement'])) {
             $this->processSuccessPayment($orderId);
-            session()->flush(); // bersihkan semua session
+            session()->forget(['pending_booking', 'current_order_id']);
             return redirect()->route('home')->with('success', 'Pembayaran berhasil! Tiket telah dikirim ke email Anda.');
         }
 
-        session()->flush();
+        session()->forget(['pending_booking', 'current_order_id']);
         return redirect()->route('home')->with('error', 'Pembayaran gagal atau dibatalkan.');
     }
 
