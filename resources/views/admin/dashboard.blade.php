@@ -28,111 +28,182 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-4">
-                        <!-- KPI Harian -->
-                        <div class="col-md-4">
+                        <!-- KPI Penjualan Tiket -->
+                        <div class="col-md-6">
                             <div class="kpi-card">
-                                <div class="kpi-header">
-                                    <i class="bi bi-calendar-day kpi-icon"></i>
-                                    <div>
-                                        <h5 class="kpi-title">Target Harian</h5>
-                                        <p class="kpi-subtitle">{{ now()->format('d F Y') }}</p>
-                                    </div>
-                                </div>
-                                <div class="kpi-metrics">
-                                    <div class="kpi-values">
-                                        <span class="kpi-actual">{{ number_format($kpi['actual']['daily']) }}</span>
-                                        <span class="kpi-separator">/</span>
-                                        <span class="kpi-target">{{ number_format($kpi['targets']['daily']) }}</span>
-                                    </div>
-                                    <p class="kpi-label">Pengunjung Hari Ini</p>
-                                </div>
-                                <div class="kpi-progress-wrapper">
-                                    <div class="kpi-progress">
-                                        <div class="kpi-progress-bar {{ $kpi['on_track']['daily'] ? 'bg-success' : ($kpi['achievement']['daily'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
-                                             style="width: {{ min($kpi['achievement']['daily'], 100) }}%">
+                                <div class="kpi-header d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-ticket-perforated kpi-icon me-2"></i>
+                                        <div>
+                                            <h5 class="kpi-title mb-0">KPI Penjualan Tiket</h5>
                                         </div>
                                     </div>
-                                    <div class="kpi-percentage {{ $kpi['on_track']['daily'] ? 'text-success' : ($kpi['achievement']['daily'] >= 50 ? 'text-warning' : 'text-danger') }}">
-                                        {{ number_format($kpi['achievement']['daily'], 1) }}%
+                                    <select class="form-select form-select-sm" id="ticketPeriod" style="width: auto; font-size: 0.875rem;">
+                                        <option value="daily">Harian</option>
+                                        <option value="monthly" selected>Bulanan</option>
+                                        <option value="yearly">Tahunan</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Data Harian -->
+                                <div class="kpi-period-data" data-period="daily" style="display: none;">
+                                    <p class="kpi-subtitle text-muted small mb-3">{{ now()->format('d F Y') }}</p>
+                                    <div class="kpi-metrics">
+                                        <div class="kpi-values">
+                                            <span class="kpi-actual">{{ number_format($kpi['actual']['daily']) }}</span>
+                                            <span class="kpi-separator">/</span>
+                                            <span class="kpi-target">{{ number_format($kpi['targets']['daily']) }}</span>
+                                        </div>
+                                        <p class="kpi-label">Pengunjung Hari Ini</p>
+                                    </div>
+                                    <div class="kpi-progress-wrapper">
+                                        <div class="kpi-progress">
+                                            <div class="kpi-progress-bar {{ $kpi['on_track']['daily'] ? 'bg-success' : ($kpi['achievement']['daily'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                                 style="width: {{ min($kpi['achievement']['daily'], 100) }}%">
+                                            </div>
+                                        </div>
+                                        <div class="kpi-percentage {{ $kpi['on_track']['daily'] ? 'text-success' : ($kpi['achievement']['daily'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                            {{ number_format($kpi['achievement']['daily'], 1) }}%
+                                        </div>
+                                    </div>
+                                    <div class="kpi-status {{ $kpi['on_track']['daily'] ? 'status-success' : 'status-warning' }}">
+                                        <i class="bi bi-{{ $kpi['on_track']['daily'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                        {{ $kpi['on_track']['daily'] ? 'On Track' : 'Perlu Peningkatan' }}
                                     </div>
                                 </div>
-                                <div class="kpi-status {{ $kpi['on_track']['daily'] ? 'status-success' : 'status-warning' }}">
-                                    <i class="bi bi-{{ $kpi['on_track']['daily'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
-                                    {{ $kpi['on_track']['daily'] ? 'On Track' : 'Perlu Peningkatan' }}
+
+                                <!-- Data Bulanan -->
+                                <div class="kpi-period-data" data-period="monthly">
+                                    <p class="kpi-subtitle text-muted small mb-3">{{ now()->format('F Y') }}</p>
+                                    <div class="kpi-metrics">
+                                        <div class="kpi-values">
+                                            <span class="kpi-actual">{{ number_format($kpi['actual']['monthly']) }}</span>
+                                            <span class="kpi-separator">/</span>
+                                            <span class="kpi-target">{{ number_format($kpi['targets']['monthly']) }}</span>
+                                        </div>
+                                        <p class="kpi-label">Pengunjung Bulan Ini</p>
+                                    </div>
+                                    <div class="kpi-progress-wrapper">
+                                        <div class="kpi-progress">
+                                            <div class="kpi-progress-bar {{ $kpi['on_track']['monthly'] ? 'bg-success' : ($kpi['achievement']['monthly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                                 style="width: {{ min($kpi['achievement']['monthly'], 100) }}%">
+                                            </div>
+                                        </div>
+                                        <div class="kpi-percentage {{ $kpi['on_track']['monthly'] ? 'text-success' : ($kpi['achievement']['monthly'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                            {{ number_format($kpi['achievement']['monthly'], 1) }}%
+                                        </div>
+                                    </div>
+                                    <div class="kpi-projection mb-2">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                        Proyeksi Akhir Bulan: <strong>{{ number_format($kpi['projected_monthly']) }}</strong>
+                                    </div>
+                                    <div class="kpi-status {{ $kpi['on_track']['monthly'] ? 'status-success' : 'status-warning' }}">
+                                        <i class="bi bi-{{ $kpi['on_track']['monthly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                        {{ $kpi['on_track']['monthly'] ? 'On Track' : 'Perlu Peningkatan' }}
+                                    </div>
+                                </div>
+
+                                <!-- Data Tahunan -->
+                                <div class="kpi-period-data" data-period="yearly" style="display: none;">
+                                    <p class="kpi-subtitle text-muted small mb-3">Tahun {{ now()->format('Y') }}</p>
+                                    <div class="kpi-metrics">
+                                        <div class="kpi-values">
+                                            <span class="kpi-actual">{{ number_format($kpi['actual']['yearly']) }}</span>
+                                            <span class="kpi-separator">/</span>
+                                            <span class="kpi-target">{{ number_format($kpi['targets']['yearly']) }}</span>
+                                        </div>
+                                        <p class="kpi-label">Total Pengunjung Tahun Ini</p>
+                                    </div>
+                                    <div class="kpi-progress-wrapper">
+                                        <div class="kpi-progress">
+                                            <div class="kpi-progress-bar {{ $kpi['on_track']['yearly'] ? 'bg-success' : ($kpi['achievement']['yearly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                                 style="width: {{ min($kpi['achievement']['yearly'], 100) }}%">
+                                            </div>
+                                        </div>
+                                        <div class="kpi-percentage {{ $kpi['on_track']['yearly'] ? 'text-success' : ($kpi['achievement']['yearly'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                            {{ number_format($kpi['achievement']['yearly'], 1) }}%
+                                        </div>
+                                    </div>
+                                    <div class="kpi-status {{ $kpi['on_track']['yearly'] ? 'status-success' : 'status-warning' }}">
+                                        <i class="bi bi-{{ $kpi['on_track']['yearly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                        {{ $kpi['on_track']['yearly'] ? 'On Track' : 'Perlu Peningkatan' }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- KPI Bulanan -->
-                        <div class="col-md-4">
+                        <!-- KPI Pendapatan Bersih -->
+                        <div class="col-md-6">
                             <div class="kpi-card">
-                                <div class="kpi-header">
-                                    <i class="bi bi-calendar-month kpi-icon"></i>
-                                    <div>
-                                        <h5 class="kpi-title">Target Bulanan</h5>
-                                        <p class="kpi-subtitle">{{ now()->format('F Y') }}</p>
-                                    </div>
-                                </div>
-                                <div class="kpi-metrics">
-                                    <div class="kpi-values">
-                                        <span class="kpi-actual">{{ number_format($kpi['actual']['monthly']) }}</span>
-                                        <span class="kpi-separator">/</span>
-                                        <span class="kpi-target">{{ number_format($kpi['targets']['monthly']) }}</span>
-                                    </div>
-                                    <p class="kpi-label">Pengunjung Bulan Ini</p>
-                                </div>
-                                <div class="kpi-progress-wrapper">
-                                    <div class="kpi-progress">
-                                        <div class="kpi-progress-bar {{ $kpi['on_track']['monthly'] ? 'bg-success' : ($kpi['achievement']['monthly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
-                                             style="width: {{ min($kpi['achievement']['monthly'], 100) }}%">
+                                <div class="kpi-header d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-cash-coin kpi-icon me-2"></i>
+                                        <div>
+                                            <h5 class="kpi-title mb-0">KPI Pendapatan Bersih</h5>
                                         </div>
                                     </div>
-                                    <div class="kpi-percentage {{ $kpi['on_track']['monthly'] ? 'text-success' : ($kpi['achievement']['monthly'] >= 50 ? 'text-warning' : 'text-danger') }}">
-                                        {{ number_format($kpi['achievement']['monthly'], 1) }}%
+                                    <select class="form-select form-select-sm" id="revenuePeriod" style="width: auto; font-size: 0.875rem;">
+                                        <option value="monthly" selected>Bulanan</option>
+                                        <option value="yearly">Tahunan</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Data Bulanan -->
+                                <div class="kpi-period-data" data-period="monthly">
+                                    <p class="kpi-subtitle text-muted small mb-3">{{ now()->format('F Y') }}</p>
+                                    <div class="kpi-metrics">
+                                        <div class="kpi-values">
+                                            <span class="kpi-actual">Rp {{ number_format($kpi['revenue']['actual']['monthly']) }}</span>
+                                            <span class="kpi-separator">/</span>
+                                            <span class="kpi-target">Rp {{ number_format($kpi['revenue']['targets']['monthly']) }}</span>
+                                        </div>
+                                        <p class="kpi-label">Pendapatan Bulan Ini</p>
+                                    </div>
+                                    <div class="kpi-progress-wrapper">
+                                        <div class="kpi-progress">
+                                            <div class="kpi-progress-bar {{ $kpi['revenue']['on_track']['monthly'] ? 'bg-success' : ($kpi['revenue']['achievement']['monthly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                                 style="width: {{ min($kpi['revenue']['achievement']['monthly'], 100) }}%">
+                                            </div>
+                                        </div>
+                                        <div class="kpi-percentage {{ $kpi['revenue']['on_track']['monthly'] ? 'text-success' : ($kpi['revenue']['achievement']['monthly'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                            {{ number_format($kpi['revenue']['achievement']['monthly'], 1) }}%
+                                        </div>
+                                    </div>
+                                    <div class="kpi-projection mb-2">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                        Proyeksi Akhir Bulan: <strong>Rp {{ number_format($kpi['revenue']['projected_monthly']) }}</strong>
+                                    </div>
+                                    <div class="kpi-status {{ $kpi['revenue']['on_track']['monthly'] ? 'status-success' : 'status-warning' }}">
+                                        <i class="bi bi-{{ $kpi['revenue']['on_track']['monthly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                        {{ $kpi['revenue']['on_track']['monthly'] ? 'On Track' : 'Perlu Peningkatan' }}
                                     </div>
                                 </div>
-                                <div class="kpi-projection">
-                                    <i class="bi bi-graph-up-arrow"></i>
-                                    Proyeksi Akhir Bulan: <strong>{{ number_format($kpi['projected_monthly']) }}</strong>
-                                </div>
-                                <div class="kpi-status {{ $kpi['on_track']['monthly'] ? 'status-success' : 'status-warning' }}">
-                                    <i class="bi bi-{{ $kpi['on_track']['monthly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
-                                    {{ $kpi['on_track']['monthly'] ? 'On Track' : 'Perlu Peningkatan' }}
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- KPI Tahunan -->
-                        <div class="col-md-4">
-                            <div class="kpi-card">
-                                <div class="kpi-header">
-                                    <i class="bi bi-calendar-range kpi-icon"></i>
-                                    <div>
-                                        <h5 class="kpi-title">Target Tahunan</h5>
-                                        <p class="kpi-subtitle">{{ now()->format('Y') }}</p>
+                                <!-- Data Tahunan -->
+                                <div class="kpi-period-data" data-period="yearly" style="display: none;">
+                                    <p class="kpi-subtitle text-muted small mb-3">Tahun {{ now()->format('Y') }}</p>
+                                    <div class="kpi-metrics">
+                                        <div class="kpi-values">
+                                            <span class="kpi-actual">Rp {{ number_format($kpi['revenue']['actual']['yearly']) }}</span>
+                                            <span class="kpi-separator">/</span>
+                                            <span class="kpi-target">Rp {{ number_format($kpi['revenue']['targets']['yearly']) }}</span>
+                                        </div>
+                                        <p class="kpi-label">Total Pendapatan Tahun Ini</p>
                                     </div>
-                                </div>
-                                <div class="kpi-metrics">
-                                    <div class="kpi-values">
-                                        <span class="kpi-actual">{{ number_format($kpi['actual']['yearly']) }}</span>
-                                        <span class="kpi-separator">/</span>
-                                        <span class="kpi-target">{{ number_format($kpi['targets']['yearly']) }}</span>
-                                    </div>
-                                    <p class="kpi-label">Total Pengunjung Tahun Ini</p>
-                                </div>
-                                <div class="kpi-progress-wrapper">
-                                    <div class="kpi-progress">
-                                        <div class="kpi-progress-bar {{ $kpi['on_track']['yearly'] ? 'bg-success' : ($kpi['achievement']['yearly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
-                                             style="width: {{ min($kpi['achievement']['yearly'], 100) }}%">
+                                    <div class="kpi-progress-wrapper">
+                                        <div class="kpi-progress">
+                                            <div class="kpi-progress-bar {{ $kpi['revenue']['on_track']['yearly'] ? 'bg-success' : ($kpi['revenue']['achievement']['yearly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                                 style="width: {{ min($kpi['revenue']['achievement']['yearly'], 100) }}%">
+                                            </div>
+                                        </div>
+                                        <div class="kpi-percentage {{ $kpi['revenue']['on_track']['yearly'] ? 'text-success' : ($kpi['revenue']['achievement']['yearly'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                            {{ number_format($kpi['revenue']['achievement']['yearly'], 1) }}%
                                         </div>
                                     </div>
-                                    <div class="kpi-percentage {{ $kpi['on_track']['yearly'] ? 'text-success' : ($kpi['achievement']['yearly'] >= 50 ? 'text-warning' : 'text-danger') }}">
-                                        {{ number_format($kpi['achievement']['yearly'], 1) }}%
+                                    <div class="kpi-status {{ $kpi['revenue']['on_track']['yearly'] ? 'status-success' : 'status-warning' }}">
+                                        <i class="bi bi-{{ $kpi['revenue']['on_track']['yearly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                        {{ $kpi['revenue']['on_track']['yearly'] ? 'On Track' : 'Perlu Peningkatan' }}
                                     </div>
-                                </div>
-                                <div class="kpi-status {{ $kpi['on_track']['yearly'] ? 'status-success' : 'status-warning' }}">
-                                    <i class="bi bi-{{ $kpi['on_track']['yearly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
-                                    {{ $kpi['on_track']['yearly'] ? 'On Track' : 'Perlu Peningkatan' }}
                                 </div>
                             </div>
                         </div>
@@ -230,59 +301,108 @@
 
     <!-- Secondary Stats -->
     <div class="row g-4 mb-4">
-        <div class="col-xl-4 col-md-6">
+        <!-- Rata-rata Penjualan Tiket -->
+        <div class="col-xl-6 col-md-6">
             <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-bar-chart-line me-2"></i>
-                    Rata-rata Harian
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-bar-chart-line me-2"></i>
+                        Rata-rata Penjualan Tiket
+                    </div>
+                    <select class="form-select form-select-sm" id="avgTicketPeriod" style="width: auto; min-width: 130px;">
+                        <option value="weekly">Perminggu</option>
+                        <option value="monthly" selected>Perbulan</option>
+                        <option value="yearly">Pertahun</option>
+                    </select>
                 </div>
                 <div class="card-body">
-                    <div class="stat-item-large">
+                    <!-- Data Perminggu -->
+                    <div class="stat-item-large avg-ticket-data" data-period="weekly" style="display: none;">
                         <div class="stat-icon">
                             <i class="bi bi-calculator"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 class="stat-value">{{ number_format($avg_daily, 1) }}</h3>
+                            <h3 class="stat-value">{{ number_format($avg_ticket['weekly'] ?? 0, 1) }}</h3>
+                            <p class="stat-desc">pengunjung/minggu</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">Rata-rata per minggu bulan ini</p>
+                        </div>
+                    </div>
+
+                    <!-- Data Perbulan -->
+                    <div class="stat-item-large avg-ticket-data" data-period="monthly">
+                        <div class="stat-icon">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value">{{ number_format($avg_ticket['monthly'] ?? 0, 1) }}</h3>
                             <p class="stat-desc">pengunjung/hari</p>
-                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">30 hari terakhir</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">Rata-rata harian bulan {{ now()->format('F') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Data Pertahun -->
+                    <div class="stat-item-large avg-ticket-data" data-period="yearly" style="display: none;">
+                        <div class="stat-icon">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value">{{ number_format($avg_ticket['yearly'] ?? 0, 1) }}</h3>
+                            <p class="stat-desc">pengunjung/bulan</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">Rata-rata per bulan tahun ini</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-md-6">
+
+        <!-- Rata-rata Pendapatan Bersih -->
+        <div class="col-xl-6 col-md-6">
             <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-calendar-check me-2"></i>
-                    Bulan Ini
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-cash-stack me-2"></i>
+                        Rata-rata Pendapatan Bersih
+                    </div>
+                    <select class="form-select form-select-sm" id="avgRevenuePeriod" style="width: auto; min-width: 130px;">
+                        <option value="weekly">Perminggu</option>
+                        <option value="monthly" selected>Perbulan</option>
+                        <option value="yearly">Pertahun</option>
+                    </select>
                 </div>
                 <div class="card-body">
-                    <div class="stat-item-large">
+                    <!-- Data Perminggu -->
+                    <div class="stat-item-large avg-revenue-data" data-period="weekly" style="display: none;">
                         <div class="stat-icon">
-                            <i class="bi bi-calendar3"></i>
+                            <i class="bi bi-currency-dollar"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 class="stat-value">{{ number_format($kunjungan_bulan_ini ?? 0) }}</h3>
-                            <p class="stat-desc">{{ now()->format('F Y') }}</p>
+                            <h3 class="stat-value">Rp {{ number_format($avg_revenue['weekly'] ?? 0) }}</h3>
+                            <p class="stat-desc">rata-rata/minggu</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">Bulan {{ now()->format('F') }}</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4 col-md-12">
-            <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-database me-2"></i>
-                    Total Keseluruhan
-                </div>
-                <div class="card-body">
-                    <div class="stat-item-large">
+
+                    <!-- Data Perbulan -->
+                    <div class="stat-item-large avg-revenue-data" data-period="monthly">
                         <div class="stat-icon">
-                            <i class="bi bi-pie-chart"></i>
+                            <i class="bi bi-currency-dollar"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 class="stat-value">{{ number_format($total_pengunjung ?? 0) }}</h3>
-                            <p class="stat-desc">pengunjung</p>
+                            <h3 class="stat-value">Rp {{ number_format($avg_revenue['monthly'] ?? 0) }}</h3>
+                            <p class="stat-desc">rata-rata/hari</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">Bulan {{ now()->format('F') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Data Pertahun -->
+                    <div class="stat-item-large avg-revenue-data" data-period="yearly" style="display: none;">
+                        <div class="stat-icon">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value">Rp {{ number_format($avg_revenue['yearly'] ?? 0) }}</h3>
+                            <p class="stat-desc">rata-rata/bulan</p>
+                            <p class="text-muted" style="font-size: 11px; margin-top: 5px;">Tahun {{ now()->format('Y') }}</p>
                         </div>
                     </div>
                 </div>
@@ -290,9 +410,10 @@
         </div>
     </div>
 
-    <!-- SECTION 2: PENJUALAN TIKET PER BULAN -->
+    <!-- SECTION 2: PENJUALAN TIKET & PENDAPATAN PER BULAN -->
     <div class="row g-4 mb-4">
-        <div class="col-12">
+        <!-- Penjualan Tiket Per Bulan -->
+        <div class="col-xl-6">
             <div class="detail-card">
                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div class="d-flex align-items-center">
@@ -300,10 +421,10 @@
                         <span>Penjualan Tiket Per Bulan</span>
                     </div>
                     <div class="d-flex align-items-center gap-3">
-                        <select id="salesMonth" class="form-select" style="min-width: 150px; max-width: 180px;"></select>
-                        <select id="salesYear" class="form-select" style="min-width: 110px; max-width: 130px;"></select>
-                        <button type="button" class="btn btn-export-modern" onclick="exportMonthlyXlsx()">
-                            <i class="bi bi-file-earmark-excel me-2"></i>Export XLSX
+                        <select id="salesMonth" class="form-select form-select-sm" style="min-width: 120px; max-width: 150px;"></select>
+                        <select id="salesYear" class="form-select form-select-sm" style="min-width: 90px; max-width: 110px;"></select>
+                        <button type="button" class="btn btn-export-modern btn-sm" onclick="exportMonthlyXlsx()">
+                            <i class="bi bi-file-earmark-excel me-1"></i>Export
                         </button>
                     </div>
                 </div>
@@ -312,11 +433,34 @@
                 </div>
             </div>
         </div>
+
+        <!-- Pendapatan Bersih Per Bulan -->
+        <div class="col-xl-6">
+            <div class="detail-card">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-currency-dollar me-2"></i>
+                        <span>Pendapatan Bersih Per Bulan</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <select id="revenueMonth" class="form-select form-select-sm" style="min-width: 120px; max-width: 150px;"></select>
+                        <select id="revenueYear" class="form-select form-select-sm" style="min-width: 90px; max-width: 110px;"></select>
+                        <button type="button" class="btn btn-export-modern btn-sm" onclick="exportMonthlyRevenueXlsx()">
+                            <i class="bi bi-file-earmark-excel me-1"></i>Export
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyRevenueChart" height="90"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- SECTION 3: PENJUALAN TIKET PER TAHUN -->
+    <!-- SECTION 3: PENJUALAN TIKET & PENDAPATAN PER TAHUN -->
     <div class="row g-4 mb-4">
-        <div class="col-12">
+        <!-- Penjualan Tiket Per Tahun -->
+        <div class="col-xl-6">
             <div class="detail-card">
                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div class="d-flex align-items-center">
@@ -324,14 +468,35 @@
                         <span>Penjualan Tiket Per Tahun</span>
                     </div>
                     <div class="d-flex align-items-center gap-3">
-                        <select id="yearlyYear" class="form-select" style="min-width: 110px; max-width: 130px;"></select>
-                        <button type="button" class="btn btn-export-modern" onclick="exportYearlyXlsx()">
-                            <i class="bi bi-file-earmark-excel me-2"></i>Export XLSX
+                        <select id="yearlyYear" class="form-select form-select-sm" style="min-width: 90px; max-width: 110px;"></select>
+                        <button type="button" class="btn btn-export-modern btn-sm" onclick="exportYearlyXlsx()">
+                            <i class="bi bi-file-earmark-excel me-1"></i>Export
                         </button>
                     </div>
                 </div>
                 <div class="card-body">
                     <canvas id="yearlySalesChart" height="90"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pendapatan Bersih Per Tahun -->
+        <div class="col-xl-6">
+            <div class="detail-card">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cash-stack me-2"></i>
+                        <span>Pendapatan Bersih Per Tahun</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <select id="revenueYearlyYear" class="form-select form-select-sm" style="min-width: 90px; max-width: 110px;"></select>
+                        <button type="button" class="btn btn-export-modern btn-sm" onclick="exportYearlyRevenueXlsx()">
+                            <i class="bi bi-file-earmark-excel me-1"></i>Export
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="yearlyRevenueChart" height="90"></canvas>
                 </div>
             </div>
         </div>
@@ -356,7 +521,7 @@
             <div class="detail-card">
                 <div class="card-header">
                     <i class="bi bi-pie-chart me-2"></i>
-                    Persentase Kategori
+                    Persentase Pendapatan per Kategori
                 </div>
                 <div class="card-body">
                     <canvas id="pieChart"></canvas>
@@ -411,6 +576,9 @@
             <div class="modal-body">
                 <form id="kpiSettingsForm">
                     @csrf
+                    <h6 class="fw-bold mb-3 text-primary">
+                        <i class="bi bi-ticket-perforated me-2"></i>Target Penjualan Tiket
+                    </h6>
                     <div class="mb-3">
                         <label for="targetDaily" class="form-label fw-bold">
                             <i class="bi bi-calendar-day text-primary me-1"></i> Target Harian
@@ -427,7 +595,7 @@
                                value="{{ $kpi['targets']['monthly'] }}" min="1" required>
                         <small class="text-muted">Jumlah target pengunjung per bulan</small>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="targetYearly" class="form-label fw-bold">
                             <i class="bi bi-calendar-range text-warning me-1"></i> Target Tahunan
                         </label>
@@ -435,6 +603,35 @@
                                value="{{ $kpi['targets']['yearly'] }}" min="1" required>
                         <small class="text-muted">Jumlah target pengunjung per tahun</small>
                     </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="fw-bold mb-3 text-success">
+                        <i class="bi bi-cash-coin me-2"></i>Target Pendapatan Bersih
+                    </h6>
+                    <div class="mb-3">
+                        <label for="targetRevenueMonthly" class="form-label fw-bold">
+                            <i class="bi bi-calendar-month text-success me-1"></i> Target Pendapatan Bulanan
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control" id="targetRevenueMonthly" name="target_revenue_monthly" 
+                                   value="{{ $kpi['revenue']['targets']['monthly'] ?? 0 }}" min="0" required>
+                        </div>
+                        <small class="text-muted">Target total pendapatan dari penjualan tiket per bulan</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="targetRevenueYearly" class="form-label fw-bold">
+                            <i class="bi bi-calendar-range text-warning me-1"></i> Target Pendapatan Tahunan
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control" id="targetRevenueYearly" name="target_revenue_yearly" 
+                                   value="{{ $kpi['revenue']['targets']['yearly'] ?? 0 }}" min="0" required>
+                        </div>
+                        <small class="text-muted">Target total pendapatan dari penjualan tiket per tahun</small>
+                    </div>
+
                     <div class="alert alert-info d-flex align-items-center" role="alert">
                         <i class="bi bi-info-circle-fill me-2"></i>
                         <small>Target yang Anda tetapkan akan langsung diterapkan ke semua KPI dashboard.</small>
@@ -1189,11 +1386,95 @@ particlesJS('particles-js', {
     },
     retina_detect: true
 });
+
+// ============================================================================
+// KPI PERIOD SWITCHER
+// ============================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle Ticket Sales KPI Period Switcher
+    const ticketPeriodSelect = document.getElementById('ticketPeriod');
+    if (ticketPeriodSelect) {
+        ticketPeriodSelect.addEventListener('change', function() {
+            const selectedPeriod = this.value;
+            const ticketCard = this.closest('.kpi-card');
+            const allPeriods = ticketCard.querySelectorAll('.kpi-period-data');
+            
+            allPeriods.forEach(period => {
+                period.style.display = 'none';
+            });
+            
+            const selectedData = ticketCard.querySelector(`[data-period="${selectedPeriod}"]`);
+            if (selectedData) {
+                selectedData.style.display = 'block';
+            }
+        });
+    }
+
+    // Handle Revenue KPI Period Switcher  
+    const revenuePeriodSelect = document.getElementById('revenuePeriod');
+    if (revenuePeriodSelect) {
+        revenuePeriodSelect.addEventListener('change', function() {
+            const selectedPeriod = this.value;
+            const revenueCard = this.closest('.kpi-card');
+            const allPeriods = revenueCard.querySelectorAll('.kpi-period-data');
+            
+            allPeriods.forEach(period => {
+                period.style.display = 'none';
+            });
+            
+            const selectedData = revenueCard.querySelector(`[data-period="${selectedPeriod}"]`);
+            if (selectedData) {
+                selectedData.style.display = 'block';
+            }
+        });
+    }
+
+    // Handle Average Ticket Sales Period Switcher
+    const avgTicketPeriodSelect = document.getElementById('avgTicketPeriod');
+    if (avgTicketPeriodSelect) {
+        avgTicketPeriodSelect.addEventListener('change', function() {
+            const selectedPeriod = this.value;
+            const allPeriods = document.querySelectorAll('.avg-ticket-data');
+            
+            allPeriods.forEach(period => {
+                period.style.display = 'none';
+            });
+            
+            const selectedData = document.querySelector(`.avg-ticket-data[data-period="${selectedPeriod}"]`);
+            if (selectedData) {
+                selectedData.style.display = 'flex';
+            }
+        });
+    }
+
+    // Handle Average Revenue Period Switcher
+    const avgRevenuePeriodSelect = document.getElementById('avgRevenuePeriod');
+    if (avgRevenuePeriodSelect) {
+        avgRevenuePeriodSelect.addEventListener('change', function() {
+            const selectedPeriod = this.value;
+            const allPeriods = document.querySelectorAll('.avg-revenue-data');
+            
+            allPeriods.forEach(period => {
+                period.style.display = 'none';
+            });
+            
+            const selectedData = document.querySelector(`.avg-revenue-data[data-period="${selectedPeriod}"]`);
+            if (selectedData) {
+                selectedData.style.display = 'flex';
+            }
+        });
+    }
+});
+
 // Chart.js Data
 const pelajarTotal = {{ $total_per_kategori->pelajar ?? 0 }};
 const umumTotal = {{ $total_per_kategori->umum ?? 0 }};
 const asingTotal = {{ $total_per_kategori->asing ?? 0 }};
 const khususTotal = {{ $total_per_kategori->khusus ?? 0 }};
+const pelajarRevenue = {{ $revenue_per_kategori->pelajar ?? 0 }};
+const umumRevenue = {{ $revenue_per_kategori->umum ?? 0 }};
+const asingRevenue = {{ $revenue_per_kategori->asing ?? 0 }};
+const khususRevenue = {{ $revenue_per_kategori->khusus ?? 0 }};
 const tkTotal = {{ $sub_pelajar->tk ?? 0 }};
 const sdTotal = {{ $sub_pelajar->sd ?? 0 }};
 const smpTotal = {{ $sub_pelajar->smp ?? 0 }};
@@ -1634,7 +1915,13 @@ let forecastChart;
 let currentForecastPeriod = 7;
 const historicalData = generateHistoricalData(60);
 let monthlySalesChart;
+let monthlyRevenueChart;
+let yearlySalesChart;
+let yearlyRevenueChart;
 const monthlySalesUrl = '{{ route('admin.sales.monthly') }}';
+const monthlyRevenueUrl = '{{ route('admin.revenue.monthly') }}';
+const yearlySalesUrl = '{{ route('admin.sales.yearly') }}';
+const yearlyRevenueUrl = '{{ route('admin.revenue.yearly') }}';
 // ============================================================================
 // CHART CONFIGURATIONS
 // ============================================================================
@@ -1983,13 +2270,34 @@ function createCategoryChart() {
     });
 }
 function createPieChart() {
-    const pieCtx = document.getElementById('pieChart').getContext('2d');
-    new Chart(pieCtx, {
+    console.log('Creating pie chart with revenue data:', {
+        pelajar: pelajarRevenue,
+        umum: umumRevenue,
+        asing: asingRevenue,
+        khusus: khususRevenue
+    });
+    
+    const pieCtx = document.getElementById('pieChart');
+    if (!pieCtx) {
+        console.error('Pie chart canvas not found!');
+        return;
+    }
+    
+    const total = pelajarRevenue + umumRevenue + asingRevenue + khususRevenue;
+    console.log('Total revenue:', total);
+    
+    // Jika semua data 0, tampilkan pesan
+    if (total === 0) {
+        pieCtx.parentElement.innerHTML = '<p class="text-center text-muted py-5">Belum ada data pendapatan</p>';
+        return;
+    }
+    
+    new Chart(pieCtx.getContext('2d'), {
         type: 'doughnut',
         data: {
             labels: ['Pelajar', 'Umum', 'Asing', 'Tiket Khusus'],
             datasets: [{
-                data: [pelajarTotal, umumTotal, asingTotal, khususTotal],
+                data: [pelajarRevenue, umumRevenue, asingRevenue, khususRevenue],
                 backgroundColor: [
                     'rgba(76, 175, 80, 0.8)',
                     'rgba(33, 150, 243, 0.8)',
@@ -2026,7 +2334,7 @@ function createPieChart() {
                         label: function(context) {
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
                             const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            return context.label + ': ' + context.parsed.toLocaleString('id-ID') + ' (' + percentage + '%)';
+                            return context.label + ': Rp ' + context.parsed.toLocaleString('id-ID') + ' (' + percentage + '%)';
                         }
                     }
                 }
@@ -2412,8 +2720,6 @@ function initYearlySalesControls() {
 }
 
 let isLoadingYearlySales = false;
-let yearlySalesChart;
-const yearlySalesUrl = '{{ route('admin.sales.yearly') }}';
 
 async function loadYearlySales() {
     const year = document.getElementById('yearlyYear')?.value;
@@ -2686,6 +2992,235 @@ function exportForecastData() {
     link.click();
     document.body.removeChild(link);
 }
+
+// ============================================================================
+// MONTHLY REVENUE (PENDAPATAN BERSIH PER BULAN)
+// ============================================================================
+function initMonthlyRevenueControls() {
+    const monthSelect = document.getElementById('revenueMonth');
+    const yearSelect = document.getElementById('revenueYear');
+
+    if (!monthSelect || !yearSelect) return;
+
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+
+    // Populate months
+    const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    monthSelect.innerHTML = '';
+    for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement('option');
+        opt.value = String(m);
+        opt.textContent = monthNames[m - 1];
+        if (m === currentMonth) opt.selected = true;
+        monthSelect.appendChild(opt);
+    }
+
+    // Populate years
+    yearSelect.innerHTML = '';
+    for (let y = currentYear - 2; y <= currentYear + 1; y++) {
+        const opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = String(y);
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+    }
+
+    monthSelect.addEventListener('change', loadMonthlyRevenue);
+    yearSelect.addEventListener('change', loadMonthlyRevenue);
+}
+
+let isLoadingMonthlyRevenue = false;
+
+async function loadMonthlyRevenue() {
+    const month = document.getElementById('revenueMonth')?.value;
+    const year = document.getElementById('revenueYear')?.value;
+    if (!month || !year) return;
+    
+    if (isLoadingMonthlyRevenue) return;
+    isLoadingMonthlyRevenue = true;
+
+    try {
+        const cacheBuster = new Date().getTime();
+        const url = `${monthlyRevenueUrl}?month=${month}&year=${year}&_=${cacheBuster}`;
+        const resp = await fetch(url, { cache: 'no-cache' });
+        const data = await resp.json();
+        renderMonthlyRevenueChart(data);
+    } catch (e) {
+        console.error('Gagal memuat data pendapatan bulanan', e);
+    } finally {
+        isLoadingMonthlyRevenue = false;
+    }
+}
+
+function renderMonthlyRevenueChart(payload) {
+    const ctx = document.getElementById('monthlyRevenueChart')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = payload.labels || [];
+    const revenues = payload.revenues || [];
+
+    if (monthlyRevenueChart) monthlyRevenueChart.destroy();
+
+    monthlyRevenueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Pendapatan (Rp)',
+                data: revenues,
+                backgroundColor: 'rgba(33, 150, 243, 0.8)',
+                borderColor: 'rgb(33, 150, 243)',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.85)',
+                    borderColor: '#2196F3',
+                    borderWidth: 2,
+                    padding: 12,
+                    callbacks: {
+                        label: (ctx) => {
+                            return 'Rp ' + ctx.parsed.y.toLocaleString('id-ID');
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    grid: { display: false }, 
+                    ticks: { font: { size: 10, weight: 'bold' } },
+                    title: { display: true, text: 'Tanggal', font: { size: 12, weight: 'bold' } }
+                },
+                y: {
+                    beginAtZero: true,
+                    grace: '5%',
+                    grid: { color: 'rgba(0,0,0,0.05)' },
+                    ticks: {
+                        font: { size: 10, weight: 'bold' },
+                        callback: (v) => 'Rp ' + v.toLocaleString('id-ID')
+                    },
+                    title: { display: true, text: 'Pendapatan (Rp)', font: { size: 12, weight: 'bold' } }
+                }
+            }
+        }
+    });
+}
+
+// ============================================================================
+// YEARLY REVENUE (PENDAPATAN BERSIH PER TAHUN)
+// ============================================================================
+function initYearlyRevenueControls() {
+    const yearSelect = document.getElementById('revenueYearlyYear');
+
+    if (!yearSelect) return;
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    yearSelect.innerHTML = '';
+    for (let y = currentYear - 2; y <= currentYear + 1; y++) {
+        const opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = String(y);
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+    }
+
+    yearSelect.addEventListener('change', loadYearlyRevenue);
+}
+
+let isLoadingYearlyRevenue = false;
+
+async function loadYearlyRevenue() {
+    const year = document.getElementById('revenueYearlyYear')?.value;
+    if (!year) return;
+    
+    if (isLoadingYearlyRevenue) return;
+    isLoadingYearlyRevenue = true;
+
+    try {
+        const cacheBuster = new Date().getTime();
+        const url = `${yearlyRevenueUrl}?year=${year}&_=${cacheBuster}`;
+        const resp = await fetch(url, { cache: 'no-cache' });
+        const data = await resp.json();
+        renderYearlyRevenueChart(data);
+    } catch (e) {
+        console.error('Gagal memuat data pendapatan tahunan', e);
+    } finally {
+        isLoadingYearlyRevenue = false;
+    }
+}
+
+function renderYearlyRevenueChart(payload) {
+    const ctx = document.getElementById('yearlyRevenueChart')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = payload.labels || [];
+    const revenues = payload.revenues || [];
+
+    if (yearlyRevenueChart) yearlyRevenueChart.destroy();
+
+    yearlyRevenueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Pendapatan (Rp)',
+                data: revenues,
+                backgroundColor: 'rgba(76, 175, 80, 0.8)',
+                borderColor: 'rgb(76, 175, 80)',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.85)',
+                    borderColor: '#4CAF50',
+                    borderWidth: 2,
+                    padding: 12,
+                    callbacks: {
+                        label: (ctx) => {
+                            return 'Rp ' + ctx.parsed.y.toLocaleString('id-ID');
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    grid: { display: false }, 
+                    ticks: { font: { size: 10, weight: 'bold' } },
+                    title: { display: true, text: 'Bulan', font: { size: 12, weight: 'bold' } }
+                },
+                y: {
+                    beginAtZero: true,
+                    grace: '5%',
+                    grid: { color: 'rgba(0,0,0,0.05)' },
+                    ticks: {
+                        font: { size: 10, weight: 'bold' },
+                        callback: (v) => 'Rp ' + v.toLocaleString('id-ID')
+                    },
+                    title: { display: true, text: 'Pendapatan (Rp)', font: { size: 12, weight: 'bold' } }
+                }
+            }
+        }
+    });
+}
+
 // ============================================================================
 // REAL-TIME UPDATE (Optional - jika ada WebSocket/polling)
 // ============================================================================
@@ -2736,6 +3271,31 @@ function exportYearlyXlsx() {
     window.location.href = url;
 }
 
+function exportMonthlyRevenueXlsx() {
+    const month = document.getElementById('revenueMonth')?.value;
+    const year = document.getElementById('revenueYear')?.value;
+    
+    if (!month || !year) {
+        alert('Pilih bulan dan tahun terlebih dahulu');
+        return;
+    }
+    
+    const url = '{{ route("admin.export.monthly.revenue") }}?month=' + month + '&year=' + year;
+    window.location.href = url;
+}
+
+function exportYearlyRevenueXlsx() {
+    const year = document.getElementById('revenueYearlyYear')?.value;
+    
+    if (!year) {
+        alert('Pilih tahun terlebih dahulu');
+        return;
+    }
+    
+    const url = '{{ route("admin.export.yearly.revenue") }}?year=' + year;
+    window.location.href = url;
+}
+
 function exportForecastXlsx() {
     const days = currentForecastPeriod || 7;
     const url = '{{ route("admin.export.forecast") }}?days=' + days + '&method=ensemble';
@@ -2753,6 +3313,8 @@ async function saveKpiSettings() {
         target_daily: parseInt(formData.get('target_daily')),
         target_monthly: parseInt(formData.get('target_monthly')),
         target_yearly: parseInt(formData.get('target_yearly')),
+        target_revenue_monthly: parseInt(formData.get('target_revenue_monthly')),
+        target_revenue_yearly: parseInt(formData.get('target_revenue_yearly')),
         _token: formData.get('_token')
     };
 
@@ -2767,6 +3329,14 @@ async function saveKpiSettings() {
     }
     if (data.target_yearly < 1) {
         alert('Target tahunan harus minimal 1');
+        return;
+    }
+    if (data.target_revenue_monthly < 0) {
+        alert('Target pendapatan bulanan harus minimal 0');
+        return;
+    }
+    if (data.target_revenue_yearly < 0) {
+        alert('Target pendapatan tahunan harus minimal 0');
         return;
     }
 
@@ -2862,6 +3432,10 @@ document.addEventListener('DOMContentLoaded', function() {
     loadMonthlySales();
     initYearlySalesControls();
     loadYearlySales();
+    initMonthlyRevenueControls();
+    loadMonthlyRevenue();
+    initYearlyRevenueControls();
+    loadYearlyRevenue();
     
     // Update metrics
     // (removed forecasting metrics)
@@ -2883,7 +3457,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================================================
 window.loadMonthlySales = loadMonthlySales;
 window.loadYearlySales = loadYearlySales;
+window.loadMonthlyRevenue = loadMonthlyRevenue;
+window.loadYearlyRevenue = loadYearlyRevenue;
 window.exportMonthlyXlsx = exportMonthlyXlsx;
 window.exportYearlyXlsx = exportYearlyXlsx;
+window.exportMonthlyRevenueXlsx = exportMonthlyRevenueXlsx;
+window.exportYearlyRevenueXlsx = exportYearlyRevenueXlsx;
 </script>
 @endsection

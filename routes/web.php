@@ -113,6 +113,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/sales/monthly', [AdminController::class, 'monthlySales'])->name('admin.sales.monthly');
     Route::get('/sales/yearly', [AdminController::class, 'yearlySales'])->name('admin.sales.yearly');
     
+    // Revenue analytics API
+    Route::get('/revenue/monthly', [AdminController::class, 'monthlyRevenue'])->name('admin.revenue.monthly');
+    Route::get('/revenue/yearly', [AdminController::class, 'yearlyRevenue'])->name('admin.revenue.yearly');
+    
     // KPI Settings
     Route::post('/kpi/update', [AdminController::class, 'updateKpiSettings'])->name('admin.kpi.update');
     
@@ -123,6 +127,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/export/monthly-xlsx', [AdminController::class, 'exportMonthlyXlsx'])->name('admin.export.monthly');
     Route::get('/export/yearly-xlsx', [AdminController::class, 'exportYearlyXlsx'])->name('admin.export.yearly');
     Route::get('/export/forecast-xlsx', [AdminController::class, 'exportForecastXlsx'])->name('admin.export.forecast');
+    Route::get('/export/monthly-revenue-xlsx', [AdminController::class, 'exportMonthlyRevenueXlsx'])->name('admin.export.monthly.revenue');
+    Route::get('/export/yearly-revenue-xlsx', [AdminController::class, 'exportYearlyRevenueXlsx'])->name('admin.export.yearly.revenue');
     
     // Bookings & Payment History
     Route::get('/bookings', [AdminController::class, 'bookings'])->name('admin.bookings.index');

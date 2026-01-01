@@ -524,26 +524,41 @@ let historicalData = [];
 let forecastDataCache = null;
 let isLoadingForecast = false;
 
-async function loadForecastData(historicalDays = 60, forecastDays = 7) {
-    if (isLoadingForecast) return forecastDataCache;
+async function loadForecastData(historicalDays = 30, forecastDays = 7) {
+    if (isLoadingForecast) {
+        console.log('Already loading forecast data, returning cache');
+        return forecastDataCache;
+    }
     
     isLoadingForecast = true;
     try {
-        const response = await fetch(`{{ route('admin.forecast.data') }}?historical_days=${historicalDays}&forecast_days=${forecastDays}`);
+        const url = `{{ route('admin.forecast.data') }}?historical_days=${historicalDays}&forecast_days=${forecastDays}`;
+        console.log('Fetching forecast data from:', url);
+        
+        const response = await fetch(url);
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('Forecast data received:', data);
         
         if (data.success) {
             historicalData = data.historical.values;
             forecastDataCache = data;
+            console.log('✅ Forecast data cached successfully');
             return data;
         } else {
-            console.error('Failed to load forecast data:', data.message);
+            console.error('❌ API returned error:', data.message);
             // Fallback to dummy data
             historicalData = generateHistoricalDataFallback(historicalDays);
             return null;
         }
     } catch (error) {
-        console.error('Error loading forecast data:', error);
+        console.error('❌ Error loading forecast data:', error);
+        console.error('Error details:', error.message);
         // Fallback to dummy data
         historicalData = generateHistoricalDataFallback(historicalDays);
         return null;
@@ -763,18 +778,32 @@ let currentForecastPeriod = 7;
 
 // CREATE CHARTS
 async function createForecastChart(days = 7) {
-    const ctx = document.getElementById('forecastChart').getContext('2d');
-    
-    // Load real data from API
-    const apiData = await loadForecastData(60, days);
+    try {
+        const chartElement = document.getElementById('forecastChart');
+        if (!chartElement) {
+            console.error('❌ Chart element "forecastChart" not found!');
+            return;
+        }
+        
+        const ctx = chartElement.getContext('2d');
+        console.log('Chart context obtained');
+        
+        // Load real data from API (30 days default)
+        console.log('Loading forecast data for', days, 'days...');
+        const apiData = await loadForecastData(30, days);
+        console.log('API data:', apiData);
     
     let recentHistorical, historicalLabels, ensemble, forecastLabels;
     let upperBound, lowerBound;
+    let hasDataArray = [];
     
     if (apiData && apiData.success) {
         // Use real data from API
-        recentHistorical = apiData.historical.values.slice(-30);
-        historicalLabels = apiData.historical.labels.slice(-30);
+        const displayCount = 14; // Show last 14 days only
+        recentHistorical = apiData.historical.values.slice(-displayCount);
+        historicalLabels = apiData.historical.labels.slice(-displayCount);
+        hasDataArray = apiData.historical.has_data ? apiData.historical.has_data.slice(-displayCount) : [];
+        
         ensemble = apiData.forecast.values;
         forecastLabels = apiData.forecast.labels;
         upperBound = apiData.forecast.confidence_upper;
@@ -785,8 +814,9 @@ async function createForecastChart(days = 7) {
         updateAIInsightsFromAPI(apiData, days);
     } else {
         // Fallback to client-side calculation
-        recentHistorical = historicalData.slice(-30);
-        historicalLabels = generateDateLabels(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 30);
+        recentHistorical = historicalData.slice(-14);
+        historicalLabels = generateDateLabels(new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), 14);
+        hasDataArray = Array(14).fill(true);
         ensemble = ensembleForecast(historicalData, days);
         const confidence = calculateConfidenceIntervals(ensemble, historicalData);
         upperBound = confidence.upperBound;
@@ -797,58 +827,80 @@ async function createForecastChart(days = 7) {
         updateAIInsights(ensemble, days);
     }
     
+    // Separate real data from missing data
+    const realDataValues = recentHistorical.map((val, i) => hasDataArray[i] ? val : null);
+    const missingDataValues = recentHistorical.map((val, i) => !hasDataArray[i] ? val : null);
+    
     if (forecastChart) forecastChart.destroy();
     forecastChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [...historicalLabels.slice(-14), ...forecastLabels],
+            labels: [...historicalLabels, ...forecastLabels],
             datasets: [
                 {
-                    label: 'Data Historis',
-                    data: [...recentHistorical.slice(-14), ...Array(days).fill(null)],
+                    label: 'Data Real (Ada di Database)',
+                    data: [...realDataValues, ...Array(days).fill(null)],
                     borderColor: 'rgb(33, 150, 243)',
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    backgroundColor: 'rgba(33, 150, 243, 0.2)',
                     borderWidth: 3,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
                     pointBackgroundColor: 'rgb(33, 150, 243)',
-                    tension: 0.4,
-                    fill: true
+                    tension: 0.3,
+                    fill: true,
+                    spanGaps: false
                 },
                 {
-                    label: 'Prediksi (Ensemble AI)',
-                    data: [...Array(14).fill(null), recentHistorical[recentHistorical.length - 1], ...ensemble],
-                    borderColor: 'rgb(255, 212, 0)',
-                    backgroundColor: 'rgba(255, 212, 0, 0.2)',
+                    label: 'Data Missing (Tidak Ada di DB)',
+                    data: [...missingDataValues, ...Array(days).fill(null)],
+                    borderColor: 'rgba(158, 158, 158, 0.5)',
+                    backgroundColor: 'rgba(158, 158, 158, 0.1)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: 'rgba(158, 158, 158, 0.7)',
+                    pointStyle: 'cross',
+                    tension: 0.3,
+                    fill: false,
+                    spanGaps: false
+                },
+                {
+                    label: '📊 Prediksi AI (Holt-Winters + Seasonality)',
+                    data: [...Array(recentHistorical.length).fill(null), recentHistorical[recentHistorical.length - 1], ...ensemble],
+                    borderColor: 'rgb(255, 193, 7)',
+                    backgroundColor: 'rgba(255, 193, 7, 0.15)',
                     borderWidth: 4,
-                    borderDash: [10, 5],
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                    pointStyle: 'rectRot',
-                    pointBackgroundColor: 'rgb(255, 212, 0)',
-                    tension: 0.4,
+                    borderDash: [8, 4],
+                    pointRadius: 7,
+                    pointHoverRadius: 9,
+                    pointStyle: 'star',
+                    pointBackgroundColor: 'rgb(255, 193, 7)',
+                    pointBorderColor: 'rgb(255, 152, 0)',
+                    pointBorderWidth: 2,
+                    tension: 0.3,
                     fill: false
                 },
                 {
-                    label: 'Upper Confidence (95%)',
-                    data: [...Array(14).fill(null), recentHistorical[recentHistorical.length - 1], ...upperBound],
-                    borderColor: 'rgba(76, 175, 80, 0.3)',
-                    backgroundColor: 'rgba(76, 175, 80, 0.05)',
-                    borderWidth: 1,
-                    borderDash: [5, 5],
+                    label: 'Confidence Band Atas (95%)',
+                    data: [...Array(recentHistorical.length).fill(null), recentHistorical[recentHistorical.length - 1], ...upperBound],
+                    borderColor: 'rgba(76, 175, 80, 0.4)',
+                    backgroundColor: 'rgba(76, 175, 80, 0.08)',
+                    borderWidth: 1.5,
+                    borderDash: [3, 3],
                     pointRadius: 0,
-                    tension: 0.4,
+                    tension: 0.3,
                     fill: '+1'
                 },
                 {
-                    label: 'Lower Confidence (95%)',
-                    data: [...Array(14).fill(null), recentHistorical[recentHistorical.length - 1], ...lowerBound],
-                    borderColor: 'rgba(244, 67, 54, 0.3)',
-                    backgroundColor: 'rgba(244, 67, 54, 0.05)',
-                    borderWidth: 1,
-                    borderDash: [5, 5],
+                    label: 'Confidence Band Bawah (95%)',
+                    data: [...Array(recentHistorical.length).fill(null), recentHistorical[recentHistorical.length - 1], ...lowerBound],
+                    borderColor: 'rgba(244, 67, 54, 0.4)',
+                    backgroundColor: 'rgba(244, 67, 54, 0.08)',
+                    borderWidth: 1.5,
+                    borderDash: [3, 3],
                     pointRadius: 0,
-                    tension: 0.4,
+                    tension: 0.3,
                     fill: false
                 }
             ]
@@ -881,8 +933,19 @@ async function createForecastChart(days = 7) {
                         },
                         footer: function(tooltipItems) {
                             const dataIndex = tooltipItems[0].dataIndex;
-                            if (dataIndex >= 14) return 'Prediksi AI dengan confidence 95%';
-                            return 'Data aktual kunjungan';
+                            const histLen = recentHistorical.length;
+                            
+                            if (dataIndex < histLen) {
+                                // Historical data area
+                                if (hasDataArray[dataIndex]) {
+                                    return '✅ Data real dari database (status: paid)';
+                                } else {
+                                    return '❌ Tanggal ini tidak ada data di database';
+                                }
+                            } else {
+                                // Forecast area
+                                return '🔮 Prediksi AI (Holt-Winters + Seasonality) - Confidence 95%';
+                            }
                         }
                     }
                 }
@@ -904,6 +967,14 @@ async function createForecastChart(days = 7) {
             }
         }
     });
+    
+    console.log('✅ Forecast chart created successfully');
+    
+    } catch (error) {
+        console.error('❌ Error creating forecast chart:', error);
+        console.error('Error details:', error.message);
+        console.error('Stack trace:', error.stack);
+    }
 }
 
 function createHeatmapChart() {
@@ -1158,15 +1229,31 @@ function exportForecastXlsx() {
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Initializing Stats & Forecasting Dashboard...');
     
-    // Load initial forecast data
-    await loadForecastData(60, 7);
-    
-    // Create all charts
-    await createForecastChart(7);
-    createHeatmapChart();
-    createMovingAverageChart();
-    
-    console.log('Dashboard initialized successfully with real data!');
+    try {
+        // Load initial forecast data (30 days historical)
+        console.log('Loading forecast data...');
+        const forecastData = await loadForecastData(30, 7);
+        console.log('Forecast data loaded:', forecastData);
+        
+        // Create all charts
+        console.log('Creating forecast chart...');
+        await createForecastChart(7);
+        console.log('Forecast chart created');
+        
+        console.log('Creating heatmap chart...');
+        createHeatmapChart();
+        console.log('Heatmap chart created');
+        
+        console.log('Creating moving average chart...');
+        createMovingAverageChart();
+        console.log('Moving average chart created');
+        
+        console.log('✅ Dashboard initialized successfully with real data!');
+    } catch (error) {
+        console.error('❌ Error initializing dashboard:', error);
+        console.error('Error details:', error.message);
+        console.error('Stack trace:', error.stack);
+    }
 });
 
 window.changeForecastPeriod = changeForecastPeriod;
