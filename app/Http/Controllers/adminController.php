@@ -51,7 +51,10 @@ class AdminController extends Controller
                 $admin->update(['terakhir_login' => now()]);
                 
                 // Login using auth guard
-                Auth::guard('admin')->login($admin);
+                Auth::guard('admin')->login($admin, true); // true = remember me
+                
+                // Regenerate session to prevent fixation attacks
+                $request->session()->regenerate();
                 
                 return redirect()->route('admin.dashboard');
             }

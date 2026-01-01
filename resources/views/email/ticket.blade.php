@@ -36,9 +36,12 @@
                 <tr><td>Nama Pemesan</td><td>: {{ $booking->nama }}</td></tr>
                 <tr><td>Email</td><td>: {{ $booking->email }}</td></tr>
                 <tr><td>Tanggal Kunjungan</td><td>: {{ \Carbon\Carbon::parse($booking->tanggal_kunjungan)->format('d F Y') }}</td></tr>
-                <tr><td>Jenis Kunjungan</td><td>: {{ ucfirst($booking->jenis_pemesanan) }} @if($booking->nama_rombongan)- {{ $booking->nama_rombongan }} @endif</td></tr>
+                <tr><td>Jenis Kunjungan</td><td>: {{ ucfirst($booking->jenis_pemesanan) }}</td></tr>
+                @if($booking->nama_rombongan)
+                <tr><td>Nama Rombongan</td><td>: <strong>{{ $booking->nama_rombongan }}</strong></td></tr>
+                @endif
                 <tr><td>Total Pengunjung</td><td>: {{ $booking->jumlah_pelajar + $booking->jumlah_umum + $booking->jumlah_asing }} orang</td></tr>
-                <tr><td>Total Bayar</td><td>: <strong>Rp {{ number_format($booking->jumlah_pelajar * 3000 + $booking->jumlah_umum * 5000 + $booking->jumlah_asing * 25000) }}</strong></td></tr>
+                <tr><td>Total Bayar</td><td>: <strong>Rp {{ number_format($booking->total_pembayaran, 0, ',', '.') }}</strong></td></tr>
             </table>
         </div>
 
