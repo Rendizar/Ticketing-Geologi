@@ -115,7 +115,7 @@
         <!-- UPCOMING EVENTS SECTION -->
 <section id="events" class="min-vh-100 d-flex align-items-center py-5 position-relative scroll-reveal">
     <div class="container">
-        <h2 class="text-center mb-5 display-4 fw-bold" style="font-family: 'Merriweather', serif !important;">Upcoming Events</h2>
+        <h2 class="text-center mb-5 display-4 fw-bold" style="font-family: 'Merriweather', serif !important;" data-lang-key="events_title">Upcoming Events</h2>
 
         <div class="row g-5 justify-content-center">
             @forelse($events as $event)
@@ -139,33 +139,29 @@
                                     <i class="fas fa-clock me-2" style="color: var(--mg-yellow);"></i>
                                     <span>{{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}</span>
                                 </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="fas fa-ticket-alt me-2" style="color: var(--mg-yellow);"></i>
-                                    <strong>Rp {{ number_format($event->price, 0, ',', '.') }}</strong>
-                                </div>
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-users me-2" style="color: var(--mg-yellow);"></i>
                                     <span>
-                                        <strong>{{ $event->available_slots }}</strong> / {{ $event->capacity }} tersisa
+                                        <strong>{{ $event->available_slots }}</strong> / {{ $event->capacity }} <span data-lang-key="event_remaining">tersisa</span>
                                         @if($event->available_slots == 0)
-                                            <span class="badge bg-danger ms-1">SOLD OUT</span>
+                                            <span class="badge bg-danger ms-1" data-lang-key="event_sold_out">SOLD OUT</span>
                                         @elseif($event->available_slots <= 10)
-                                            <span class="badge bg-warning text-dark ms-1">Hampir Habis!</span>
+                                            <span class="badge bg-warning text-dark ms-1" data-lang-key="event_almost_sold">Hampir Habis!</span>
                                         @endif
                                     </span>
                                 </div>
                             </div>
                             @if($event->available_slots > 0)
-                                <a href="{{ route('event.booking.create', $event->id) }}" class="btn btn-event-yellow mt-4 fw-bold">Get Ticket</a>
+                                <a href="{{ route('event.booking.create', $event->id) }}" class="btn btn-event-yellow mt-4 fw-bold" data-lang-key="event_get_ticket">Get Ticket</a>
                             @else
-                                <button class="btn btn-secondary mt-4 fw-bold" disabled>Sold Out</button>
+                                <button class="btn btn-secondary mt-4 fw-bold" disabled data-lang-key="event_sold_out">Sold Out</button>
                             @endif
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12 text-center text-muted py-5">
-                    <p class="fs-3">Belum ada event yang tersedia saat ini.</p>
+                    <p class="fs-3" data-lang-key="event_no_events">Belum ada event yang tersedia saat ini.</p>
                 </div>
             @endforelse
         </div>

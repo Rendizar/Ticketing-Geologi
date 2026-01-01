@@ -9,7 +9,7 @@
             <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
                 <!-- Header -->
                 <div class="card-header text-center py-5" style="background: #1F2933; border: none;">
-                    <h3 class="mb-0" style="font-family: 'Merriweather', serif; font-weight: 700; color: #ffffff; font-size: 1.75rem;">
+                    <h3 class="mb-0" style="font-family: 'Merriweather', serif; font-weight: 700; color: #ffffff; font-size: 1.75rem;" data-lang-key="event_booking_title">
                         Pemesanan Tiket Event
                     </h3>
                 </div>
@@ -21,21 +21,17 @@
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <i class="fas fa-calendar me-2" style="color: #FACC15;"></i>
-                                <strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
+                                <strong data-lang-key="event_date_label">Tanggal:</strong> {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
                             </div>
                             <div class="col-md-6 mb-2">
                                 <i class="fas fa-clock me-2" style="color: #FACC15;"></i>
-                                <strong>Waktu:</strong> {{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }} WIB
+                                <strong data-lang-key="event_time_label">Waktu:</strong> {{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }} WIB
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <i class="fas fa-tag me-2" style="color: #FACC15;"></i>
-                                <strong>Harga:</strong> Rp {{ number_format($event->price, 0, ',', '.') }}/tiket
-                            </div>
-                            <div class="col-md-6 mb-2">
+                            <div class="col-md-12 mb-2">
                                 <i class="fas fa-users me-2" style="color: #FACC15;"></i>
-                                <strong>Kapasitas:</strong> {{ $event->available_slots }} / {{ $event->capacity }} tersisa
+                                <strong data-lang-key="event_capacity_label">Kapasitas:</strong> {{ $event->available_slots }} / {{ $event->capacity }} <span data-lang-key="event_remaining">tersisa</span>
                                 @if($event->available_slots <= 10 && $event->available_slots > 0)
-                                    <span class="badge ms-2" style="background: #FACC15; color: #1F2933; border-radius: 8px; padding: 0.35rem 0.75rem;">Hampir Habis!</span>
+                                    <span class="badge ms-2" style="background: #FACC15; color: #1F2933; border-radius: 8px; padding: 0.35rem 0.75rem;" data-lang-key="event_almost_sold">Hampir Habis!</span>
                                 @endif
                             </div>
                         </div>
@@ -53,13 +49,14 @@
                         
                         <!-- Nama -->
                         <div class="mb-4">
-                            <label for="nama" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Nama Lengkap</label>
+                            <label for="nama" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="event_name_label">Nama Lengkap</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                    <i class="fas fa-user" style="color: #1F2933; font-size: 1.2rem;"></i>
+                                    <i class="bi bi-person-fill" style="color: #9CA3AF; font-size: 1.2rem;"></i>
                                 </span>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror" 
                                     id="nama" name="nama" value="{{ old('nama') }}" 
+                                    data-lang-placeholder="event_name_placeholder"
                                     placeholder="Masukkan nama lengkap" required
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('nama')
@@ -70,13 +67,14 @@
 
                         <!-- Email -->
                         <div class="mb-4">
-                            <label for="email" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Email</label>
+                            <label for="email" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="ticket_email">Email</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                    <i class="fas fa-envelope" style="color: #1F2933; font-size: 1.2rem;"></i>
+                                    <i class="bi bi-envelope-fill" style="color: #9CA3AF; font-size: 1.2rem;"></i>
                                 </span>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" 
                                     id="email" name="email" value="{{ old('email') }}" 
+                                    data-lang-placeholder="event_email_placeholder"
                                     placeholder="contoh@email.com" required
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('email')
@@ -87,15 +85,15 @@
 
                         <!-- Negara Asal -->
                         <div class="mb-4">
-                            <label for="negara" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Negara Asal</label>
+                            <label for="negara" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="event_country_label">Negara Asal</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                    <i class="fas fa-globe" style="color: #1F2933; font-size: 1.2rem;"></i>
+                                    <i class="bi bi-globe-americas" style="color: #9CA3AF; font-size: 1.2rem;"></i>
                                 </span>
                                 <select class="form-select @error('negara') is-invalid @enderror" 
                                     id="negara" name="negara" required
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
-                                    <option value="">Pilih Negara</option>
+                                    <option value="" data-lang-key="form_select_country">Pilih Negara</option>
                                 </select>
                                 @error('negara')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -103,18 +101,20 @@
                             </div>
                         </div>
 
-                        <!-- Nomor Telepon -->
-                        <div class="mb-4">
-                            <label for="nomor_telepon" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Nomor Telepon</label>
+                        <!-- Provinsi (untuk Indonesia) -->
+                        <div class="mb-4" id="provinsi_group" style="display:none;">
+                            <label for="provinsi" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="event_province_label">Provinsi</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                    <i class="fas fa-phone" style="color: #1F2933; font-size: 1.2rem;"></i>
+                                    <i class="bi bi-map-fill" style="color: #9CA3AF; font-size: 1.2rem;"></i>
                                 </span>
-                                <input type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" 
-                                    id="nomor_telepon" name="nomor_telepon" value="{{ old('nomor_telepon') }}" 
-                                    placeholder="08123456789" required
+                                <select class="form-select @error('provinsi') is-invalid @enderror" 
+                                    id="provinsi" 
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
-                                @error('nomor_telepon')
+                                    <option value="" data-lang-key="form_select_province">Pilih Provinsi</option>
+                                </select>
+                                <input type="hidden" name="provinsi" id="provinsi_name">
+                                @error('provinsi')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -122,15 +122,15 @@
 
                         <!-- Jenis Pemesanan -->
                         <div class="mb-4">
-                            <label for="jenis_pemesanan" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Jenis Pemesanan</label>
+                            <label for="jenis_pemesanan" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="event_booking_type_label">Jenis Pemesanan</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                    <i class="fas fa-ticket-alt" style="color: #1F2933; font-size: 1.2rem;"></i>
+                                    <i class="bi bi-ticket-detailed-fill" style="color: #9CA3AF; font-size: 1.2rem;"></i>
                                 </span>
                                 <select class="form-select @error('jenis_pemesanan') is-invalid @enderror" 
                                     id="jenis_pemesanan" name="jenis_pemesanan" required
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
-                                    <option value="">Pilih Jenis Pemesanan</option>
+                                    <option value="" data-lang-key="form_select_booking_type">Pilih Jenis Pemesanan</option>
                                     <option value="individu" {{ old('jenis_pemesanan') == 'individu' ? 'selected' : '' }}>Individu</option>
                                     <option value="rombongan" {{ old('jenis_pemesanan') == 'rombongan' ? 'selected' : '' }}>Rombongan</option>
                                 </select>
@@ -142,12 +142,13 @@
 
                         <!-- Nama Rombongan -->
                         <div class="mb-4" id="nama_rombongan_group" style="display:none;">
-                            <label for="nama_rombongan" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Nama Rombongan / Instansi</label>
+                            <label for="nama_rombongan" class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="event_group_name_label">Nama Rombongan / Instansi</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                    <i class="fas fa-building" style="color: #1F2933; font-size: 1.2rem;"></i>
+                                    <i class="fas fa-building" style="color: #9CA3AF; font-size: 1.2rem;"></i>
                                 </span>
                                 <input type="text" class="form-control" id="nama_rombongan" name="nama_rombongan" 
+                                    data-lang-placeholder="event_group_name_placeholder"
                                     placeholder="Nama sekolah / perusahaan" value="{{ old('nama_rombongan') }}"
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                             </div>
@@ -155,81 +156,65 @@
 
                         <!-- Jenis Pengunjung Dinamis -->
                         <div class="mb-4" id="jenis_pengunjung_group" style="display:none;">
-                            <label class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;">Jenis Pengunjung</label>
+                            <label class="form-label fw-bold" style="color: #1F2933; font-size: 1.05rem;" data-lang-key="event_visitor_count_label">Jumlah Pengunjung</label>
 
-                            <!-- Individu -->
+                            <!-- Individu (1-19 orang) -->
                             <div id="pengunjung_individu" style="display:none;" class="p-4 rounded-3" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                                <div class="alert mb-3" style="background: rgba(251, 191, 36, 0.1); border: 1px solid #FACC15; border-radius: 8px; padding: 1rem;">
+                                    <small>
+                                        <i class="bi bi-info-circle-fill me-1"></i>
+                                        <span data-lang-key="event_individual_alert"><strong>Individu:</strong> Maksimal 19 orang total. Sistem akan otomatis alihkan ke Rombongan jika ≥20 orang.</span>
+                                    </small>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Pelajar</label>
+                                    <div class="row g-3">
+                                        @foreach(['tk'=>'TK','sd'=>'SD','smp'=>'SMP','sma'=>'SMA','kuliah'=>'Kuliah'] as $k=>$v)
+                                        <div class="col-6 col-md-4">
+                                            <label class="fw-bold mb-2" style="color: #1F2933;">{{ $v }}</label>
+                                            <div class="input-group">
+                                                <button type="button" class="btn fw-bold" onclick="changeCount('individu_sub_{{ $k }}',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
+                                                <input type="number" class="form-control text-center fw-bold" id="individu_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" max="19" oninput="validateNumberInput(this); checkIndividuLimit();" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                                <button type="button" class="btn fw-bold" onclick="changeCount('individu_sub_{{ $k }}',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;" data-lang-key="event_general_count_label">Jumlah Umum</label>
+                                    <div class="input-group" style="max-width:250px;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('individu_jumlah_umum',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
+                                        <input type="number" class="form-control text-center fw-bold" id="individu_jumlah_umum" name="jumlah_umum" value="0" min="0" max="19" oninput="validateNumberInput(this); checkIndividuLimit();" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('individu_jumlah_umum',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Pilih Kategori Individu</label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                            <i class="fas fa-user-tag" style="color: #1F2933; font-size: 1.2rem;"></i>
-                                        </span>
-                                        <select class="form-select" id="kategori_individu" name="kategori_individu" 
-                                            style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
-                                            <option value="">Pilih Kategori</option>
-                                        </select>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;" data-lang-key="event_foreign_count_label">Jumlah Asing</label>
+                                    <div class="input-group" style="max-width:250px;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('individu_jumlah_asing',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
+                                        <input type="number" class="form-control text-center fw-bold" id="individu_jumlah_asing" name="jumlah_asing" value="0" min="0" max="19" oninput="validateNumberInput(this); checkIndividuLimit();" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                        <button type="button" class="btn fw-bold" onclick="changeCount('individu_jumlah_asing',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                     </div>
                                 </div>
 
-                                <!-- Asing -->
-                                <div id="individu_asing" style="display:none;" class="alert" style="background: #dbeafe; border: 1px solid #93c5fd; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                                    <strong>Kategori:</strong> Asing, <strong>Jumlah:</strong> 1
-                                    <input type="hidden" id="jumlah_asing" name="jumlah_asing" value="1">
-                                </div>
-
-                                <!-- Umum -->
-                                <div id="individu_umum" style="display:none;">
-                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem; margin-top: 1rem;">Apakah Anda Pelajar?</label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                            <i class="fas fa-question-circle" style="color: #1F2933; font-size: 1.2rem;"></i>
-                                        </span>
-                                        <select class="form-select" id="is_pelajar" name="is_pelajar" 
-                                            style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
-                                            <option value="">Pilih</option>
-                                            <option value="pelajar">Ya, Pelajar</option>
-                                            <option value="bukan">Tidak, Umum</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div id="individu_umum_bukan" style="display:none;" class="alert" style="background: #d1fae5; border: 1px solid #86efac; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                                    <strong>Kategori:</strong> Umum (Bukan Pelajar), <strong>Jumlah:</strong> 1
-                                    <input type="hidden" id="jumlah_umum" name="jumlah_umum" value="1">
-                                </div>
-
-                                <div id="individu_umum_pelajar" style="display:none;" class="mt-3">
-                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Pilih Jenjang Pendidikan</label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text" style="background: #ffffff; border: 1px solid #d1d5db; border-right: none; border-radius: 12px 0 0 12px;">
-                                            <i class="fas fa-graduation-cap" style="color: #1F2933; font-size: 1.2rem;"></i>
-                                        </span>
-                                        <select class="form-select" id="jenjang_pelajar" name="jenjang_pelajar" 
-                                            style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
-                                            <option value="">Pilih Jenjang</option>
-                                            <option value="sub_tk">TK</option>
-                                            <option value="sub_sd">SD</option>
-                                            <option value="sub_smp">SMP</option>
-                                            <option value="sub_sma">SMA</option>
-                                            <option value="sub_kuliah">Kuliah</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div id="individu_umum_pelajar_jumlah" style="display:none;" class="alert mt-3" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                                    <span id="info_pelajar"><strong>Kategori:</strong> Pelajar, <strong>Jumlah:</strong> 1</span>
-                                    <input type="hidden" id="jumlah_pelajar" name="jumlah_pelajar" value="1">
-                                    <input type="hidden" id="sub_tk" name="sub_tk" value="0">
-                                    <input type="hidden" id="sub_sd" name="sub_sd" value="0">
-                                    <input type="hidden" id="sub_smp" name="sub_smp" value="0">
-                                    <input type="hidden" id="sub_sma" name="sub_sma" value="0">
-                                    <input type="hidden" id="sub_kuliah" name="sub_kuliah" value="0">
+                                <div class="alert mt-3" style="background: #ecfdf5; border: 1px solid #86efac; border-radius: 8px; padding: 1rem;">
+                                    <strong style="color: #166534;" data-lang-key="event_total_visitors">Total Pengunjung:</strong> <span id="total_individu" style="color: #166534; font-weight: bold;">0</span> <span data-lang-key="visitors">orang</span>
                                 </div>
                             </div>
 
-                            <!-- Rombongan -->
+                            <!-- Rombongan (>=20 orang) -->
                             <div id="pengunjung_rombongan" style="display:none;" class="p-4" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                                <div class="alert mb-3" style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 1rem;">
+                                    <small>
+                                        <i class="bi bi-info-circle-fill me-1"></i>
+                                        <span data-lang-key="event_rombongan_alert"><strong>Rombongan:</strong> Minimal 20 orang total. Sistem akan otomatis alihkan ke Individu jika <20 orang.</span>
+                                    </small>
+                                </div>
+
                                 <div class="mb-4">
                                     <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Pelajar</label>
                                     <div class="row g-3">
@@ -238,7 +223,7 @@
                                             <label class="fw-bold mb-2" style="color: #1F2933;">{{ $v }}</label>
                                             <div class="input-group">
                                                 <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
-                                                <input type="number" class="form-control text-center fw-bold" id="rombongan_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" oninput="validateNumberInput(this)" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                                <input type="number" class="form-control text-center fw-bold" id="rombongan_sub_{{ $k }}" name="sub_{{ $k }}" value="0" min="0" oninput="validateNumberInput(this); checkRombonganLimit();" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
                                                 <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_sub_{{ $k }}',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                             </div>
                                         </div>
@@ -247,32 +232,36 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Umum</label>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;" data-lang-key="event_general_count_label">Jumlah Umum</label>
                                     <div class="input-group" style="max-width:250px;">
                                         <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
-                                        <input type="number" class="form-control text-center fw-bold" id="rombongan_jumlah_umum" name="jumlah_umum" value="0" min="0" oninput="validateNumberInput(this)" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                        <input type="number" class="form-control text-center fw-bold" id="rombongan_jumlah_umum" name="jumlah_umum" value="0" min="0" oninput="validateNumberInput(this); checkRombonganLimit();" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
                                         <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_umum',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;">Jumlah Asing</label>
+                                    <label class="form-label fw-bold" style="color: #1F2933; font-size: 1rem;" data-lang-key="event_foreign_count_label">Jumlah Asing</label>
                                     <div class="input-group" style="max-width:250px;">
                                         <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',-1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 8px 0 0 8px;">−</button>
-                                        <input type="number" class="form-control text-center fw-bold" id="rombongan_jumlah_asing" name="jumlah_asing" value="0" min="0" oninput="validateNumberInput(this)" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
+                                        <input type="number" class="form-control text-center fw-bold" id="rombongan_jumlah_asing" name="jumlah_asing" value="0" min="0" oninput="validateNumberInput(this); checkRombonganLimit();" style="border: 1px solid #d1d5db; border-left: none; border-right: none;">
                                         <button type="button" class="btn fw-bold" onclick="changeCount('rombongan_jumlah_asing',1)" style="background-color: #1F2933; color: #FACC15; border: 2px solid #1F2933; min-width: 45px; font-size: 1.5rem; line-height: 1; border-radius: 0 8px 8px 0;">+</button>
                                     </div>
+                                </div>
+
+                                <div class="alert mt-3" style="background: #ecfdf5; border: 1px solid #86efac; border-radius: 8px; padding: 1rem;">
+                                    <strong style="color: #166534;" data-lang-key="event_total_visitors">Total Pengunjung:</strong> <span id="total_rombongan" style="color: #166534; font-weight: bold;">0</span> <span data-lang-key="visitors" style="color: #166534;">orang</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="d-grid gap-3">
-                            <button type="submit" class="btn btn-lg fw-bold btn-submit-event" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px;">
-                                <i class="fas fa-arrow-right me-2"></i>Lanjut ke Pembayaran
+                            <button type="submit" class="btn btn-lg fw-bold btn-submit-event" id="submitBtn" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px;">
+                                <span data-lang-key="event_submit_ticket">Submit Tiket</span>
                             </button>
                             <a href="{{ route('home') }}" class="btn btn-lg btn-back-event" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px; text-decoration: none;">
-                                <i class="fas fa-arrow-left me-2"></i>Kembali
+                                <i class="fas fa-arrow-left me-2"></i><span data-lang-key="event_back_home">Kembali ke Beranda</span>
                             </a>
                         </div>
                     </form>
@@ -292,45 +281,97 @@ function validateNumberInput(input) {
     input.value = value;
 }
 
-// Fungsi +/- jumlah (rombongan)
+// Fungsi +/- jumlah
 function changeCount(id, delta) {
     const input = document.getElementById(id);
     let val = parseInt(input.value) || 0;
     val += delta;
     if (val < 0) val = 0;
+    
+    // Limit untuk individu
+    if (id.startsWith('individu_') && val > 19) {
+        val = 19;
+    }
+    
     input.value = val;
-}
-
-// Sembunyikan semua detail individu
-function hideAllIndividuDetails() {
-    const ids = ['individu_asing','individu_umum','individu_umum_bukan','individu_umum_pelajar','individu_umum_pelajar_jumlah'];
-    ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
-}
-
-// Update opsi kategori individu berdasarkan negara
-function updateKategoriIndividuOptions() {
-    const select = document.getElementById('kategori_individu');
-    const negara = document.getElementById('negara').value;
-    const jenis = document.getElementById('jenis_pemesanan').value;
-
-    select.innerHTML = '<option value="">Pilih Kategori</option>';
-
-    if (jenis !== 'individu') return;
-
-    if (negara === 'Indonesia') {
-        select.innerHTML += '<option value="umum">Umum</option>';
-    } else if (negara) {
-        select.innerHTML += '<option value="asing">Asing</option>';
+    
+    // Update total
+    if (id.startsWith('individu_')) {
+        checkIndividuLimit();
+    } else if (id.startsWith('rombongan_')) {
+        checkRombonganLimit();
     }
 }
 
-// Logika utama saat jenis pemesanan / negara berubah
+// Cek limit individu dan auto-switch ke rombongan
+function checkIndividuLimit() {
+    const total = 
+        parseInt(document.getElementById('individu_sub_tk').value || 0) +
+        parseInt(document.getElementById('individu_sub_sd').value || 0) +
+        parseInt(document.getElementById('individu_sub_smp').value || 0) +
+        parseInt(document.getElementById('individu_sub_sma').value || 0) +
+        parseInt(document.getElementById('individu_sub_kuliah').value || 0) +
+        parseInt(document.getElementById('individu_jumlah_umum').value || 0) +
+        parseInt(document.getElementById('individu_jumlah_asing').value || 0);
+    
+    document.getElementById('total_individu').textContent = total;
+    
+    if (total >= 20) {
+        // Auto switch ke rombongan
+        document.getElementById('jenis_pemesanan').value = 'rombongan';
+        
+        // Copy values ke rombongan
+        document.getElementById('rombongan_sub_tk').value = document.getElementById('individu_sub_tk').value;
+        document.getElementById('rombongan_sub_sd').value = document.getElementById('individu_sub_sd').value;
+        document.getElementById('rombongan_sub_smp').value = document.getElementById('individu_sub_smp').value;
+        document.getElementById('rombongan_sub_sma').value = document.getElementById('individu_sub_sma').value;
+        document.getElementById('rombongan_sub_kuliah').value = document.getElementById('individu_sub_kuliah').value;
+        document.getElementById('rombongan_jumlah_umum').value = document.getElementById('individu_jumlah_umum').value;
+        document.getElementById('rombongan_jumlah_asing').value = document.getElementById('individu_jumlah_asing').value;
+        
+        refreshForm();
+        checkRombonganLimit();
+        
+        alert('Total pengunjung mencapai 20 orang. Sistem otomatis mengubah ke Rombongan.');
+    }
+}
+
+// Cek limit rombongan dan auto-switch ke individu
+function checkRombonganLimit() {
+    const total = 
+        parseInt(document.getElementById('rombongan_sub_tk').value || 0) +
+        parseInt(document.getElementById('rombongan_sub_sd').value || 0) +
+        parseInt(document.getElementById('rombongan_sub_smp').value || 0) +
+        parseInt(document.getElementById('rombongan_sub_sma').value || 0) +
+        parseInt(document.getElementById('rombongan_sub_kuliah').value || 0) +
+        parseInt(document.getElementById('rombongan_jumlah_umum').value || 0) +
+        parseInt(document.getElementById('rombongan_jumlah_asing').value || 0);
+    
+    document.getElementById('total_rombongan').textContent = total;
+    
+    if (total < 20 && total > 0) {
+        // Auto switch ke individu
+        document.getElementById('jenis_pemesanan').value = 'individu';
+        
+        // Copy values ke individu
+        document.getElementById('individu_sub_tk').value = document.getElementById('rombongan_sub_tk').value;
+        document.getElementById('individu_sub_sd').value = document.getElementById('rombongan_sub_sd').value;
+        document.getElementById('individu_sub_smp').value = document.getElementById('rombongan_sub_smp').value;
+        document.getElementById('individu_sub_sma').value = document.getElementById('rombongan_sub_sma').value;
+        document.getElementById('individu_sub_kuliah').value = document.getElementById('rombongan_sub_kuliah').value;
+        document.getElementById('individu_jumlah_umum').value = document.getElementById('rombongan_jumlah_umum').value;
+        document.getElementById('individu_jumlah_asing').value = document.getElementById('rombongan_jumlah_asing').value;
+        
+        refreshForm();
+        checkIndividuLimit();
+        
+        alert('Total pengunjung kurang dari 20 orang. Sistem otomatis mengubah ke Individu.');
+    }
+}
+
+// Logika utama saat jenis pemesanan berubah
 function refreshForm() {
     const jenis = document.getElementById('jenis_pemesanan').value;
-    const negara = document.getElementById('negara').value;
 
     document.getElementById('nama_rombongan_group').style.display = (jenis === 'rombongan') ? '' : 'none';
 
@@ -340,26 +381,39 @@ function refreshForm() {
 
     if (jenis === 'individu' || jenis === 'rombongan') {
         jenisGroup.style.display = '';
+        
+        if (jenis === 'individu') {
+            pengIndividu.style.display = '';
+            pengRombongan.style.display = 'none';
+        } else {
+            pengIndividu.style.display = 'none';
+            pengRombongan.style.display = '';
+        }
     } else {
         jenisGroup.style.display = 'none';
         pengIndividu.style.display = 'none';
         pengRombongan.style.display = 'none';
-        return;
-    }
-
-    if (jenis === 'individu') {
-        pengIndividu.style.display = '';
-        pengRombongan.style.display = 'none';
-        hideAllIndividuDetails();
-        updateKategoriIndividuOptions();
-    } else {
-        pengIndividu.style.display = 'none';
-        pengRombongan.style.display = '';
     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const hargaSatuan = {{ $event->price }};
+    // Handle form submit - disable inputs yang tidak aktif
+    const form = document.getElementById('eventBookingForm');
+    form.addEventListener('submit', function(e) {
+        const jenis = document.getElementById('jenis_pemesanan').value;
+        
+        if (jenis === 'individu') {
+            // Disable semua input rombongan
+            document.querySelectorAll('#pengunjung_rombongan input[type="number"]').forEach(input => {
+                input.disabled = true;
+            });
+        } else if (jenis === 'rombongan') {
+            // Disable semua input individu
+            document.querySelectorAll('#pengunjung_individu input[type="number"]').forEach(input => {
+                input.disabled = true;
+            });
+        }
+    });
 
     // Populate countries
     const countryList = [
@@ -439,53 +493,42 @@ document.addEventListener('DOMContentLoaded', function() {
         negaraSelect.appendChild(option);
     });
 
-    // Event listeners
-    document.getElementById('jenis_pemesanan').addEventListener('change', refreshForm);
-    document.getElementById('negara').addEventListener('change', refreshForm);
-
-    // Kategori individu berubah
-    document.getElementById('kategori_individu').addEventListener('change', function() {
-        hideAllIndividuDetails();
-        const val = this.value;
-
-        if (val === 'asing') {
-            document.getElementById('individu_asing').style.display = '';
-            document.getElementById('jumlah_asing').value = 1;
-        } else if (val === 'umum') {
-            document.getElementById('individu_umum').style.display = '';
-        }
-    });
-
-    // Pelajar / bukan
-    document.getElementById('is_pelajar').addEventListener('change', function() {
-        document.getElementById('individu_umum_bukan').style.display = 'none';
-        document.getElementById('individu_umum_pelajar').style.display = 'none';
-        document.getElementById('individu_umum_pelajar_jumlah').style.display = 'none';
-
-        if (this.value === 'bukan') {
-            document.getElementById('individu_umum_bukan').style.display = '';
-            document.getElementById('jumlah_umum').value = 1;
-        } else if (this.value === 'pelajar') {
-            document.getElementById('individu_umum_pelajar').style.display = '';
-        }
-    });
-
-    // Jenjang pelajar
-    document.getElementById('jenjang_pelajar').addEventListener('change', function() {
-        const val = this.value;
-        const jumlahDiv = document.getElementById('individu_umum_pelajar_jumlah');
-        jumlahDiv.style.display = val ? '' : 'none';
-
-        ['sub_tk','sub_sd','sub_smp','sub_sma','sub_kuliah'].forEach(id => {
-            document.getElementById(id).value = 0;
+    // Load provinsi dari API Wilayah Indonesia
+    fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
+        .then(response => response.json())
+        .then(data => {
+            const provinsiSelect = document.getElementById('provinsi');
+            data.forEach(prov => {
+                const opt = document.createElement('option');
+                opt.value = prov.id;
+                opt.textContent = prov.name;
+                provinsiSelect.appendChild(opt);
+            });
         });
 
-        if (val) {
-            document.getElementById(val).value = 1;
-            const text = this.options[this.selectedIndex].text;
-            document.getElementById('info_pelajar').innerHTML = `<strong>Kategori:</strong> Pelajar ${text}, <strong>Jumlah:</strong> 1`;
+    // Simpan nama provinsi ketika dipilih
+    document.getElementById('provinsi').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const provName = selectedOption ? selectedOption.textContent : '';
+        const provinsiNameInput = document.getElementById('provinsi_name');
+        
+        if (provinsiNameInput) {
+            provinsiNameInput.value = provName || '';
         }
     });
+
+    // Show/hide provinsi field when Indonesia is selected
+    document.getElementById('negara').addEventListener('change', function() {
+        const provinsiGroup = document.getElementById('provinsi_group');
+        if (this.value === 'Indonesia') {
+            provinsiGroup.style.display = '';
+        } else {
+            provinsiGroup.style.display = 'none';
+        }
+    });
+
+    // Event listeners
+    document.getElementById('jenis_pemesanan').addEventListener('change', refreshForm);
 });
 </script>
 

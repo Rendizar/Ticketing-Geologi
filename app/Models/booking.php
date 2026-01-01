@@ -15,10 +15,18 @@ class Booking extends Model
 
     protected $fillable = [
         'booking_id', 'nama', 'email', 'nomor_telepon', 'negara',
-        'jenis_pemesanan', 'nama_rombongan', 'tanggal_kunjungan',
-        'kota_kabupaten', 'provinsi', 'jumlah_pelajar', 'jumlah_umum',
+        'jenis_pemesanan', 'nama_rombongan', 'tanggal_kunjungan', 'slot_waktu',
+        'provinsi', 'jumlah_pelajar', 'jumlah_umum',
         'jumlah_asing', 'sub_tk', 'sub_sd', 'sub_smp', 'sub_sma', 'sub_kuliah',
-        'status', 'unique_key'
+        'harga_pelajar_saat_booking', 'harga_umum_saat_booking', 'harga_asing_saat_booking',
+        'total_pembayaran', 'status', 'unique_key', 'kategori_khusus', 'jumlah_tiket_khusus'
+    ];
+
+    protected $casts = [
+        'harga_pelajar_saat_booking' => 'decimal:2',
+        'harga_umum_saat_booking' => 'decimal:2',
+        'harga_asing_saat_booking' => 'decimal:2',
+        'total_pembayaran' => 'decimal:2',
     ];
 
     public function payment()

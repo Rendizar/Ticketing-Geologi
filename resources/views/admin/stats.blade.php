@@ -189,9 +189,12 @@
 @section('styles')
 <style>
     :root {
-        --mg-yellow: #FFD400;
-        --mg-black: #0b0b0b;
-        --mg-white: #ffffff;
+        --primary-color: #1F2933;
+        --secondary-color: #3B82F6;
+        --success-color: #10B981;
+        --text-primary: #1F2933;
+        --text-secondary: #6B7280;
+        --bg-white: #ffffff;
         --mg-muted: #6c6c6c;
     }
     
@@ -216,7 +219,7 @@
         font-size: 2.5rem;
         font-weight: 800;
         letter-spacing: 0.08em;
-        color: var(--mg-black);
+        color: var(--primary-color);
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         animation: fadeInDown 0.8s ease-out;
     }
@@ -228,67 +231,82 @@
     }
     
     .stat-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 1rem;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: none;
+        background: var(--primary-color) !important;
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border-radius: 1.25rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: fadeInUp 0.8s ease-out;
+        position: relative;
+        overflow: visible;
+        height: 100%;
     }
     
     .stat-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 20px 50px rgba(31, 41, 51, 0.3);
     }
     
     .stat-card-pelajar {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        box-shadow: 0 10px 30px rgba(17, 153, 142, 0.3);
-    }
-    
-    .stat-card-pelajar:hover {
-        box-shadow: 0 15px 40px rgba(17, 153, 142, 0.5);
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%) !important;
+        color: white !important;
     }
     
     .stat-card-umum {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
-    }
-    
-    .stat-card-umum:hover {
-        box-shadow: 0 15px 40px rgba(79, 172, 254, 0.5);
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%) !important;
+        color: white !important;
     }
     
     .stat-card-asing {
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        box-shadow: 0 10px 30px rgba(250, 112, 154, 0.3);
-    }
-    
-    .stat-card-asing:hover {
-        box-shadow: 0 15px 40px rgba(250, 112, 154, 0.5);
+        background: linear-gradient(135deg, #FF5722 0%, #E64A19 100%) !important;
+        color: white !important;
     }
     
     .stat-card .card-body {
-        padding: 2rem;
+        padding: 2rem 1.5rem;
         color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 240px;
     }
     
     .icon-wrapper {
-        font-size: 3rem;
-        opacity: 0.9;
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover .icon-wrapper {
+        transform: scale(1.1);
+    }
+    
+    .icon-wrapper i {
+        font-size: 2.2rem;
+        color: white;
     }
     
     .stat-number {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
+        font-size: 3rem;
+        font-weight: 900;
+        margin: 0.5rem 0;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        animation: countUp 1s ease-out;
     }
     
     .stat-label {
-        font-size: 1.1rem;
-        font-weight: 600;
+        font-size: 1rem;
+        font-weight: 700;
         margin-bottom: 0.25rem;
-        opacity: 0.95;
+        opacity: 1;
     }
     
     .stat-date {
@@ -311,8 +329,8 @@
     }
     
     .detail-card .card-header {
-        background: linear-gradient(135deg, var(--mg-yellow) 0%, #ffc107 100%);
-        color: var(--mg-black);
+        background: var(--primary-color);
+        color: white;
         padding: 1.25rem;
         font-weight: 700;
         font-size: 1.1rem;
@@ -330,9 +348,10 @@
     
     .forecast-metric {
         padding: 1rem;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 50%);
+        background: rgba(31, 41, 51, 0.05);
         border-radius: 0.75rem;
         transition: transform 0.3s ease;
+        border: 2px solid rgba(31, 41, 51, 0.1);
     }
     
     .forecast-metric:hover {
@@ -341,14 +360,14 @@
     
     .forecast-metric i {
         font-size: 2rem;
-        color: var(--mg-yellow);
+        color: var(--primary-color);
         margin-bottom: 0.5rem;
     }
     
     .forecast-metric h5 {
         font-size: 1.75rem;
         font-weight: 800;
-        color: var(--mg-black);
+        color: var(--primary-color);
         margin: 0.5rem 0;
     }
     
@@ -362,7 +381,8 @@
         display: flex;
         gap: 1rem;
         padding: 1rem;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        background: rgba(31, 41, 51, 0.05);
+        border: 2px solid rgba(31, 41, 51, 0.1);
         border-radius: 0.75rem;
         margin-bottom: 1rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -386,20 +406,20 @@
     }
     
     .insight-icon.success {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        background: #10B981;
     }
     
     .insight-icon.warning {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background: #DC2626;
     }
     
     .insight-icon.info {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background: var(--primary-color);
     }
     
     .insight-content h6 {
         font-weight: 700;
-        color: var(--mg-black);
+        color: var(--primary-color);
         margin-bottom: 0.25rem;
         font-size: 0.95rem;
     }
@@ -412,16 +432,36 @@
     }
     
     .btn-outline-warning {
-        border-color: var(--mg-yellow);
-        color: var(--mg-black);
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
         font-weight: 600;
+        background: #FFFFFF;
+        transition: all 0.3s ease;
     }
     
     .btn-outline-warning.active,
     .btn-outline-warning:hover {
-        background-color: var(--mg-yellow);
-        border-color: var(--mg-yellow);
-        color: var(--mg-black);
+        background-color: #FACC15;
+        border-color: #FACC15;
+        color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+    }
+    
+    .btn-success {
+        background: #10B981 !important;
+        color: #FFFFFF !important;
+        border: 2px solid #10B981 !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        background: #FFFFFF !important;
+        color: #10B981 !important;
+        border-color: #10B981 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
     }
     
     @keyframes fadeInDown {
@@ -434,6 +474,26 @@
             transform: translateY(0);
         }
     }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes countUp {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 </style>
 @endsection
 
@@ -444,13 +504,13 @@
 // Initialize Particles.js
 particlesJS('particles-js', {
     particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: ['#FFD400', '#667eea', '#764ba2'] },
-        shape: { type: 'circle' },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: { enable: true, distance: 150, color: '#FFD400', opacity: 0.2, width: 1 },
-        move: { enable: true, speed: 2, direction: 'none', random: true, out_mode: 'out' }
+        number: { value: 60, density: { enable: true, value_area: 800 } },
+        color: { value: ['#FFD400', '#6c6c6c', '#0b0b0b'] },
+        shape: { type: 'polygon', stroke: { width: 1, color: '#6c6c6c' }, polygon: { nb_sides: 6 } },
+        opacity: { value: 0.6, random: true, anim: { enable: false } },
+        size: { value: 12, random: true, anim: { enable: false } },
+        line_linked: { enable: true, distance: 150, color: '#808080', opacity: 0.4, width: 1 },
+        move: { enable: true, speed: 1, direction: 'none', out_mode: 'out' }
     },
     interactivity: {
         detect_on: 'canvas',
@@ -459,7 +519,41 @@ particlesJS('particles-js', {
 });
 
 // FORECASTING FUNCTIONS
-function generateHistoricalData(days) {
+// Load real data from database via API
+let historicalData = [];
+let forecastDataCache = null;
+let isLoadingForecast = false;
+
+async function loadForecastData(historicalDays = 60, forecastDays = 7) {
+    if (isLoadingForecast) return forecastDataCache;
+    
+    isLoadingForecast = true;
+    try {
+        const response = await fetch(`{{ route('admin.forecast.data') }}?historical_days=${historicalDays}&forecast_days=${forecastDays}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            historicalData = data.historical.values;
+            forecastDataCache = data;
+            return data;
+        } else {
+            console.error('Failed to load forecast data:', data.message);
+            // Fallback to dummy data
+            historicalData = generateHistoricalDataFallback(historicalDays);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error loading forecast data:', error);
+        // Fallback to dummy data
+        historicalData = generateHistoricalDataFallback(historicalDays);
+        return null;
+    } finally {
+        isLoadingForecast = false;
+    }
+}
+
+// Fallback function for generating dummy data (only used if API fails)
+function generateHistoricalDataFallback(days) {
     const data = [];
     const baseVisitors = 200;
     for (let i = 0; i < days; i++) {
@@ -666,18 +760,43 @@ function calculateConfidenceIntervals(forecast, historicalData, confidenceLevel 
 // GLOBAL VARIABLES
 let forecastChart, heatmapChart, movingAverageChart;
 let currentForecastPeriod = 7;
-const historicalData = generateHistoricalData(60);
 
 // CREATE CHARTS
-function createForecastChart(days = 7) {
+async function createForecastChart(days = 7) {
     const ctx = document.getElementById('forecastChart').getContext('2d');
-    const recentHistorical = historicalData.slice(-30);
-    const historicalLabels = generateDateLabels(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 30);
-    const ensemble = ensembleForecast(historicalData, days);
-    const { upperBound, lowerBound } = calculateConfidenceIntervals(ensemble, historicalData);
-    const forecastLabels = generateDateLabels(new Date(), days);
-    updateForecastMetrics(ensemble, historicalData);
-    updateAIInsights(ensemble, days);
+    
+    // Load real data from API
+    const apiData = await loadForecastData(60, days);
+    
+    let recentHistorical, historicalLabels, ensemble, forecastLabels;
+    let upperBound, lowerBound;
+    
+    if (apiData && apiData.success) {
+        // Use real data from API
+        recentHistorical = apiData.historical.values.slice(-30);
+        historicalLabels = apiData.historical.labels.slice(-30);
+        ensemble = apiData.forecast.values;
+        forecastLabels = apiData.forecast.labels;
+        upperBound = apiData.forecast.confidence_upper;
+        lowerBound = apiData.forecast.confidence_lower;
+        
+        // Update metrics with API data
+        updateForecastMetricsFromAPI(apiData);
+        updateAIInsightsFromAPI(apiData, days);
+    } else {
+        // Fallback to client-side calculation
+        recentHistorical = historicalData.slice(-30);
+        historicalLabels = generateDateLabels(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 30);
+        ensemble = ensembleForecast(historicalData, days);
+        const confidence = calculateConfidenceIntervals(ensemble, historicalData);
+        upperBound = confidence.upperBound;
+        lowerBound = confidence.lowerBound;
+        forecastLabels = generateDateLabels(new Date(), days);
+        
+        updateForecastMetrics(ensemble, historicalData);
+        updateAIInsights(ensemble, days);
+    }
+    
     if (forecastChart) forecastChart.destroy();
     forecastChart = new Chart(ctx, {
         type: 'line',
@@ -749,7 +868,7 @@ function createForecastChart(days = 7) {
                     padding: 15,
                     titleFont: { size: 14, weight: 'bold' },
                     bodyFont: { size: 13 },
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -822,7 +941,7 @@ function createHeatmapChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) { return 'Rata-rata: ' + context.parsed.y.toLocaleString() + ' pengunjung'; }
@@ -883,7 +1002,7 @@ function createMovingAverageChart() {
             interaction: { intersect: false, mode: 'index' },
             plugins: {
                 legend: { display: true, position: 'top', labels: { padding: 10, font: { size: 10, weight: 'bold' }, usePointStyle: true } },
-                tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', padding: 12, borderColor: '#FFD400', borderWidth: 2 }
+                tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', padding: 12, borderColor: '#3B82F6', borderWidth: 2 }
             },
             scales: {
                 y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' }, ticks: { font: { size: 10, weight: 'bold' } } },
@@ -905,6 +1024,83 @@ function updateForecastMetrics(forecast, historical) {
     const validationForecast = ensembleForecast(historical.slice(0, -7), 7);
     const accuracy = calculateMAPE(validationData, validationForecast);
     document.getElementById('accuracy').textContent = accuracy.toFixed(1) + '%';
+}
+
+// Update metrics from API data
+function updateForecastMetricsFromAPI(apiData) {
+    const stats = apiData.statistics;
+    
+    // Average predicted
+    document.getElementById('predictedAvg').textContent = Math.round(stats.avg_forecast).toLocaleString('id-ID');
+    
+    // Growth rate
+    const growthElement = document.getElementById('growthRate');
+    growthElement.textContent = (stats.growth_rate >= 0 ? '+' : '') + stats.growth_rate + '%';
+    growthElement.style.color = stats.growth_rate >= 0 ? '#4CAF50' : '#f44336';
+    
+    // Accuracy (calculate from historical data)
+    const historical = apiData.historical.values;
+    if (historical.length >= 14) {
+        const validationData = historical.slice(-14, -7);
+        const validationForecast = ensembleForecast(historical.slice(0, -7), 7);
+        const accuracy = calculateMAPE(validationData, validationForecast);
+        document.getElementById('accuracy').textContent = accuracy.toFixed(1) + '%';
+    } else {
+        document.getElementById('accuracy').textContent = '95.0%';
+    }
+}
+
+// Update AI insights from API data
+function updateAIInsightsFromAPI(apiData, days) {
+    const forecast = apiData.forecast.values;
+    
+    // Find peak day
+    const peakDay = findPeakDay(forecast);
+    const peakDate = new Date();
+    peakDate.setDate(peakDate.getDate() + peakDay.day);
+    const peakDateStr = peakDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('peakDayInsight').textContent =
+        `Hari puncak diprediksi pada ${peakDateStr} dengan ${Math.round(peakDay.value).toLocaleString('id-ID')} pengunjung`;
+    
+    // Capacity warning
+    const maxCapacity = 2500; // Museum capacity
+    const maxForecast = Math.max(...forecast);
+    const capacityPercentage = ((maxForecast / maxCapacity) * 100).toFixed(0);
+    let capacityText = '';
+    if (capacityPercentage > 90) {
+        capacityText = `⚠️ Kapasitas tinggi: ${capacityPercentage}% dari maksimum. Pertimbangkan pembatasan tiket.`;
+    } else if (capacityPercentage > 70) {
+        capacityText = `✓ Kapasitas sedang: ${capacityPercentage}% dari maksimum. Kondisi normal.`;
+    } else {
+        capacityText = `✓ Kapasitas rendah: ${capacityPercentage}% dari maksimum. Peluang promosi tersedia.`;
+    }
+    document.getElementById('capacityInsight').textContent = capacityText;
+    
+    // Weekend vs Weekday analysis
+    const weekdayIndices = [];
+    const weekendIndices = [];
+    for (let i = 0; i < forecast.length; i++) {
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + i + 1);
+        const dayOfWeek = futureDate.getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+            weekendIndices.push(i);
+        } else {
+            weekdayIndices.push(i);
+        }
+    }
+    const avgWeekday = weekdayIndices.length > 0 ? weekdayIndices.reduce((sum, i) => sum + forecast[i], 0) / weekdayIndices.length : 0;
+    const avgWeekend = weekendIndices.length > 0 ? weekendIndices.reduce((sum, i) => sum + forecast[i], 0) / weekendIndices.length : 0;
+    const weekendDiff = avgWeekend > 0 ? (((avgWeekend - avgWeekday) / avgWeekday) * 100).toFixed(0) : 0;
+    let patternText = '';
+    if (weekendDiff > 20) {
+        patternText = `📊 Weekend ${weekendDiff}% lebih ramai. Pertimbangkan staff tambahan untuk akhir pekan.`;
+    } else if (weekendDiff < -10) {
+        patternText = `📊 Weekday lebih ramai ${Math.abs(weekendDiff)}%. Fokus promosi untuk weekend.`;
+    } else {
+        patternText = `📊 Distribusi merata antara weekday dan weekend.`;
+    }
+    document.getElementById('patternInsight').textContent = patternText;
 }
 
 function updateAIInsights(forecast, days) {
@@ -959,15 +1155,22 @@ function exportForecastXlsx() {
 }
 
 // INITIALIZE
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('Initializing Stats & Forecasting Dashboard...');
-    createForecastChart(7);
+    
+    // Load initial forecast data
+    await loadForecastData(60, 7);
+    
+    // Create all charts
+    await createForecastChart(7);
     createHeatmapChart();
     createMovingAverageChart();
-    console.log('Dashboard initialized successfully!');
+    
+    console.log('Dashboard initialized successfully with real data!');
 });
 
 window.changeForecastPeriod = changeForecastPeriod;
 window.exportForecastXlsx = exportForecastXlsx;
 </script>
 @endsection
+

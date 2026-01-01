@@ -16,16 +16,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root{
-            --mg-yellow: #FFD400; /* primary yellow */
-            --mg-black: #0b0b0b;  /* primary black */
-            --mg-white: #ffffff;  /* white */
+            --primary-color: #3B82F6; /* primary yellow */
+            --primary-color: #1F2933;  /* primary black */
+            --bg-white: #ffffff;  /* white */
             --mg-muted: #6c6c6c;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: var(--mg-black);
+            color: var(--primary-color);
             position: relative;
             min-height: 100vh;
             padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
@@ -43,7 +43,7 @@
         }
 
         .card {
-            background: var(--mg-white) !important;
+            background: var(--bg-white) !important;
             border: 2px solid rgba(0, 0, 0, 0.08);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             border-radius: 1.25rem;
@@ -56,7 +56,7 @@
         .card-title {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--mg-black);
+            color: var(--primary-color);
             letter-spacing: 0.02em;
         }
 
@@ -93,9 +93,9 @@
 
         /* Button Styling selaras dengan btn-service-yellow di visitor */
         .btn-login {
-            background: var(--mg-yellow) !important;
-            color: var(--mg-black) !important;
-            border: 2px solid var(--mg-yellow) !important;
+            background: var(--primary-color) !important;
+            color: #ffffff !important;
+            border: 2px solid var(--primary-color) !important;
             font-weight: 700;
             transition: all 0.3s ease;
             border-radius: 25px;
@@ -105,11 +105,11 @@
         }
 
         .btn-login:hover {
-            background: var(--mg-black) !important;
-            color: var(--mg-yellow) !important;
-            border-color: var(--mg-black) !important;
+            background: #FACC15 !important;
+            color: var(--primary-color) !important;
+            border-color: #FACC15 !important;
             transform: translateY(-2px); /* Efek hover selaras */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(250, 204, 21, 0.4);
         }
 
         /* Back button */
@@ -118,8 +118,8 @@
             top: 2rem;
             left: 2rem;
             background: rgba(255, 255, 255, 0.95) !important;
-            color: var(--mg-black) !important;
-            border: 2px solid var(--mg-black) !important;
+            color: var(--primary-color) !important;
+            border: 2px solid var(--primary-color) !important;
             font-weight: 600;
             transition: all 0.3s ease;
             border-radius: 50px;
@@ -135,11 +135,11 @@
         }
 
         .btn-back:hover {
-            background: var(--mg-black) !important;
-            color: var(--mg-yellow) !important;
-            border-color: var(--mg-black) !important;
+            background: #FACC15 !important;
+            color: var(--primary-color) !important;
+            border-color: #FACC15 !important;
             transform: translateX(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 16px rgba(250, 204, 21, 0.4);
         }
         
         .btn-back i {
@@ -153,7 +153,7 @@
 
         /* Form labels and inputs */
         .form-label {
-            color: var(--mg-black);
+            color: var(--primary-color);
             font-weight: 600;
             font-size: 1.05rem;
         }
@@ -168,8 +168,8 @@
         }
 
         .form-control:focus {
-            border-color: var(--mg-yellow);
-            box-shadow: 0 0 0 0.25rem rgba(255, 212, 0, 0.25);
+            border-color: #FACC15;
+            box-shadow: 0 0 0 0.25rem rgba(250, 204, 21, 0.25);
             outline: none;
         }
 
@@ -323,13 +323,13 @@
                 "line_linked": {
                     "enable": true,
                     "distance": 150,
-                    "color": "#6c6c6c",
+                    "color": "#808080",
                     "opacity": 0.4,
                     "width": 1
                 },
                 "move": {
                     "enable": true,
-                    "speed": 3,
+                    "speed": 1,
                     "direction": "none",
                     "out_mode": "out"
                 }

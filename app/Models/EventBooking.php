@@ -14,7 +14,6 @@ class EventBooking extends Model
         'email',
         'nomor_telepon',
         'negara',
-        'kota_kabupaten',
         'provinsi',
         'jenis_pemesanan',
         'nama_rombongan',

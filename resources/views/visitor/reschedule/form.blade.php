@@ -31,7 +31,24 @@
 
                     <div class="alert alert-info border-0 shadow-sm mb-4" style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3B82F6 !important; border-radius: 1rem;">
                         <i class="fas fa-info-circle me-2" style="color: #3B82F6;"></i>
-                        <strong>Info:</strong> Masukkan ID Tiket atau Unique Key untuk mengubah jadwal kunjungan atau event Anda.
+                        <strong>Info:</strong> Masukkan ID Tiket atau Unique Key untuk mengubah jadwal kunjungan Anda.
+                        <br>
+                        <small class="fw-bold mt-2 d-inline-block" style="color: #1e40af;">
+                            <i class="fas fa-exclamation-circle me-1"></i>Fitur ini hanya untuk tiket reguler, bukan untuk tiket event.
+                        </small>
+                    </div>
+
+                    <!-- Ketentuan Reschedule -->
+                    <div class="alert border-0 shadow-sm mb-4" style="background: rgba(251, 191, 36, 0.1); border-left: 4px solid #FACC15 !important; border-radius: 1rem;">
+                        <h6 class="fw-bold mb-2" style="color: #92400e;">
+                            <i class="fas fa-exclamation-triangle me-2" style="color: #FACC15;"></i>Ketentuan Reschedule
+                        </h6>
+                        <ul class="mb-0 small" style="color: #78350f;">
+                            <li><strong>Reschedule maksimal H-2</strong> dari jadwal kunjungan/event awal</li>
+                            <li><strong>Hanya bisa mundur tanggal</strong>, tidak dapat maju dari jadwal awal</li>
+                            <li>Reschedule hanya dapat dilakukan 1 kali per tiket</li>
+                            <li>Tiket harus sudah dibayar (status: PAID)</li>
+                        </ul>
                     </div>
 
                     <form action="{{ route('tickets.reschedule.check') }}" method="POST">
@@ -77,21 +94,12 @@
 
                     <!-- Info Cards -->
                     <div class="row mt-5">
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-0 shadow-sm h-100" style="border-radius: 1rem; background: #ffffff;">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm" style="border-radius: 1rem; background: #ffffff;">
                                 <div class="card-body text-center p-4">
                                     <i class="fas fa-ticket-alt fa-3x mb-3" style="color: #FACC15;"></i>
                                     <h6 class="fw-bold mb-2" style="color: #1F2933;">Tiket Reguler</h6>
                                     <p class="small text-muted mb-0">Ubah tanggal kunjungan Anda</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-0 shadow-sm h-100" style="border-radius: 1rem; background: #ffffff;">
-                                <div class="card-body text-center p-4">
-                                    <i class="fas fa-calendar-check fa-3x mb-3" style="color: #10B981;"></i>
-                                    <h6 class="fw-bold mb-2" style="color: #1F2933;">Tiket Event</h6>
-                                    <p class="small text-muted mb-0">Pindah ke event lain yang tersedia</p>
                                 </div>
                             </div>
                         </div>

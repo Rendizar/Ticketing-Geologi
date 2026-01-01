@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Booking;
+use App\Models\EventBooking;
+use App\Models\SpecialTicketRequest;
+use App\Models\KpiSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -18,21 +24,39 @@ class AdminController extends Controller
 {
     public function login(Request $request)
     {
+        // Redirect if already logged in
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+        
         if ($request->isMethod('post')) {
             $request->validate([
                 'username' => 'required',
                 'password' => 'required'
             ]);
 
-            $credentials = $request->only('username', 'password');
+            $credentials = [
+                'nama' => $request->username,
+                'password' => $request->password
+            ];
             
-            // Simple hardcoded admin check
-            if ($credentials['username'] === 'admin' && $credentials['password'] === '1234') {
-                session(['admin_logged_in' => true]);
+            // Try to find admin by username
+            $admin = Admin::where('nama', $credentials['nama'])
+                          ->where('status_aktif', 1)
+                          ->first();
+            
+            // Check if admin exists and password matches (bcrypt comparison)
+            if ($admin && Hash::check($credentials['password'], $admin->password)) {
+                // Update last login
+                $admin->update(['terakhir_login' => now()]);
+                
+                // Login using auth guard
+                Auth::guard('admin')->login($admin);
+                
                 return redirect()->route('admin.dashboard');
             }
             
-            return back()->withErrors(['error' => 'Username atau password salah!']);
+            return back()->withErrors(['error' => 'Username atau password salah!'])->withInput();
         }
         
         return view('admin.login');
@@ -55,7 +79,8 @@ class AdminController extends Controller
                 'total_pengunjung' => $this->getTotalPengunjung(),
                 'kunjungan_bulan_ini' => $this->getKunjunganBulanIni(),
                 'trend_hari_ini' => $this->getTrendHariIni(),
-                'trend_per_kategori' => $this->getTrendPerKategori()
+                'trend_per_kategori' => $this->getTrendPerKategori(),
+                'kpi' => $this->getKPI()
             ];
 
             return view('admin.dashboard', $data);
@@ -73,7 +98,7 @@ class AdminController extends Controller
             $today = Carbon::now('Asia/Jakarta')->toDateString();
             
             return Booking::whereDate('tanggal_kunjungan', $today)
-                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)')) ?? 0;
         } catch (\Exception $e) {
             Log::warning('Error calculating kunjungan_hari_ini: ' . $e->getMessage());
             return 0;
@@ -86,13 +111,14 @@ class AdminController extends Controller
             $result = Booking::select(
                 DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
                 DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
-                DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing'),
+                DB::raw('SUM(COALESCE(jumlah_tiket_khusus, 0)) as khusus')
             )->first();
 
-            return $result ?? (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0];
+            return $result ?? (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0, 'khusus' => 0];
         } catch (\Exception $e) {
             Log::warning('Error calculating total_per_kategori: ' . $e->getMessage());
-            return (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0];
+            return (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0, 'khusus' => 0];
         }
     }
 
@@ -122,7 +148,7 @@ class AdminController extends Controller
                 ->groupBy('provinsi')
                 ->select(
                     'provinsi',
-                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)) as total')
+                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)) as total')
                 )
                 ->orderByDesc('total')
                 ->limit(10)
@@ -136,7 +162,7 @@ class AdminController extends Controller
     private function getTotalPengunjung()
     {
         try {
-            return Booking::sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
+            return Booking::sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)')) ?? 0;
         } catch (\Exception $e) {
             Log::warning('Error calculating total_pengunjung: ' . $e->getMessage());
             return 0;
@@ -151,7 +177,7 @@ class AdminController extends Controller
             
             // Hitung total pengunjung dalam 30 hari terakhir
             $totalVisits = Booking::whereBetween('tanggal_kunjungan', [$thirtyDaysAgo, $today])
-                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)')) ?? 0;
             
             // Hitung jumlah hari yang memiliki data kunjungan dalam 30 hari terakhir
             $daysWithData = Booking::whereBetween('tanggal_kunjungan', [$thirtyDaysAgo, $today])
@@ -174,7 +200,7 @@ class AdminController extends Controller
             
             return Booking::whereMonth('tanggal_kunjungan', $now->month)
                 ->whereYear('tanggal_kunjungan', $now->year)
-                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)')) ?? 0;
         } catch (\Exception $e) {
             Log::warning('Error calculating kunjungan_bulan_ini: ' . $e->getMessage());
             return 0;
@@ -189,7 +215,7 @@ class AdminController extends Controller
             
             // Kunjungan hari ini
             $todayVisits = Booking::whereDate('tanggal_kunjungan', $today)
-                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)')) ?? 0;
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)')) ?? 0;
             
             // Rata-rata 7 hari sebelumnya (tidak termasuk hari ini)
             $avgLast7Days = Booking::whereBetween('tanggal_kunjungan', [$sevenDaysAgo, Carbon::now('Asia/Jakarta')->subDay()->toDateString()])
@@ -197,7 +223,7 @@ class AdminController extends Controller
                 ->fromSub(function ($query) use ($sevenDaysAgo) {
                     $query->select(
                         'tanggal_kunjungan',
-                        DB::raw('SUM(COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0)) as daily_total')
+                        DB::raw('SUM(COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)) as daily_total')
                     )
                     ->from('bookings')
                     ->whereBetween('tanggal_kunjungan', [$sevenDaysAgo, Carbon::now('Asia/Jakarta')->subDay()->toDateString()])
@@ -230,7 +256,8 @@ class AdminController extends Controller
                 ->select(
                     DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
                     DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
-                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing'),
+                    DB::raw('SUM(COALESCE(jumlah_tiket_khusus, 0)) as khusus')
                 )->first();
             
             // Data 30 hari sebelumnya (31-60 hari yang lalu)
@@ -238,17 +265,19 @@ class AdminController extends Controller
                 ->select(
                     DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
                     DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
-                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing'),
+                    DB::raw('SUM(COALESCE(jumlah_tiket_khusus, 0)) as khusus')
                 )->first();
             
             $trends = [
                 'pelajar' => 0,
                 'umum' => 0,
-                'asing' => 0
+                'asing' => 0,
+                'khusus' => 0
             ];
             
             // Hitung trend untuk setiap kategori
-            foreach (['pelajar', 'umum', 'asing'] as $category) {
+            foreach (['pelajar', 'umum', 'asing', 'khusus'] as $category) {
                 $recentValue = $recent30Days->$category ?? 0;
                 $previousValue = $previous30Days->$category ?? 0;
                 
@@ -260,7 +289,81 @@ class AdminController extends Controller
             return (object)$trends;
         } catch (\Exception $e) {
             Log::warning('Error calculating trend_per_kategori: ' . $e->getMessage());
-            return (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0];
+            return (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0, 'khusus' => 0];
+        }
+    }
+
+    private function getKPI()
+    {
+        try {
+            // Ambil target dari database
+            $kpiSettings = KpiSetting::first();
+            
+            // Jika belum ada settings, buat default
+            if (!$kpiSettings) {
+                $kpiSettings = KpiSetting::create([
+                    'target_daily' => 100,
+                    'target_monthly' => 3000,
+                    'target_yearly' => 36000,
+                ]);
+            }
+            
+            $targets = [
+                'daily' => $kpiSettings->target_daily,
+                'monthly' => $kpiSettings->target_monthly,
+                'yearly' => $kpiSettings->target_yearly,
+            ];
+
+            // Actual data
+            $today = Carbon::now('Asia/Jakarta');
+            $kunjunganHariIni = $this->getKunjunganHariIni();
+            $kunjunganBulanIni = $this->getKunjunganBulanIni();
+            
+            // Kunjungan tahun ini
+            $kunjunganTahunIni = Booking::whereYear('tanggal_kunjungan', $today->year)
+                ->where('status', 'paid')
+                ->sum(DB::raw('COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)')) ?? 0;
+
+            // Hitung persentase pencapaian
+            $achievement = [
+                'daily' => $targets['daily'] > 0 ? round(($kunjunganHariIni / $targets['daily']) * 100, 1) : 0,
+                'monthly' => $targets['monthly'] > 0 ? round(($kunjunganBulanIni / $targets['monthly']) * 100, 1) : 0,
+                'yearly' => $targets['yearly'] > 0 ? round(($kunjunganTahunIni / $targets['yearly']) * 100, 1) : 0,
+            ];
+
+            // Hitung sisa hari untuk proyeksi
+            $daysInMonth = $today->daysInMonth;
+            $daysPassed = $today->day;
+            $daysRemaining = $daysInMonth - $daysPassed;
+
+            // Proyeksi akhir bulan berdasarkan rata-rata harian bulan ini
+            $avgDailyThisMonth = $daysPassed > 0 ? $kunjunganBulanIni / $daysPassed : 0;
+            $projectedMonthly = $kunjunganBulanIni + ($avgDailyThisMonth * $daysRemaining);
+
+            return [
+                'targets' => $targets,
+                'actual' => [
+                    'daily' => $kunjunganHariIni,
+                    'monthly' => $kunjunganBulanIni,
+                    'yearly' => $kunjunganTahunIni,
+                ],
+                'achievement' => $achievement,
+                'projected_monthly' => round($projectedMonthly),
+                'on_track' => [
+                    'daily' => $achievement['daily'] >= 80,    // 80% dari target dianggap on track
+                    'monthly' => $achievement['monthly'] >= 80,
+                    'yearly' => $achievement['yearly'] >= 80,
+                ],
+            ];
+        } catch (\Exception $e) {
+            Log::warning('Error calculating KPI: ' . $e->getMessage());
+            return [
+                'targets' => ['daily' => 100, 'monthly' => 3000, 'yearly' => 36000],
+                'actual' => ['daily' => 0, 'monthly' => 0, 'yearly' => 0],
+                'achievement' => ['daily' => 0, 'monthly' => 0, 'yearly' => 0],
+                'projected_monthly' => 0,
+                'on_track' => ['daily' => false, 'monthly' => false, 'yearly' => false],
+            ];
         }
     }
 
@@ -268,14 +371,14 @@ class AdminController extends Controller
     {
         return view('admin.dashboard', [
             'kunjungan_hari_ini' => 0,
-            'total_per_kategori' => (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0],
+            'total_per_kategori' => (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0, 'khusus' => 0],
             'sub_pelajar' => (object)['tk' => 0, 'sd' => 0, 'smp' => 0, 'sma' => 0, 'kuliah' => 0],
             'per_provinsi' => collect([]),
             'avg_daily' => 0,
             'total_pengunjung' => 0,
             'kunjungan_bulan_ini' => 0,
             'trend_hari_ini' => 0,
-            'trend_per_kategori' => (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0],
+            'trend_per_kategori' => (object)['pelajar' => 0, 'umum' => 0, 'asing' => 0, 'khusus' => 0],
             'error_message' => $errorMessage
         ]);
     }
@@ -341,17 +444,31 @@ class AdminController extends Controller
             $end = (clone $start)->endOfMonth()->endOfDay();
             $daysInMonth = $start->daysInMonth;
 
-            // Fetch grouped sums by day
+            // Fetch grouped sums by day - HANYA yang sudah dibayar
             $rows = Booking::whereBetween('tanggal_kunjungan', [$start->toDateString(), $end->toDateString()])
+                ->where('status', 'paid') // Tambahkan filter status paid
                 ->select(
                     DB::raw('DAY(tanggal_kunjungan) as day'),
                     DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
                     DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
-                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing'),
+                    DB::raw('SUM(COALESCE(jumlah_tiket_khusus, 0)) as khusus')
                 )
                 ->groupBy(DB::raw('DAY(tanggal_kunjungan)'))
                 ->orderBy(DB::raw('DAY(tanggal_kunjungan)'))
                 ->get();
+
+            // Debug log
+            Log::info('Monthly Sales Query', [
+                'month' => $month,
+                'year' => $year,
+                'start' => $start->toDateString(),
+                'end' => $end->toDateString(),
+                'rows_count' => $rows->count(),
+                'raw_query' => Booking::whereBetween('tanggal_kunjungan', [$start->toDateString(), $end->toDateString()])
+                    ->where('status', 'paid')
+                    ->toSql()
+            ]);
 
             // Map rows to day => values for quick lookup
             $byDay = [];
@@ -360,6 +477,7 @@ class AdminController extends Controller
                     'pelajar' => (int) $r->pelajar,
                     'umum' => (int) $r->umum,
                     'asing' => (int) $r->asing,
+                    'khusus' => (int) $r->khusus,
                 ];
             }
 
@@ -367,6 +485,7 @@ class AdminController extends Controller
             $pelajar = [];
             $umum = [];
             $asing = [];
+            $khusus = [];
             $totals = [];
 
             for ($d = 1; $d <= $daysInMonth; $d++) {
@@ -374,10 +493,12 @@ class AdminController extends Controller
                 $p = $byDay[$d]['pelajar'] ?? 0;
                 $u = $byDay[$d]['umum'] ?? 0;
                 $a = $byDay[$d]['asing'] ?? 0;
+                $k = $byDay[$d]['khusus'] ?? 0;
                 $pelajar[] = $p;
                 $umum[] = $u;
                 $asing[] = $a;
-                $totals[] = $p + $u + $a;
+                $khusus[] = $k;
+                $totals[] = $p + $u + $a + $k;
             }
 
             return response()->json([
@@ -387,11 +508,18 @@ class AdminController extends Controller
                     'pelajar' => $pelajar,
                     'umum' => $umum,
                     'asing' => $asing,
+                    'khusus' => $khusus,
                 ],
                 'meta' => [
                     'month' => $month,
                     'year' => $year,
                     'days' => $daysInMonth,
+                ],
+                'debug' => [
+                    'query_start' => $start->toDateString(),
+                    'query_end' => $end->toDateString(),
+                    'rows_fetched' => $rows->count(),
+                    'raw_data' => $byDay,
                 ]
             ]);
         } catch (\Exception $e) {
@@ -403,6 +531,117 @@ class AdminController extends Controller
                     'pelajar' => [],
                     'umum' => [],
                     'asing' => [],
+                    'khusus' => [],
+                ],
+                'error' => 'Terjadi kesalahan saat memuat data.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get yearly sales data (per month in a year)
+     * JSON shape:
+     * {
+     *   labels: ["Jan", "Feb", ...],
+     *   totals: [..],
+     *   by_category: { pelajar: [...], umum: [...], asing: [...], khusus: [...] }
+     * }
+     */
+    public function yearlySales(Request $request)
+    {
+        try {
+            $year = (int) ($request->get('year') ?? now()->year);
+
+            if ($year < 2000 || $year > (int) now()->year + 10) {
+                $year = now()->year;
+            }
+
+            $start = Carbon::create($year, 1, 1)->startOfDay();
+            $end = Carbon::create($year, 12, 31)->endOfDay();
+
+            // Fetch grouped sums by month - HANYA yang sudah dibayar
+            $rows = Booking::whereBetween('tanggal_kunjungan', [$start->toDateString(), $end->toDateString()])
+                ->where('status', 'paid')
+                ->select(
+                    DB::raw('MONTH(tanggal_kunjungan) as month'),
+                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
+                    DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing'),
+                    DB::raw('SUM(COALESCE(jumlah_tiket_khusus, 0)) as khusus')
+                )
+                ->groupBy(DB::raw('MONTH(tanggal_kunjungan)'))
+                ->orderBy(DB::raw('MONTH(tanggal_kunjungan)'))
+                ->get();
+
+            // Debug log
+            Log::info('Yearly Sales Query', [
+                'year' => $year,
+                'start' => $start->toDateString(),
+                'end' => $end->toDateString(),
+                'rows_count' => $rows->count(),
+            ]);
+
+            // Map rows to month => values for quick lookup
+            $byMonth = [];
+            foreach ($rows as $r) {
+                $byMonth[(int) $r->month] = [
+                    'pelajar' => (int) $r->pelajar,
+                    'umum' => (int) $r->umum,
+                    'asing' => (int) $r->asing,
+                    'khusus' => (int) $r->khusus,
+                ];
+            }
+
+            $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            $labels = [];
+            $pelajar = [];
+            $umum = [];
+            $asing = [];
+            $khusus = [];
+            $totals = [];
+
+            for ($m = 1; $m <= 12; $m++) {
+                $labels[] = $monthNames[$m - 1];
+                $p = $byMonth[$m]['pelajar'] ?? 0;
+                $u = $byMonth[$m]['umum'] ?? 0;
+                $a = $byMonth[$m]['asing'] ?? 0;
+                $k = $byMonth[$m]['khusus'] ?? 0;
+                $pelajar[] = $p;
+                $umum[] = $u;
+                $asing[] = $a;
+                $khusus[] = $k;
+                $totals[] = $p + $u + $a + $k;
+            }
+
+            return response()->json([
+                'labels' => $labels,
+                'totals' => $totals,
+                'by_category' => [
+                    'pelajar' => $pelajar,
+                    'umum' => $umum,
+                    'asing' => $asing,
+                    'khusus' => $khusus,
+                ],
+                'meta' => [
+                    'year' => $year,
+                ],
+                'debug' => [
+                    'query_start' => $start->toDateString(),
+                    'query_end' => $end->toDateString(),
+                    'rows_fetched' => $rows->count(),
+                    'raw_data' => $byMonth,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error loading yearly sales: ' . $e->getMessage());
+            return response()->json([
+                'labels' => [],
+                'totals' => [],
+                'by_category' => [
+                    'pelajar' => [],
+                    'umum' => [],
+                    'asing' => [],
+                    'khusus' => [],
                 ],
                 'error' => 'Terjadi kesalahan saat memuat data.'
             ], 500);
@@ -411,7 +650,7 @@ class AdminController extends Controller
 
     public function logout()
     {
-        session()->forget('admin_logged_in');
+        Auth::guard('admin')->logout();
         return redirect()->route('admin.login')->with('success', 'Berhasil logout');
     }
 
@@ -626,11 +865,13 @@ class AdminController extends Controller
 
             // Fetch grouped sums by month
             $rows = Booking::whereBetween('tanggal_kunjungan', [$start->toDateString(), $end->toDateString()])
+                ->where('status', 'paid')
                 ->select(
                     DB::raw('MONTH(tanggal_kunjungan) as month'),
                     DB::raw('SUM(COALESCE(jumlah_pelajar, 0)) as pelajar'),
                     DB::raw('SUM(COALESCE(jumlah_umum, 0)) as umum'),
-                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing')
+                    DB::raw('SUM(COALESCE(jumlah_asing, 0)) as asing'),
+                    DB::raw('SUM(COALESCE(jumlah_tiket_khusus, 0)) as khusus')
                 )
                 ->groupBy(DB::raw('MONTH(tanggal_kunjungan)'))
                 ->orderBy(DB::raw('MONTH(tanggal_kunjungan)'))
@@ -643,6 +884,7 @@ class AdminController extends Controller
                     'pelajar' => (int) $r->pelajar,
                     'umum' => (int) $r->umum,
                     'asing' => (int) $r->asing,
+                    'khusus' => (int) $r->khusus,
                 ];
             }
 
@@ -676,7 +918,7 @@ class AdminController extends Controller
 
             // Table header
             $headerRow = 5;
-            $headers = ['Bulan', 'Pelajar', 'Umum', 'Asing', 'Total'];
+            $headers = ['Bulan', 'Pelajar', 'Umum', 'Asing', 'Tiket Khusus', 'Total'];
             $col = 'A';
             foreach ($headers as $header) {
                 $sheet->setCellValue($col . $headerRow, $header);
@@ -684,7 +926,7 @@ class AdminController extends Controller
             }
 
             // Style table header
-            $sheet->getStyle("A{$headerRow}:E{$headerRow}")->applyFromArray([
+            $sheet->getStyle("A{$headerRow}:F{$headerRow}")->applyFromArray([
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFD400']],
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
@@ -693,27 +935,30 @@ class AdminController extends Controller
 
             // Data rows
             $row = $headerRow + 1;
-            $totalPelajar = $totalUmum = $totalAsing = 0;
+            $totalPelajar = $totalUmum = $totalAsing = $totalKhusus = 0;
 
             for ($m = 1; $m <= 12; $m++) {
                 $p = $byMonth[$m]['pelajar'] ?? 0;
                 $u = $byMonth[$m]['umum'] ?? 0;
                 $a = $byMonth[$m]['asing'] ?? 0;
-                $total = $p + $u + $a;
+                $k = $byMonth[$m]['khusus'] ?? 0;
+                $total = $p + $u + $a + $k;
 
                 $sheet->setCellValue('A' . $row, $monthNames[$m] . ' ' . $year);
                 $sheet->setCellValue('B' . $row, $p);
                 $sheet->setCellValue('C' . $row, $u);
                 $sheet->setCellValue('D' . $row, $a);
-                $sheet->setCellValue('E' . $row, $total);
+                $sheet->setCellValue('E' . $row, $k);
+                $sheet->setCellValue('F' . $row, $total);
 
                 $totalPelajar += $p;
                 $totalUmum += $u;
                 $totalAsing += $a;
+                $totalKhusus += $k;
 
                 // Zebra striping
                 if ($m % 2 == 0) {
-                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                    $sheet->getStyle("A{$row}:F{$row}")->applyFromArray([
                         'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F9F9F9']]
                     ]);
                 }
@@ -723,21 +968,22 @@ class AdminController extends Controller
 
             // Style data area
             $lastRow = $row - 1;
-            $sheet->getStyle("A{$headerRow}:E{$lastRow}")->applyFromArray([
+            $sheet->getStyle("A{$headerRow}:F{$lastRow}")->applyFromArray([
                 'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'CCCCCC']]]
             ]);
-            $sheet->getStyle("B" . ($headerRow + 1) . ":E{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("B" . ($headerRow + 1) . ":F{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
             // Total row
             $row++;
-            $grandTotal = $totalPelajar + $totalUmum + $totalAsing;
+            $grandTotal = $totalPelajar + $totalUmum + $totalAsing + $totalKhusus;
             $sheet->setCellValue('A' . $row, 'TOTAL TAHUNAN');
             $sheet->setCellValue('B' . $row, $totalPelajar);
             $sheet->setCellValue('C' . $row, $totalUmum);
             $sheet->setCellValue('D' . $row, $totalAsing);
-            $sheet->setCellValue('E' . $row, $grandTotal);
+            $sheet->setCellValue('E' . $row, $totalKhusus);
+            $sheet->setCellValue('F' . $row, $grandTotal);
 
-            $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+            $sheet->getStyle("A{$row}:F{$row}")->applyFromArray([
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '0B0B0B']],
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
@@ -750,6 +996,7 @@ class AdminController extends Controller
             $sheet->getColumnDimension('C')->setWidth(15);
             $sheet->getColumnDimension('D')->setWidth(15);
             $sheet->getColumnDimension('E')->setWidth(15);
+            $sheet->getColumnDimension('F')->setWidth(15);
 
             return $this->generateXlsxResponse($spreadsheet, $filename);
 
@@ -968,5 +1215,500 @@ class AdminController extends Controller
             'Pragma' => 'no-cache',
             'Expires' => '0'
         ])->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Update KPI Settings
+     */
+    public function updateKpiSettings(Request $request)
+    {
+        try {
+            $request->validate([
+                'target_daily' => 'required|integer|min:1|max:2500',
+                'target_monthly' => 'required|integer|min:1',
+                'target_yearly' => 'required|integer|min:1',
+            ]);
+
+            $kpiSettings = KpiSetting::first();
+            
+            if (!$kpiSettings) {
+                $kpiSettings = KpiSetting::create([
+                    'target_daily' => $request->target_daily,
+                    'target_monthly' => $request->target_monthly,
+                    'target_yearly' => $request->target_yearly,
+                ]);
+            } else {
+                $kpiSettings->update([
+                    'target_daily' => $request->target_daily,
+                    'target_monthly' => $request->target_monthly,
+                    'target_yearly' => $request->target_yearly,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Target KPI berhasil diperbarui',
+                'data' => $kpiSettings
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error updating KPI settings: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui target KPI: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get historical data for forecasting (real data from database)
+     */
+    public function getForecastData(Request $request)
+    {
+        try {
+            $historicalDays = (int) ($request->get('historical_days') ?? 60);
+            $forecastDays = (int) ($request->get('forecast_days') ?? 7);
+
+            // Ambil data historis dari database
+            $endDate = Carbon::now('Asia/Jakarta');
+            $startDate = $endDate->copy()->subDays($historicalDays);
+
+            $historicalData = Booking::whereBetween('tanggal_kunjungan', [$startDate->toDateString(), $endDate->toDateString()])
+                ->where('status', 'paid')
+                ->select(
+                    'tanggal_kunjungan',
+                    DB::raw('SUM(COALESCE(jumlah_pelajar, 0) + COALESCE(jumlah_umum, 0) + COALESCE(jumlah_asing, 0) + COALESCE(jumlah_tiket_khusus, 0)) as total')
+                )
+                ->groupBy('tanggal_kunjungan')
+                ->orderBy('tanggal_kunjungan')
+                ->get();
+
+            // Fill missing dates with 0
+            $dateRange = [];
+            $dataMap = [];
+            
+            foreach ($historicalData as $row) {
+                $dataMap[$row->tanggal_kunjungan] = (int) $row->total;
+            }
+
+            $currentDate = $startDate->copy();
+            $historicalValues = [];
+            $historicalLabels = [];
+
+            while ($currentDate <= $endDate) {
+                $dateStr = $currentDate->toDateString();
+                $historicalLabels[] = $currentDate->format('d M');
+                $historicalValues[] = $dataMap[$dateStr] ?? 0;
+                $currentDate->addDay();
+            }
+
+            // Calculate forecast using multiple methods
+            $forecast = $this->calculateForecast($historicalValues, $forecastDays);
+
+            // Generate forecast labels
+            $forecastLabels = [];
+            $forecastStartDate = $endDate->copy()->addDay();
+            for ($i = 0; $i < $forecastDays; $i++) {
+                $forecastLabels[] = $forecastStartDate->copy()->addDays($i)->format('d M');
+            }
+
+            // Calculate statistics
+            $avgHistorical = count($historicalValues) > 0 ? array_sum($historicalValues) / count($historicalValues) : 0;
+            $avgForecast = count($forecast['ensemble']) > 0 ? array_sum($forecast['ensemble']) / count($forecast['ensemble']) : 0;
+            $growthRate = $avgHistorical > 0 ? (($avgForecast - $avgHistorical) / $avgHistorical) * 100 : 0;
+
+            return response()->json([
+                'success' => true,
+                'historical' => [
+                    'labels' => $historicalLabels,
+                    'values' => $historicalValues,
+                ],
+                'forecast' => [
+                    'labels' => $forecastLabels,
+                    'values' => $forecast['ensemble'],
+                    'sma' => $forecast['sma'],
+                    'ema' => $forecast['ema'],
+                    'linear' => $forecast['linear'],
+                    'confidence_upper' => $forecast['confidence_upper'],
+                    'confidence_lower' => $forecast['confidence_lower'],
+                ],
+                'statistics' => [
+                    'avg_historical' => round($avgHistorical, 1),
+                    'avg_forecast' => round($avgForecast, 1),
+                    'growth_rate' => round($growthRate, 1),
+                    'total_historical' => array_sum($historicalValues),
+                    'max_historical' => count($historicalValues) > 0 ? max($historicalValues) : 0,
+                    'min_historical' => count(array_filter($historicalValues, fn($v) => $v > 0)) > 0 ? min(array_filter($historicalValues, fn($v) => $v > 0)) : 0,
+                ],
+                'metadata' => [
+                    'historical_days' => $historicalDays,
+                    'forecast_days' => $forecastDays,
+                    'start_date' => $startDate->format('Y-m-d'),
+                    'end_date' => $endDate->format('Y-m-d'),
+                    'forecast_start' => $forecastStartDate->format('Y-m-d'),
+                ]
+            ], 200, [], JSON_NUMERIC_CHECK);
+
+        } catch (\Exception $e) {
+            Log::error('Error getting forecast data: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data forecasting: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Calculate forecast using multiple methods
+     */
+    private function calculateForecast($historicalData, $forecastDays)
+    {
+        $n = count($historicalData);
+        
+        if ($n < 7) {
+            // Not enough data, return simple average
+            $avg = $n > 0 ? array_sum($historicalData) / $n : 100;
+            return [
+                'ensemble' => array_fill(0, $forecastDays, $avg),
+                'sma' => array_fill(0, $forecastDays, $avg),
+                'ema' => array_fill(0, $forecastDays, $avg),
+                'linear' => array_fill(0, $forecastDays, $avg),
+                'confidence_upper' => array_fill(0, $forecastDays, $avg * 1.2),
+                'confidence_lower' => array_fill(0, $forecastDays, $avg * 0.8),
+            ];
+        }
+
+        // 1. Simple Moving Average (SMA)
+        $smaPeriod = min(7, $n);
+        $lastValues = array_slice($historicalData, -$smaPeriod);
+        $smaValue = array_sum($lastValues) / $smaPeriod;
+        $smaForecast = array_fill(0, $forecastDays, $smaValue);
+
+        // 2. Exponential Moving Average (EMA)
+        $emaPeriod = min(7, $n);
+        $k = 2 / ($emaPeriod + 1);
+        $ema = $historicalData[0];
+        for ($i = 1; $i < $n; $i++) {
+            $ema = $historicalData[$i] * $k + $ema * (1 - $k);
+        }
+        $emaForecast = array_fill(0, $forecastDays, $ema);
+
+        // 3. Linear Regression
+        $sumX = 0; $sumY = 0; $sumXY = 0; $sumX2 = 0;
+        for ($i = 0; $i < $n; $i++) {
+            $sumX += $i;
+            $sumY += $historicalData[$i];
+            $sumXY += $i * $historicalData[$i];
+            $sumX2 += $i * $i;
+        }
+
+        $denominator = ($n * $sumX2 - $sumX * $sumX);
+        $slope = $denominator != 0 ? ($n * $sumXY - $sumX * $sumY) / $denominator : 0;
+        $intercept = ($sumY - $slope * $sumX) / $n;
+
+        $linearForecast = [];
+        for ($i = 0; $i < $forecastDays; $i++) {
+            $linearForecast[] = max(0, $slope * ($n + $i) + $intercept);
+        }
+
+        // 4. Ensemble (weighted average of all methods)
+        $ensemble = [];
+        for ($i = 0; $i < $forecastDays; $i++) {
+            $ensemble[] = ($smaForecast[$i] * 0.3 + $emaForecast[$i] * 0.3 + $linearForecast[$i] * 0.4);
+        }
+
+        // Calculate standard deviation for confidence intervals
+        $mean = array_sum($historicalData) / $n;
+        $variance = 0;
+        for ($i = 0; $i < $n; $i++) {
+            $variance += pow($historicalData[$i] - $mean, 2);
+        }
+        $stdDev = sqrt($variance / $n);
+
+        // Confidence intervals (95% = 1.96 * stdDev)
+        $confidenceUpper = array_map(fn($v) => $v + (1.96 * $stdDev), $ensemble);
+        $confidenceLower = array_map(fn($v) => max(0, $v - (1.96 * $stdDev)), $ensemble);
+
+        return [
+            'ensemble' => array_map(fn($v) => round($v), $ensemble),
+            'sma' => array_map(fn($v) => round($v), $smaForecast),
+            'ema' => array_map(fn($v) => round($v), $emaForecast),
+            'linear' => array_map(fn($v) => round($v), $linearForecast),
+            'confidence_upper' => array_map(fn($v) => round($v), $confidenceUpper),
+            'confidence_lower' => array_map(fn($v) => round($v), $confidenceLower),
+        ];
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => [
+                'required',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/'
+            ],
+        ], [
+            'current_password.required' => 'Password saat ini wajib diisi',
+            'new_password.required' => 'Password baru wajib diisi',
+            'new_password.min' => 'Password baru minimal 8 karakter',
+            'new_password.confirmed' => 'Konfirmasi password tidak cocok',
+            'new_password.regex' => 'Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol (@$!%*?&#)',
+        ]);
+
+        $adminId = Auth::guard('admin')->id();
+        $admin = Admin::find($adminId);
+
+        // Verify current password
+        if (!Hash::check($request->current_password, $admin->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai'])->withInput();
+        }
+
+        // Update password
+        $admin->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        // Logout the admin
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('admin.login')
+            ->with('success', 'Password berhasil diubah! Silakan login dengan password baru Anda.');
+    }
+
+    public function changeUsername(Request $request)
+    {
+        $request->validate([
+            'new_username' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                'regex:/^[a-zA-Z0-9_\-\.]+$/',
+                'unique:admins,nama,' . Auth::guard('admin')->id() . ',id_login'
+            ],
+            'password_confirmation' => 'required',
+        ], [
+            'new_username.required' => 'Username baru wajib diisi',
+            'new_username.min' => 'Username minimal 3 karakter',
+            'new_username.max' => 'Username maksimal 50 karakter',
+            'new_username.regex' => 'Username hanya boleh mengandung huruf, angka, underscore, dash, dan titik',
+            'new_username.unique' => 'Username sudah digunakan',
+            'password_confirmation.required' => 'Password konfirmasi wajib diisi',
+        ]);
+
+        $adminId = Auth::guard('admin')->id();
+        $admin = Admin::find($adminId);
+
+        // Verify password
+        if (!Hash::check($request->password_confirmation, $admin->password)) {
+            return back()->withErrors(['password_confirmation' => 'Password tidak sesuai'])->withInput();
+        }
+
+        // Update username
+        $admin->update([
+            'nama' => $request->new_username
+        ]);
+
+        return back()->with('success', 'Username berhasil diubah! Username baru Anda: ' . $request->new_username);
+    }
+
+    public function bookings(Request $request)
+    {
+        $type = $request->get('type', '');
+        $status = $request->get('status', '');
+        $search = $request->get('search', '');
+        $dateFrom = $request->get('date_from', '');
+        $dateTo = $request->get('date_to', '');
+
+        // Gabungkan regular, event, dan special ticket bookings
+        $regularBookings = collect();
+        $eventBookings = collect();
+        $specialBookings = collect();
+
+        // Query regular bookings
+        if ($type == '' || $type == 'regular') {
+            $regularQuery = Booking::with(['payment'])
+                ->orderBy('created_at', 'desc');
+
+            if ($status != '') {
+                $regularQuery->where('status', $status);
+            }
+            if ($search != '') {
+                $regularQuery->where(function($q) use ($search) {
+                    $q->where('booking_id', 'like', "%{$search}%")
+                      ->orWhere('nama', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+            if ($dateFrom != '') {
+                $regularQuery->whereDate('tanggal_kunjungan', '>=', $dateFrom);
+            }
+            if ($dateTo != '') {
+                $regularQuery->whereDate('tanggal_kunjungan', '<=', $dateTo);
+            }
+
+            $regularBookings = $regularQuery->get()->map(function($booking) {
+                $data = [
+                    'id' => $booking->booking_id,
+                    'type' => 'regular',
+                    'booking_id' => $booking->booking_id,
+                    'nama' => $booking->nama,
+                    'email' => $booking->email,
+                    'tanggal_kunjungan' => $booking->tanggal_kunjungan,
+                    'total_pembayaran' => $booking->total_pembayaran ?? 0,
+                    'status' => $booking->status,
+                    'created_at' => $booking->created_at,
+                    'data' => $booking
+                ];
+                return (object) $data;
+            });
+        }
+
+        // Query event bookings
+        if ($type == '' || $type == 'event') {
+            $eventQuery = EventBooking::with(['event'])
+                ->orderBy('created_at', 'desc');
+
+            if ($status != '') {
+                $eventQuery->where('payment_status', $status);
+            }
+            if ($search != '') {
+                $eventQuery->where(function($q) use ($search) {
+                    $q->where('booking_id', 'like', "%{$search}%")
+                      ->orWhere('nama', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+            if ($dateFrom != '') {
+                $eventQuery->whereHas('event', function($q) use ($dateFrom) {
+                    $q->whereDate('tanggal', '>=', $dateFrom);
+                });
+            }
+            if ($dateTo != '') {
+                $eventQuery->whereHas('event', function($q) use ($dateTo) {
+                    $q->whereDate('tanggal', '<=', $dateTo);
+                });
+            }
+
+            $eventBookings = $eventQuery->get()->map(function($booking) {
+                $data = [
+                    'id' => $booking->booking_id,
+                    'type' => 'event',
+                    'booking_id' => $booking->booking_id,
+                    'nama' => $booking->nama,
+                    'email' => $booking->email,
+                    'tanggal_kunjungan' => $booking->event ? $booking->event->tanggal : null,
+                    'total_pembayaran' => $booking->total_harga ?? 0,
+                    'status' => $booking->payment_status,
+                    'created_at' => $booking->created_at,
+                    'data' => $booking
+                ];
+                return (object) $data;
+            });
+        }
+
+        // Query special ticket requests
+        if ($type == '' || $type == 'special') {
+            $specialQuery = SpecialTicketRequest::orderBy('created_at', 'desc');
+
+            // Special tickets don't have payment status, only approval status
+            if ($status != '') {
+                $specialQuery->where('status', $status);
+            }
+            if ($search != '') {
+                $specialQuery->where(function($q) use ($search) {
+                    $q->where('request_id', 'like', "%{$search}%")
+                      ->orWhere('nama', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+            if ($dateFrom != '') {
+                $specialQuery->whereDate('tanggal_kunjungan', '>=', $dateFrom);
+            }
+            if ($dateTo != '') {
+                $specialQuery->whereDate('tanggal_kunjungan', '<=', $dateTo);
+            }
+
+            $specialBookings = $specialQuery->get()->map(function($booking) {
+                $data = [
+                    'id' => $booking->request_id,
+                    'type' => 'special',
+                    'booking_id' => $booking->request_id,
+                    'nama' => $booking->nama,
+                    'email' => $booking->email,
+                    'tanggal_kunjungan' => $booking->tanggal_kunjungan,
+                    'total_pembayaran' => 0, // Special tickets are free
+                    'status' => $booking->status,
+                    'created_at' => $booking->created_at,
+                    'data' => $booking
+                ];
+                return (object) $data;
+            });
+        }
+
+        // Gabungkan dan sort - use concat instead of merge to avoid getKey() error
+        $allBookings = collect([])
+            ->concat($regularBookings)
+            ->concat($eventBookings)
+            ->concat($specialBookings)
+            ->sortByDesc(function($item) {
+                return $item->created_at;
+            })
+            ->values();
+
+        // Manual pagination
+        $perPage = 20;
+        $currentPage = $request->get('page', 1);
+        $total = $allBookings->count();
+        
+        // Get items for current page
+        $items = $allBookings->forPage($currentPage, $perPage)->values();
+        
+        $bookings = new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        return view('admin.bookings.index', compact('bookings'));
+    }
+
+    public function bookingDetail($id)
+    {
+        // Cek apakah regular booking atau event booking atau special ticket
+        $regularBooking = Booking::with(['payment'])->where('booking_id', $id)->first();
+        
+        if ($regularBooking) {
+            return view('admin.bookings.detail', [
+                'booking' => $regularBooking,
+                'type' => 'regular'
+            ]);
+        }
+
+        $eventBooking = EventBooking::with(['event'])->where('booking_id', $id)->first();
+        
+        if ($eventBooking) {
+            return view('admin.bookings.detail', [
+                'booking' => $eventBooking,
+                'type' => 'event'
+            ]);
+        }
+
+        $specialTicket = SpecialTicketRequest::where('request_id', $id)->first();
+        
+        if ($specialTicket) {
+            return view('admin.bookings.detail', [
+                'booking' => $specialTicket,
+                'type' => 'special'
+            ]);
+        }
+
+        abort(404, 'Booking tidak ditemukan');
     }
 }

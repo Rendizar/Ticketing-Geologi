@@ -26,7 +26,6 @@ class EventController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric|min:0',
             'event_date' => 'required|date|after:today',
             'event_time' => 'required',
             'capacity' => 'required|integer|min:1'
@@ -38,7 +37,7 @@ class EventController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'image' => $imagePath,
-            'price' => $request->price,
+            'price' => 0, // Set default 0, menggunakan harga tiket reguler
             'event_date' => $request->event_date,
             'event_time' => $request->event_time,
             'capacity' => $request->capacity,
@@ -61,7 +60,6 @@ class EventController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric|min:0',
             'event_date' => 'required|date',
             'event_time' => 'required',
             'capacity' => 'required|integer|min:1'
@@ -80,7 +78,7 @@ class EventController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'image' => $request->hasFile('image') ? $imagePath : $event->image,
-            'price' => $request->price,
+            'price' => 0, // Set default 0, menggunakan harga tiket reguler
             'event_date' => $request->event_date,
             'event_time' => $request->event_time,
             'capacity' => $request->capacity,

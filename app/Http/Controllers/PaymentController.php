@@ -52,7 +52,7 @@ class PaymentController extends Controller
             'customer_details' => [
                 'first_name' => $pending['form_data']['nama'],
                 'email'      => $pending['form_data']['email'],
-                'phone'      => $pending['form_data']['nomor_telepon'],
+                
             ],
             'item_details' => [[
                 'id'       => 'TICKET',
@@ -156,12 +156,11 @@ class PaymentController extends Controller
             'booking_id'        => $orderId,
             'nama'              => $data['nama'],
             'email'             => $data['email'],
-            'nomor_telepon'     => $data['nomor_telepon'],
             'negara'            => $data['negara'],
-            'jenis_pemesanan'   => $data['jenis_pemesanan'],
-            'nama_rombongan'    => $data['nama_rombongan'] ?? null,
+            'jenis_pemesanan'   => $calc['jenis_pemesanan_aktual'] ?? $data['jenis_pemesanan'],
+            'nama_rombongan'    => $calc['nama_rombongan'] ?? $data['nama_rombongan'] ?? null,
             'tanggal_kunjungan' => $data['tanggal_kunjungan'],
-            'kota_kabupaten'    => $data['kota_kabupaten'] ?? null,
+            'slot_waktu'        => $calc['slot_waktu'] ?? null,
             'provinsi'          => $data['provinsi'] ?? null,
             'jumlah_pelajar'    => $calc['jumlah_pelajar'],
             'jumlah_umum'       => $calc['jumlah_umum'],
@@ -171,9 +170,28 @@ class PaymentController extends Controller
             'sub_smp'           => $calc['sub_smp'],
             'sub_sma'           => $calc['sub_sma'],
             'sub_kuliah'        => $calc['sub_kuliah'],
+            // SNAPSHOT HARGA - Proteksi data transaksi lama
+            'harga_pelajar_saat_booking' => $calc['harga_pelajar_saat_booking'] ?? 0,
+            'harga_umum_saat_booking'    => $calc['harga_umum_saat_booking'] ?? 0,
+            'harga_asing_saat_booking'   => $calc['harga_asing_saat_booking'] ?? 0,
+            'total_pembayaran'           => $calc['total_harga'],
             'status'            => 'paid',
             'unique_key'        => Str::uuid(),
         ]);
+        
+        // Update kuota harian (maksimal 2500 pengunjung per hari)
+        $dailyQuota = \App\Models\DailyVisitorQuota::getOrCreate($data['tanggal_kunjungan'], 2500);
+        $dailyQuota->increment('total_booked', $calc['total_pengunjung'] ?? ($calc['jumlah_pelajar'] + $calc['jumlah_umum'] + $calc['jumlah_asing']));
+        
+        // Update kuota untuk rombongan (slot waktu)
+        if (isset($calc['slot_waktu']) && $calc['slot_waktu']) {
+            $quotaRecord = \App\Models\DailyGroupQuota::getOrCreate(
+                $data['tanggal_kunjungan'],
+                $calc['slot_waktu'],
+                100
+            );
+            $quotaRecord->increment('used', $calc['total_pengunjung'] ?? 0);
+        }
 
         // Simpan Payment dengan metode_pembayaran yang BENAR!
         Payment::create([
@@ -199,7 +217,7 @@ class PaymentController extends Controller
         $pdf->save($path);
 
         // === KIRIM EMAIL DENGAN LAMPIRAN PDF ===
-        \Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
+        Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
     }
 
     // Event Booking Payment Methods
@@ -220,6 +238,41 @@ class PaymentController extends Controller
 
         $orderId = 'EVT-' . now()->format('Ymd-His') . '-' . strtoupper(substr(Str::uuid(), 0, 8));
 
+        // Build item details based on categories
+        $itemDetails = [];
+        
+        $jumlahPelajar = ($pending['sub_tk'] ?? 0) + ($pending['sub_sd'] ?? 0) + 
+                        ($pending['sub_smp'] ?? 0) + ($pending['sub_sma'] ?? 0) + ($pending['sub_kuliah'] ?? 0);
+        $jumlahUmum = $pending['jumlah_umum'] ?? 0;
+        $jumlahAsing = $pending['jumlah_asing'] ?? 0;
+        
+        if ($jumlahPelajar > 0) {
+            $itemDetails[] = [
+                'id'       => 'EVENT_TICKET_PELAJAR',
+                'price'    => $pending['harga_pelajar'],
+                'quantity' => $jumlahPelajar,
+                'name'     => 'Tiket Event (Pelajar): ' . $pending['event_title'],
+            ];
+        }
+        
+        if ($jumlahUmum > 0) {
+            $itemDetails[] = [
+                'id'       => 'EVENT_TICKET_UMUM',
+                'price'    => $pending['harga_umum'],
+                'quantity' => $jumlahUmum,
+                'name'     => 'Tiket Event (Umum): ' . $pending['event_title'],
+            ];
+        }
+        
+        if ($jumlahAsing > 0) {
+            $itemDetails[] = [
+                'id'       => 'EVENT_TICKET_ASING',
+                'price'    => $pending['harga_asing'],
+                'quantity' => $jumlahAsing,
+                'name'     => 'Tiket Event (Asing): ' . $pending['event_title'],
+            ];
+        }
+        
         $transaction = [
             'transaction_details' => [
                 'order_id'     => $orderId,
@@ -230,12 +283,7 @@ class PaymentController extends Controller
                 'email'      => $pending['email'],
                 'phone'      => $pending['nomor_telepon'],
             ],
-            'item_details' => [[
-                'id'       => 'EVENT_TICKET',
-                'price'    => $pending['harga_satuan'],
-                'quantity' => $pending['jumlah_tiket'],
-                'name'     => 'Tiket Event: ' . $pending['event_title'],
-            ]],
+            'item_details' => $itemDetails,
             'callbacks' => [
                 'finish' => url('/event/payment/finish?order_id=' . $orderId),
             ]
@@ -292,11 +340,10 @@ class PaymentController extends Controller
             'email'             => $pending['email'],
             'nomor_telepon'     => $pending['nomor_telepon'],
             'negara'            => $pending['negara'],
-            'kota_kabupaten'    => $pending['kota_kabupaten'] ?? null,
             'provinsi'          => $pending['provinsi'] ?? null,
             'jenis_pemesanan'   => $pending['jenis_pemesanan'],
             'nama_rombongan'    => $pending['nama_rombongan'] ?? null,
-            'kategori'          => $pending['kategori'],
+            'kategori'          => $this->determineEventCategory($pending),
             'jumlah_tiket'      => $pending['jumlah_tiket'],
             'total_harga'       => $pending['total_harga'],
             'payment_type'      => $paymentType,
@@ -331,12 +378,34 @@ class PaymentController extends Controller
         $pdf->save($path);
 
         // === KIRIM EMAIL DENGAN LAMPIRAN PDF ===
-        \Mail::to($eventBooking->email)->send(new \App\Mail\TicketMail($eventBooking, $path));
+        Mail::to($eventBooking->email)->send(new \App\Mail\TicketMail($eventBooking, $path));
 
         // === KURANGI AVAILABLE SLOTS EVENT ===
         $event = Event::find($pending['event_id']);
         if ($event) {
             $event->reduceSlots($pending['jumlah_tiket']);
         }
+    }
+
+    /**
+     * Determine event category based on ticket breakdown
+     */
+    private function determineEventCategory($pending)
+    {
+        $jumlahPelajar = ($pending['sub_tk'] ?? 0) + ($pending['sub_sd'] ?? 0) + 
+                        ($pending['sub_smp'] ?? 0) + ($pending['sub_sma'] ?? 0) + ($pending['sub_kuliah'] ?? 0);
+        $jumlahUmum = $pending['jumlah_umum'] ?? 0;
+        $jumlahAsing = $pending['jumlah_asing'] ?? 0;
+
+        // Prioritas: Asing > Umum > Pelajar (kategori dengan jumlah terbanyak)
+        if ($jumlahAsing > 0) {
+            return 'asing';
+        } elseif ($jumlahUmum > 0) {
+            return 'umum';
+        } elseif ($jumlahPelajar > 0) {
+            return 'pelajar';
+        }
+        
+        return 'umum'; // Default
     }
 }

@@ -64,7 +64,7 @@
                                 </span>
                                 <input type="date" class="form-control @error('new_date') is-invalid @enderror" 
                                     id="new_date" name="new_date" 
-                                    min="{{ date('Y-m-d') }}" required
+                                    min="{{ \Carbon\Carbon::parse($booking->tanggal_kunjungan)->addDay()->format('Y-m-d') }}" required
                                     style="border: 1px solid #d1d5db; border-left: none; border-radius: 0 12px 12px 0; padding: 0.75rem 1rem; font-size: 1rem;">
                                 @error('new_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -72,14 +72,16 @@
                             </div>
                             <small style="color: #6c6c6c;">
                                 <i class="fas fa-info-circle me-1"></i>
-                                Pilih tanggal minimal hari ini atau setelahnya
+                                Tanggal baru harus lebih lambat dari {{ \Carbon\Carbon::parse($booking->tanggal_kunjungan)->format('d F Y') }} (hanya bisa mundur)
                             </small>
                         </div>
 
                         <!-- Important Notes -->
                         <div class="alert" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 1.25rem;">
-                            <h6 class="fw-bold mb-2" style="color: #92400e;"><i class="fas fa-exclamation-triangle me-2" style="color: #FACC15;"></i>Catatan Penting:</h6>
+                            <h6 class="fw-bold mb-2" style="color: #92400e;"><i class="fas fa-exclamation-triangle me-2" style="color: #FACC15;"></i>Ketentuan Reschedule:</h6>
                             <ul class="mb-0" style="color: #78350f; font-size: 0.95rem;">
+                                <li><strong>Reschedule hanya dapat dilakukan maksimal H-2</strong> dari jadwal kunjungan awal Anda</li>
+                                <li><strong>Tanggal baru hanya bisa mundur</strong>, tidak dapat maju dari jadwal awal ({{ \Carbon\Carbon::parse($booking->tanggal_kunjungan)->format('d F Y') }})</li>
                                 <li>Reschedule hanya dapat dilakukan 1 kali</li>
                                 <li>Tiket tetap berlaku dengan data pengunjung yang sama</li>
                                 <li>Tidak ada biaya tambahan untuk reschedule</li>

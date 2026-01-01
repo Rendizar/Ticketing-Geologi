@@ -48,7 +48,6 @@
             <table>
                 <tr><td>Nama Pemesan</td><td>: {{ $eventBooking->nama }}</td></tr>
                 <tr><td>Email</td><td>: {{ $eventBooking->email }}</td></tr>
-                <tr><td>Nomor Telepon</td><td>: {{ $eventBooking->nomor_telepon }}</td></tr>
                 <tr><td>Negara</td><td>: {{ $eventBooking->negara }}</td></tr>
                 <tr><td>Jenis Pemesanan</td><td>: {{ ucfirst($eventBooking->jenis_pemesanan) }} @if($eventBooking->nama_rombongan)- {{ $eventBooking->nama_rombongan }} @endif</td></tr>
                 <tr><td>Kategori</td><td>: {{ ucfirst($eventBooking->kategori) }}</td></tr>

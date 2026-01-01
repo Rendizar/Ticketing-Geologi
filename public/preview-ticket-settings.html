@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Fitur Setting Harga Tiket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 50px 0;
+        }
+        .preview-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        .preview-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-weight: bold;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .feature-list li i {
+            margin-right: 15px;
+            font-size: 24px;
+            color: #667eea;
+        }
+        .screenshot-placeholder {
+            background: #f5f5f5;
+            padding: 100px 20px;
+            text-align: center;
+            color: #999;
+            border: 3px dashed #ddd;
+            margin: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="text-white display-4 fw-bold mb-3">
+                <i class="bi bi-gear-fill me-3"></i>Fitur Setting Harga Tiket Dinamis
+            </h1>
+            <p class="text-white-50 fs-5">Museum Geologi Bandung - Ticketing System</p>
+        </div>
+
+        <!-- Features Overview -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <h3 class="mb-0"><i class="bi bi-stars me-2"></i>Fitur Utama</h3>
+            </div>
+            <div class="card-body">
+                <ul class="feature-list">
+                    <li>
+                        <i class="bi bi-cash-coin"></i>
+                        <div>
+                            <strong>Harga Tiket Dinamis</strong>
+                            <p class="mb-0 text-muted">Ubah harga tiket kapan saja melalui dashboard admin tanpa edit kode</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-clock-history"></i>
+                        <div>
+                            <strong>Riwayat Perubahan Harga</strong>
+                            <p class="mb-0 text-muted">Semua perubahan harga tercatat lengkap dengan waktu, admin, dan alasan</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-shield-check"></i>
+                        <div>
+                            <strong>Data Transaksi Aman</strong>
+                            <p class="mb-0 text-muted">Perubahan harga tidak menimpa data transaksi yang sudah ada</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-plus-circle"></i>
+                        <div>
+                            <strong>Tambah Kategori Baru</strong>
+                            <p class="mb-0 text-muted">Buat kategori tiket baru sesuai kebutuhan (VIP, Group, Promo, dll)</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-toggle-on"></i>
+                        <div>
+                            <strong>Aktif/Nonaktif Kategori</strong>
+                            <p class="mb-0 text-muted">Kontrol kategori mana yang ditampilkan di form pemesanan</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-arrow-down-up"></i>
+                        <div>
+                            <strong>Atur Urutan Tampilan</strong>
+                            <p class="mb-0 text-muted">Tentukan urutan kategori di halaman pemesanan</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Routes -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <h3 class="mb-0"><i class="bi bi-signpost-2 me-2"></i>Routes yang Tersedia</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>URL</th>
+                                <th>Fungsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-success">GET</span></td>
+                                <td><code>/admin/settings/ticket-categories</code></td>
+                                <td>Daftar semua kategori tiket</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-success">GET</span></td>
+                                <td><code>/admin/settings/ticket-categories/create</code></td>
+                                <td>Form tambah kategori baru</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-primary">POST</span></td>
+                                <td><code>/admin/settings/ticket-categories</code></td>
+                                <td>Simpan kategori baru</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-success">GET</span></td>
+                                <td><code>/admin/settings/ticket-categories/{id}/edit</code></td>
+                                <td>Form edit kategori</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-warning">PUT</span></td>
+                                <td><code>/admin/settings/ticket-categories/{id}</code></td>
+                                <td>Update kategori</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-danger">DELETE</span></td>
+                                <td><code>/admin/settings/ticket-categories/{id}</code></td>
+                                <td>Hapus kategori</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-info">GET</span></td>
+                                <td><code>/admin/settings/ticket-categories/{id}/history</code></td>
+                                <td>Lihat riwayat perubahan harga</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Structure -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <h3 class="mb-0"><i class="bi bi-database me-2"></i>Struktur Database</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3"><i class="bi bi-table me-2"></i>ticket_categories</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><code>id</code> - Primary Key</li>
+                            <li class="list-group-item"><code>name</code> - Nama kategori (unique)</li>
+                            <li class="list-group-item"><code>code</code> - Kode kategori (unique)</li>
+                            <li class="list-group-item"><code>price</code> - Harga tiket (decimal)</li>
+                            <li class="list-group-item"><code>description</code> - Deskripsi</li>
+                            <li class="list-group-item"><code>is_active</code> - Status aktif (boolean)</li>
+                            <li class="list-group-item"><code>sort_order</code> - Urutan tampilan</li>
+                            <li class="list-group-item"><code>timestamps</code> - Created/Updated at</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="mb-3"><i class="bi bi-table me-2"></i>ticket_price_history</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><code>id</code> - Primary Key</li>
+                            <li class="list-group-item"><code>ticket_category_id</code> - Foreign Key</li>
+                            <li class="list-group-item"><code>old_price</code> - Harga lama (decimal)</li>
+                            <li class="list-group-item"><code>new_price</code> - Harga baru (decimal)</li>
+                            <li class="list-group-item"><code>changed_by</code> - ID Admin</li>
+                            <li class="list-group-item"><code>reason</code> - Alasan perubahan</li>
+                            <li class="list-group-item"><code>timestamps</code> - Created/Updated at</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Instructions -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <h3 class="mb-0"><i class="bi bi-terminal me-2"></i>Cara Setup</h3>
+            </div>
+            <div class="card-body">
+                <h5>1. Jalankan Migration</h5>
+                <div class="bg-dark text-light p-3 rounded mb-3">
+                    <code>php artisan migrate</code>
+                </div>
+
+                <h5>2. Seed Data Awal (Opsional)</h5>
+                <div class="bg-dark text-light p-3 rounded mb-3">
+                    <code>php artisan db:seed --class=TicketCategorySeeder</code>
+                </div>
+
+                <h5>3. Akses Menu Setting</h5>
+                <ul>
+                    <li>Login sebagai admin</li>
+                    <li>Klik menu "Pengaturan Tiket" di sidebar</li>
+                    <li>Mulai kelola kategori dan harga tiket</li>
+                </ul>
+
+                <div class="alert alert-info mt-3">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Info:</strong> Seeder akan membuat 3 kategori default: Pelajar (Rp 2.000), Umum (Rp 3.000), dan Wisatawan Asing (Rp 10.000)
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot Placeholders -->
+        <div class="preview-card">
+            <div class="preview-header">
+                <h3 class="mb-0"><i class="bi bi-images me-2"></i>Preview Tampilan</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="screenshot-placeholder">
+                            <i class="bi bi-grid-3x3-gap-fill" style="font-size: 48px;"></i>
+                            <h5 class="mt-3">Halaman Daftar Kategori</h5>
+                            <p>Menampilkan semua kategori tiket dengan aksi edit, hapus, dan lihat history</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="screenshot-placeholder">
+                            <i class="bi bi-plus-square-fill" style="font-size: 48px;"></i>
+                            <h5 class="mt-3">Form Tambah Kategori</h5>
+                            <p>Form untuk menambahkan kategori tiket baru</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="screenshot-placeholder">
+                            <i class="bi bi-pencil-square" style="font-size: 48px;"></i>
+                            <h5 class="mt-3">Form Edit Kategori</h5>
+                            <p>Form untuk mengubah harga dan informasi kategori</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="screenshot-placeholder">
+                            <i class="bi bi-clock-history" style="font-size: 48px;"></i>
+                            <h5 class="mt-3">Riwayat Perubahan Harga</h5>
+                            <p>Timeline lengkap semua perubahan harga dengan detail</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-5">
+            <p class="text-white-50">
+                <i class="bi bi-calendar me-2"></i>Created: December 30, 2025
+                <span class="mx-3">|</span>
+                <i class="bi bi-code-slash me-2"></i>Laravel 11
+                <span class="mx-3">|</span>
+                <i class="bi bi-bootstrap me-2"></i>Bootstrap 5
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

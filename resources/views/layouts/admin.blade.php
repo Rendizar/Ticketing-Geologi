@@ -18,11 +18,18 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Modern Admin Theme CSS -->
+    <link href="{{ asset('css/admin-modern-theme.css') }}" rel="stylesheet">
+    
     <style>
         :root {
-            --mg-yellow: #FFD400;
-            --mg-black: #0b0b0b;
-            --mg-white: #ffffff;
+            --primary-color: #1F2933;
+            --secondary-color: #3B82F6;
+            --accent-color: #10B981;
+            --text-primary: #1F2933;
+            --text-secondary: #6B7280;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
             --sidebar-width: 280px;
         }
 
@@ -38,9 +45,9 @@
             left: 0;
             height: 100vh;
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--mg-black) 0%, #1a1a1a 100%);
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
-            border-right: 3px solid var(--mg-yellow);
+            background: var(--primary-color);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #E5E7EB;
             z-index: 1000;
             overflow-y: auto;
             transition: transform 0.3s ease-in-out;
@@ -52,56 +59,26 @@
 
         .sidebar-header {
             padding: 2rem 1.5rem;
-            background: linear-gradient(135deg, var(--mg-yellow) 0%, #FFB300 100%);
-            border-bottom: 4px solid var(--mg-black);
+            background: var(--primary-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px);
-            opacity: 0.5;
-            pointer-events: none;
         }
 
         .sidebar-brand {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 900;
-            font-family: 'Futura PT', 'Century Gothic', sans-serif;
-            color: #1a1a1a;
-            -webkit-text-stroke: 2px #FFD400;
-            text-stroke: 2px #FFD400;
-            paint-order: stroke fill;
-            text-shadow: 
-                0 1px 0 #FFD400,
-                0 2px 0 #FFD400,
-                0 3px 0 #FFD400,
-                0 4px 0 #FFD400,
-                0 5px 0 #FFD400,
-                0 6px 1px rgba(0,0,0,.1),
-                0 0 5px rgba(0,0,0,.1),
-                0 1px 3px rgba(0,0,0,.3),
-                0 3px 5px rgba(0,0,0,.2),
-                0 5px 10px rgba(0,0,0,.25),
-                0 10px 20px rgba(0,0,0,.2),
-                0 20px 30px rgba(0,0,0,.15);
-            letter-spacing: 0.15em;
-            line-height: 1.1;
-            transform: perspective(500px) rotateX(5deg);
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'Merriweather', serif;
+            color: #FFFFFF;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
             margin: 0;
         }
 
         .sidebar-subtitle {
-            font-size: 0.9rem;
-            color: var(--mg-black);
-            font-weight: 600;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
             margin-top: 0.5rem;
         }
 
@@ -116,40 +93,39 @@
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 1rem 1.25rem;
-            color: var(--mg-yellow);
+            padding: 0.875rem 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border: none;
         }
 
         .nav-link i {
-            width: 30px;
-            font-size: 1.25rem;
-            margin-right: 1rem;
+            width: 24px;
+            font-size: 1.125rem;
+            margin-right: 0.75rem;
         }
 
         .nav-link:hover {
-            background: var(--mg-yellow);
-            color: var(--mg-black);
-            transform: translateX(8px);
-            border-color: var(--mg-yellow);
-            box-shadow: 0 4px 15px rgba(255, 212, 0, 0.4);
+            background: #FACC15;
+            color: var(--primary-color);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(250, 204, 21, 0.4);
         }
 
         .nav-link.active {
-            background: var(--mg-yellow);
-            color: var(--mg-black);
-            border-color: var(--mg-yellow);
-            box-shadow: 0 4px 15px rgba(255, 212, 0, 0.5);
+            background: #FACC15;
+            color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(250, 204, 21, 0.4);
+            font-weight: 700;
         }
 
         .nav-divider {
-            height: 2px;
-            background: rgba(255, 212, 0, 0.2);
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
             margin: 1rem 1.5rem;
         }
 
@@ -170,20 +146,19 @@
             top: 20px;
             left: calc(var(--sidebar-width) + 10px);
             z-index: 1050;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--mg-yellow) 0%, #FFB300 100%);
-            border: none;
-            color: var(--mg-black);
-            font-size: 1.3rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 0.5rem;
+            background: var(--primary-color);
+            border: 1px solid #E5E7EB;
+            color: #FFFFFF;
+            font-size: 1.25rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 212, 0, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
         }
 
         .main-content.expanded .floating-sidebar-toggle {
@@ -191,10 +166,10 @@
         }
 
         .floating-sidebar-toggle:hover {
-            background: var(--mg-black);
-            color: var(--mg-yellow);
+            background: #FACC15;
+            color: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 212, 0, 0.6);
+            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
         }
 
         .floating-sidebar-toggle:active {
@@ -205,13 +180,13 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--mg-yellow);
+            background: #FACC15;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 900;
-            color: var(--mg-black);
-            border: 3px solid var(--mg-yellow);
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 2px solid #FACC15;
             transition: all 0.3s ease;
         }
 
@@ -258,13 +233,31 @@
             background: rgba(255, 212, 0, 0.1);
         }
 
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
         .sidebar::-webkit-scrollbar-thumb {
-            background: var(--mg-yellow);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 3px;
         }
 
         .sidebar::-webkit-scrollbar-thumb:hover {
-            background: #FFB300;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Badge */
+        .badge.bg-warning {
+            background: #FACC15 !important;
+            color: var(--primary-color);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 700;
         }
     </style>
     
@@ -287,6 +280,13 @@
             </div>
             
             <div class="nav-item">
+                <a href="{{ route('admin.stats') }}" class="nav-link {{ request()->routeIs('admin.stats') ? 'active' : '' }}">
+                    <i class="fas fa-chart-bar"></i>
+                    Statistik
+                </a>
+            </div>
+            
+            <div class="nav-item">
                 <a href="{{ route('admin.events.index') }}" class="nav-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
                     <i class="fas fa-calendar-alt"></i>
                     Event
@@ -294,16 +294,29 @@
             </div>
             
             <div class="nav-item">
-                <a href="{{ route('admin.stats') }}" class="nav-link {{ request()->routeIs('admin.stats') ? 'active' : '' }}">
-                    <i class="fas fa-chart-bar"></i>
-                    Statistik
+                <a href="{{ route('admin.special-tickets.index') }}" class="nav-link {{ request()->routeIs('admin.special-tickets.*') ? 'active' : '' }}">
+                    <i class="fas fa-ticket-alt"></i>
+                    Tiket Khusus
+                    @php
+                        $pendingSpecial = \App\Models\SpecialTicketRequest::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingSpecial > 0)
+                        <span class="badge bg-warning ms-2">{{ $pendingSpecial }}</span>
+                    @endif
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="{{ route('admin.bookings.index') }}" class="nav-link {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}">
+                    <i class="fas fa-receipt"></i>
+                    Riwayat Tiket & Pembayaran
                 </a>
             </div>
             
             <div class="nav-divider"></div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') && !request()->routeIs('admin.special-tickets.*') ? 'active' : '' }}">
                     <i class="fas fa-cog"></i>
                     Pengaturan
                 </a>

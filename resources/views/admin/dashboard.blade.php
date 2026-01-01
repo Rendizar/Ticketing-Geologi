@@ -12,12 +12,171 @@
             <p class="subtitle-text"><strong>Sistem Analitik & Forecasting Museum Geologi Bandung</strong></p>
         </div>
     </div>
-   
-    <!-- SECTION 1: DATA UMUM (General Statistics) -->
-    <!-- Statistics Cards -->
+
+    <!-- SECTION 0: KEY PERFORMANCE INDICATORS (KPI) - PALING ATAS -->
     <div class="row g-4 mb-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card">
+        <div class="col-12">
+            <div class="detail-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div style="flex: 1; text-align: center;">
+                        <i class="bi bi-bullseye me-2"></i>
+                        Key Performance Indicators (KPI)
+                    </div>
+                    <button type="button" class="btn btn-sm btn-kpi-settings" data-bs-toggle="modal" data-bs-target="#kpiSettingsModal">
+                        <i class="bi bi-gear-fill me-1"></i> Atur Target
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <!-- KPI Harian -->
+                        <div class="col-md-4">
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <i class="bi bi-calendar-day kpi-icon"></i>
+                                    <div>
+                                        <h5 class="kpi-title">Target Harian</h5>
+                                        <p class="kpi-subtitle">{{ now()->format('d F Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="kpi-metrics">
+                                    <div class="kpi-values">
+                                        <span class="kpi-actual">{{ number_format($kpi['actual']['daily']) }}</span>
+                                        <span class="kpi-separator">/</span>
+                                        <span class="kpi-target">{{ number_format($kpi['targets']['daily']) }}</span>
+                                    </div>
+                                    <p class="kpi-label">Pengunjung Hari Ini</p>
+                                </div>
+                                <div class="kpi-progress-wrapper">
+                                    <div class="kpi-progress">
+                                        <div class="kpi-progress-bar {{ $kpi['on_track']['daily'] ? 'bg-success' : ($kpi['achievement']['daily'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                             style="width: {{ min($kpi['achievement']['daily'], 100) }}%">
+                                        </div>
+                                    </div>
+                                    <div class="kpi-percentage {{ $kpi['on_track']['daily'] ? 'text-success' : ($kpi['achievement']['daily'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                        {{ number_format($kpi['achievement']['daily'], 1) }}%
+                                    </div>
+                                </div>
+                                <div class="kpi-status {{ $kpi['on_track']['daily'] ? 'status-success' : 'status-warning' }}">
+                                    <i class="bi bi-{{ $kpi['on_track']['daily'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                    {{ $kpi['on_track']['daily'] ? 'On Track' : 'Perlu Peningkatan' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI Bulanan -->
+                        <div class="col-md-4">
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <i class="bi bi-calendar-month kpi-icon"></i>
+                                    <div>
+                                        <h5 class="kpi-title">Target Bulanan</h5>
+                                        <p class="kpi-subtitle">{{ now()->format('F Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="kpi-metrics">
+                                    <div class="kpi-values">
+                                        <span class="kpi-actual">{{ number_format($kpi['actual']['monthly']) }}</span>
+                                        <span class="kpi-separator">/</span>
+                                        <span class="kpi-target">{{ number_format($kpi['targets']['monthly']) }}</span>
+                                    </div>
+                                    <p class="kpi-label">Pengunjung Bulan Ini</p>
+                                </div>
+                                <div class="kpi-progress-wrapper">
+                                    <div class="kpi-progress">
+                                        <div class="kpi-progress-bar {{ $kpi['on_track']['monthly'] ? 'bg-success' : ($kpi['achievement']['monthly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                             style="width: {{ min($kpi['achievement']['monthly'], 100) }}%">
+                                        </div>
+                                    </div>
+                                    <div class="kpi-percentage {{ $kpi['on_track']['monthly'] ? 'text-success' : ($kpi['achievement']['monthly'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                        {{ number_format($kpi['achievement']['monthly'], 1) }}%
+                                    </div>
+                                </div>
+                                <div class="kpi-projection">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    Proyeksi Akhir Bulan: <strong>{{ number_format($kpi['projected_monthly']) }}</strong>
+                                </div>
+                                <div class="kpi-status {{ $kpi['on_track']['monthly'] ? 'status-success' : 'status-warning' }}">
+                                    <i class="bi bi-{{ $kpi['on_track']['monthly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                    {{ $kpi['on_track']['monthly'] ? 'On Track' : 'Perlu Peningkatan' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI Tahunan -->
+                        <div class="col-md-4">
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <i class="bi bi-calendar-range kpi-icon"></i>
+                                    <div>
+                                        <h5 class="kpi-title">Target Tahunan</h5>
+                                        <p class="kpi-subtitle">{{ now()->format('Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="kpi-metrics">
+                                    <div class="kpi-values">
+                                        <span class="kpi-actual">{{ number_format($kpi['actual']['yearly']) }}</span>
+                                        <span class="kpi-separator">/</span>
+                                        <span class="kpi-target">{{ number_format($kpi['targets']['yearly']) }}</span>
+                                    </div>
+                                    <p class="kpi-label">Total Pengunjung Tahun Ini</p>
+                                </div>
+                                <div class="kpi-progress-wrapper">
+                                    <div class="kpi-progress">
+                                        <div class="kpi-progress-bar {{ $kpi['on_track']['yearly'] ? 'bg-success' : ($kpi['achievement']['yearly'] >= 50 ? 'bg-warning' : 'bg-danger') }}" 
+                                             style="width: {{ min($kpi['achievement']['yearly'], 100) }}%">
+                                        </div>
+                                    </div>
+                                    <div class="kpi-percentage {{ $kpi['on_track']['yearly'] ? 'text-success' : ($kpi['achievement']['yearly'] >= 50 ? 'text-warning' : 'text-danger') }}">
+                                        {{ number_format($kpi['achievement']['yearly'], 1) }}%
+                                    </div>
+                                </div>
+                                <div class="kpi-status {{ $kpi['on_track']['yearly'] ? 'status-success' : 'status-warning' }}">
+                                    <i class="bi bi-{{ $kpi['on_track']['yearly'] ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
+                                    {{ $kpi['on_track']['yearly'] ? 'On Track' : 'Perlu Peningkatan' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Info -->
+                    <div class="kpi-info mt-4">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="kpi-info-box">
+                                    <i class="bi bi-info-circle-fill text-primary"></i>
+                                    <div>
+                                        <strong>Kuota Maksimum:</strong> Museum dapat menampung maksimal 2.500 pengunjung per hari
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="kpi-info-box">
+                                    <i class="bi bi-graph-up text-success"></i>
+                                    <div>
+                                        <strong>On Track:</strong> Pencapaian ≥80% dari target dianggap sesuai rencana
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="kpi-info-box">
+                                    <i class="bi bi-lightning-fill text-warning"></i>
+                                    <div>
+                                        <strong>Proyeksi:</strong> Berdasarkan rata-rata kunjungan harian bulan berjalan
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- SECTION 1: KUNJUNGAN HARI INI & TOTAL PER KATEGORI -->
+    <div class="row g-4 mb-4">
+        <!-- Kunjungan Hari Ini - Setengah Kiri -->
+        <div class="col-lg-6">
+            <div class="stat-card" style="height: 100%;">
                 <div class="card-body text-center">
                     <div class="icon-wrapper mb-3">
                         <i class="bi bi-calendar-day"></i>
@@ -33,55 +192,35 @@
                 </div>
             </div>
         </div>
-       
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card stat-card-pelajar">
-                <div class="card-body text-center">
-                    <div class="icon-wrapper mb-3">
+
+        <!-- Total Per Kategori - Setengah Kanan (Interaktif dengan Dropdown) -->
+        <div class="col-lg-6">
+            <div class="stat-card" id="categoryCard" style="height: 100%;">
+                <div class="card-body text-center position-relative">
+                    <!-- Dropdown Menu Button -->
+                    <div class="dropdown position-absolute" style="top: 1rem; right: 1rem;">
+                        <button class="btn btn-sm btn-dropdown-modern" type="button" id="categoryDropdown" 
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="categoryDropdown">
+                            <li><a class="dropdown-item" href="#" data-category="pelajar"><i class="bi bi-mortarboard-fill me-2 text-success"></i>Total Pelajar</a></li>
+                            <li><a class="dropdown-item" href="#" data-category="umum"><i class="bi bi-people-fill me-2 text-primary"></i>Total Umum</a></li>
+                            <li><a class="dropdown-item" href="#" data-category="asing"><i class="bi bi-globe-americas me-2 text-danger"></i>Wisatawan Asing</a></li>
+                            <li><a class="dropdown-item" href="#" data-category="khusus"><i class="bi bi-star-fill me-2 text-warning"></i>Tiket Khusus</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Dynamic Content -->
+                    <div class="icon-wrapper mb-3" id="categoryIcon">
                         <i class="bi bi-mortarboard-fill"></i>
                     </div>
-                    <h2 class="stat-number">{{ number_format($total_per_kategori->pelajar ?? 0) }}</h2>
-                    <p class="stat-label">Total Pelajar</p>
-                    <div class="stat-date">Semua Jenjang</div>
-                    <div class="trend-indicator {{ $trend_per_kategori->pelajar >= 0 ? 'positive' : 'negative' }}">
-                        <i class="bi bi-arrow-{{ $trend_per_kategori->pelajar >= 0 ? 'up' : 'down' }}"></i> 
-                        <span>{{ $trend_per_kategori->pelajar >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->pelajar, 1) }}%</span>
-                    </div>
-                    <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs 30 hari lalu</div>
-                </div>
-            </div>
-        </div>
-       
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card stat-card-umum">
-                <div class="card-body text-center">
-                    <div class="icon-wrapper mb-3">
-                        <i class="bi bi-people-fill"></i>
-                    </div>
-                    <h2 class="stat-number">{{ number_format($total_per_kategori->umum ?? 0) }}</h2>
-                    <p class="stat-label">Total Umum</p>
-                    <div class="stat-date">Pengunjung Dewasa</div>
-                    <div class="trend-indicator {{ $trend_per_kategori->umum >= 0 ? 'positive' : 'negative' }}">
-                        <i class="bi bi-arrow-{{ $trend_per_kategori->umum >= 0 ? 'up' : 'down' }}"></i> 
-                        <span>{{ $trend_per_kategori->umum >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->umum, 1) }}%</span>
-                    </div>
-                    <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs 30 hari lalu</div>
-                </div>
-            </div>
-        </div>
-       
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card stat-card-asing">
-                <div class="card-body text-center">
-                    <div class="icon-wrapper mb-3">
-                        <i class="bi bi-globe-americas"></i>
-                    </div>
-                    <h2 class="stat-number">{{ number_format($total_per_kategori->asing ?? 0) }}</h2>
-                    <p class="stat-label">Wisatawan Asing</p>
-                    <div class="stat-date">Mancanegara</div>
-                    <div class="trend-indicator {{ $trend_per_kategori->asing >= 0 ? 'positive' : 'negative' }}">
-                        <i class="bi bi-arrow-{{ $trend_per_kategori->asing >= 0 ? 'up' : 'down' }}"></i> 
-                        <span>{{ $trend_per_kategori->asing >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->asing, 1) }}%</span>
+                    <h2 class="stat-number" id="categoryNumber">{{ number_format($total_per_kategori->pelajar ?? 0) }}</h2>
+                    <p class="stat-label" id="categoryLabel">Total Pelajar</p>
+                    <div class="stat-date" id="categoryDesc">Semua Jenjang</div>
+                    <div class="trend-indicator {{ $trend_per_kategori->pelajar >= 0 ? 'positive' : 'negative' }}" id="categoryTrend">
+                        <i class="bi bi-arrow-{{ $trend_per_kategori->pelajar >= 0 ? 'up' : 'down' }}" id="categoryTrendIcon"></i> 
+                        <span id="categoryTrendValue">{{ $trend_per_kategori->pelajar >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->pelajar, 1) }}%</span>
                     </div>
                     <div class="stat-desc text-muted" style="font-size: 11px; margin-top: 5px;">vs 30 hari lalu</div>
                 </div>
@@ -163,7 +302,7 @@
                     <div class="d-flex align-items-center gap-3">
                         <select id="salesMonth" class="form-select" style="min-width: 150px; max-width: 180px;"></select>
                         <select id="salesYear" class="form-select" style="min-width: 110px; max-width: 130px;"></select>
-                        <button type="button" class="btn btn-success" onclick="exportMonthlyXlsx()" style="border-radius: 0.5rem !important; white-space: nowrap;">
+                        <button type="button" class="btn btn-export-modern" onclick="exportMonthlyXlsx()">
                             <i class="bi bi-file-earmark-excel me-2"></i>Export XLSX
                         </button>
                     </div>
@@ -175,37 +314,30 @@
         </div>
     </div>
 
-    <!-- Export Data Tahunan -->
+    <!-- SECTION 3: PENJUALAN TIKET PER TAHUN -->
     <div class="row g-4 mb-4">
         <div class="col-12">
             <div class="detail-card">
-                <div class="card-header">
-                    <i class="bi bi-download me-2"></i>
-                    Export Data Tahunan
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-calendar-range me-2"></i>
+                        <span>Penjualan Tiket Per Tahun</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <select id="yearlyYear" class="form-select" style="min-width: 110px; max-width: 130px;"></select>
+                        <button type="button" class="btn btn-export-modern" onclick="exportYearlyXlsx()">
+                            <i class="bi bi-file-earmark-excel me-2"></i>Export XLSX
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row align-items-center g-3">
-                        <div class="col-auto">
-                            <label for="exportYear" class="form-label mb-0 fw-bold">Pilih Tahun:</label>
-                        </div>
-                        <div class="col-auto">
-                            <select id="exportYear" class="form-select" style="min-width: 140px;"></select>
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-success" onclick="exportYearlyXlsx()">
-                                <i class="bi bi-file-earmark-excel me-2"></i>Export Laporan Tahunan (XLSX)
-                            </button>
-                        </div>
-                        <div class="col">
-                            <small class="text-muted">Export data penjualan tiket per bulan dalam satu tahun</small>
-                        </div>
-                    </div>
+                    <canvas id="yearlySalesChart" height="90"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 3: DISTRIBUSI & ANALISIS TENGAH -->
+    <!-- SECTION 4: DISTRIBUSI & ANALISIS TENGAH -->
     <div class="row g-4 mb-4">
         <!-- Distribusi Kategori Pengunjung -->
         <div class="col-xl-8">
@@ -266,14 +398,69 @@
     </div>
 
 </div>
+
+<!-- Modal Pengaturan Target KPI -->
+<div class="modal fade" id="kpiSettingsModal" tabindex="-1" aria-labelledby="kpiSettingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #1F2933; color: white;">
+                <h5 class="modal-title" id="kpiSettingsModalLabel">
+                    <i class="bi bi-gear-fill me-2"></i>Pengaturan Target KPI
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form id="kpiSettingsForm">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="targetDaily" class="form-label fw-bold">
+                            <i class="bi bi-calendar-day text-primary me-1"></i> Target Harian
+                        </label>
+                        <input type="number" class="form-control" id="targetDaily" name="target_daily" 
+                               value="{{ $kpi['targets']['daily'] }}" min="1" max="2500" required>
+                        <small class="text-muted">Maksimal 2,500 pengunjung/hari (kapasitas museum)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="targetMonthly" class="form-label fw-bold">
+                            <i class="bi bi-calendar-month text-success me-1"></i> Target Bulanan
+                        </label>
+                        <input type="number" class="form-control" id="targetMonthly" name="target_monthly" 
+                               value="{{ $kpi['targets']['monthly'] }}" min="1" required>
+                        <small class="text-muted">Jumlah target pengunjung per bulan</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="targetYearly" class="form-label fw-bold">
+                            <i class="bi bi-calendar-range text-warning me-1"></i> Target Tahunan
+                        </label>
+                        <input type="number" class="form-control" id="targetYearly" name="target_yearly" 
+                               value="{{ $kpi['targets']['yearly'] }}" min="1" required>
+                        <small class="text-muted">Jumlah target pengunjung per tahun</small>
+                    </div>
+                    <div class="alert alert-info d-flex align-items-center" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <small>Target yang Anda tetapkan akan langsung diterapkan ke semua KPI dashboard.</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-simpan-target" onclick="saveKpiSettings()">
+                    <i class="bi bi-save me-1"></i> Simpan Target
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('styles')
 <style>
     :root {
-        --mg-yellow: #FFD400;
-        --mg-black: #0b0b0b;
-        --mg-white: #ffffff;
-        --mg-muted: #6c6c6c;
+        --primary-color: #1F2933;
+        --secondary-color: #3B82F6;
+        --success-color: #10B981;
+        --text-primary: #1F2933;
+        --text-secondary: #6B7280;
+        --bg-white: #ffffff;
     }
     /* Particles Background */
     #particles-js {
@@ -296,19 +483,19 @@
         font-size: 2.5rem;
         font-weight: 800;
         letter-spacing: 0.08em;
-        color: var(--mg-black);
+        color: var(--primary-color);
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         animation: fadeInDown 0.8s ease-out;
     }
     
     .dashboard-title-outline {
-        -webkit-text-stroke: 3px var(--mg-yellow);
-        text-stroke: 3px var(--mg-yellow);
+        -webkit-text-stroke: 3px var(--primary-color);
+        text-stroke: 3px var(--primary-color);
         paint-order: stroke fill;
     }
     
     .brand-text i {
-        color: var(--mg-black);
+        color: var(--primary-color);
     }
     .subtitle-text {
         color: var(--mg-muted);
@@ -317,8 +504,8 @@
     }
     /* Statistics Cards */
     .stat-card {
-        background: linear-gradient(135deg, var(--mg-yellow) 0%, #f7c600 100%) !important;
-        color: var(--mg-black) !important;
+        background: var(--primary-color) !important;
+        color: white !important;
         border: none !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         border-radius: 1.25rem;
@@ -335,24 +522,9 @@
         justify-content: center;
         min-height: 240px;
     }
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity 0.4s;
-    }
     .stat-card:hover {
         transform: translateY(-10px) scale(1.03);
-        box-shadow: 0 20px 50px rgba(255, 212, 0, 0.5);
-    }
-    .stat-card:hover::before {
-        opacity: 1;
-        animation: rotate 3s linear infinite;
+        box-shadow: 0 20px 50px rgba(31, 41, 51, 0.3);
     }
     .stat-card-pelajar {
         background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%) !important;
@@ -374,6 +546,105 @@
         font-weight: 700;
         display: inline-block;
     }
+    
+    /* Export Button Modern */
+    .btn-export-modern {
+        background: #10B981;
+        color: #FFFFFF;
+        border: 2px solid #10B981;
+        border-radius: 0.75rem;
+        padding: 0.5rem 1.25rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    }
+    .btn-export-modern:hover {
+        background: #FFFFFF;
+        color: #10B981;
+        border-color: #10B981;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    
+    /* Dropdown Button Modern */
+    .btn-dropdown-modern {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #1F2933;
+        color: #1F2933;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    .btn-dropdown-modern:hover {
+        background: #FACC15;
+        border-color: #FACC15;
+        color: #1F2933;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+    }
+    
+    /* KPI Settings Button */
+    .btn-kpi-settings {
+        background: #FFFFFF;
+        color: #1F2933;
+        border: 2px solid #1F2933;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-kpi-settings:hover {
+        background: #FACC15;
+        color: #1F2933;
+        border-color: #FACC15;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+    }
+    
+    /* KPI Modal Buttons */
+    .btn-batal {
+        background: #DC2626 !important;
+        color: #FFFFFF !important;
+        border: 2px solid #DC2626 !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-batal:hover {
+        background: #FACC15 !important;
+        color: #1F2933 !important;
+        border-color: #FACC15 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+    }
+    
+    .btn-simpan-target {
+        background: #10B981 !important;
+        color: #FFFFFF !important;
+        border: 2px solid #10B981 !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-simpan-target:hover {
+        background: #FACC15 !important;
+        color: #1F2933 !important;
+        border-color: #FACC15 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+    }
+    
+    /* Modal Close Button */
+    .modal-header .btn-close {
+        background-color: #FFFFFF;
+        opacity: 1;
+        transition: all 0.3s ease;
+        border-radius: 50%;
+        padding: 0.5rem;
+    }
+    .modal-header .btn-close:hover {
+        background-color: #FACC15;
+        box-shadow: 0 2px 8px rgba(250, 204, 21, 0.4);
+    }
+    
     .trend-indicator.positive {
         background: rgba(76, 175, 80, 0.2);
         color: #2e7d32;
@@ -392,12 +663,12 @@
         width: 80px;
         height: 80px;
         margin: 0 auto;
-        background: var(--mg-black);
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 6px 20px rgba(11, 11, 11, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
     }
     .stat-card:hover .icon-wrapper {
@@ -405,7 +676,7 @@
     }
     .icon-wrapper i {
         font-size: 2.2rem;
-        color: var(--mg-yellow);
+        color: white;
     }
     .stat-card-pelajar .icon-wrapper,
     .stat-card-umum .icon-wrapper,
@@ -439,7 +710,7 @@
     }
     /* Detail Cards */
     .detail-card {
-        background: var(--mg-white) !important;
+        background: var(--bg-white) !important;
         border: 2px solid rgba(0, 0, 0, 0.1);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         border-radius: 1.25rem;
@@ -452,8 +723,8 @@
         transform: translateY(-5px);
     }
     .detail-card .card-header {
-        background: linear-gradient(135deg, var(--mg-yellow) 0%, #ffc107 100%);
-        color: var(--mg-black);
+        background: var(--primary-color);
+        color: white;
         padding: 1.25rem;
         font-weight: 700;
         font-size: 1.1rem;
@@ -474,13 +745,13 @@
     }
     .forecast-metric i {
         font-size: 2rem;
-        color: var(--mg-yellow);
+        color: var(--primary-color);
         margin-bottom: 0.5rem;
     }
     .forecast-metric h5 {
         font-size: 1.75rem;
         font-weight: 900;
-        color: var(--mg-black);
+        color: var(--primary-color);
         margin: 0.5rem 0;
     }
     .forecast-metric small {
@@ -497,7 +768,7 @@
         background: rgba(0, 0, 0, 0.02);
         border-radius: 0.75rem;
         margin-bottom: 1rem;
-        border-left: 4px solid var(--mg-yellow);
+        border-left: 4px solid var(--primary-color);
         transition: all 0.3s ease;
     }
     .insight-item:hover {
@@ -527,7 +798,7 @@
     }
     .insight-content h6 {
         font-weight: 700;
-        color: var(--mg-black);
+        color: var(--primary-color);
         margin-bottom: 0.25rem;
         font-size: 0.95rem;
     }
@@ -537,18 +808,177 @@
         margin: 0;
         line-height: 1.4;
     }
+    
+    /* KPI Cards Styling */
+    .kpi-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    .kpi-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        border-color: #3B82F6;
+    }
+    .kpi-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    .kpi-icon {
+        font-size: 2rem;
+        color: #3B82F6;
+        background: rgba(255, 212, 0, 0.1);
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+    }
+    .kpi-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1F2933;
+        margin: 0;
+    }
+    .kpi-subtitle {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin: 0;
+    }
+    .kpi-metrics {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .kpi-values {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+    }
+    .kpi-actual {
+        color: #1F2933;
+    }
+    .kpi-separator {
+        color: #dee2e6;
+        margin: 0 0.5rem;
+    }
+    .kpi-target {
+        color: #6c757d;
+        font-size: 1.5rem;
+    }
+    .kpi-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin: 0;
+        font-weight: 500;
+    }
+    .kpi-progress-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .kpi-progress {
+        flex: 1;
+        height: 12px;
+        background: #e9ecef;
+        border-radius: 1rem;
+        overflow: hidden;
+        position: relative;
+    }
+    .kpi-progress-bar {
+        height: 100%;
+        transition: width 0.6s ease;
+        border-radius: 1rem;
+        background: linear-gradient(90deg, #4CAF50 0%, #66BB6A 100%);
+    }
+    .kpi-progress-bar.bg-warning {
+        background: linear-gradient(90deg, #FF9800 0%, #FFB74D 100%) !important;
+    }
+    .kpi-progress-bar.bg-danger {
+        background: linear-gradient(90deg, #F44336 0%, #EF5350 100%) !important;
+    }
+    .kpi-percentage {
+        font-size: 1rem;
+        font-weight: 700;
+        min-width: 55px;
+        text-align: right;
+    }
+    .kpi-projection {
+        background: rgba(33, 150, 243, 0.1);
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        color: #1976D2;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    .kpi-projection i {
+        margin-right: 0.5rem;
+    }
+    .kpi-status {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    .kpi-status.status-success {
+        background: rgba(76, 175, 80, 0.15);
+        color: #2e7d32;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+    .kpi-status.status-warning {
+        background: rgba(255, 152, 0, 0.15);
+        color: #e65100;
+        border: 1px solid rgba(255, 152, 0, 0.3);
+    }
+    .kpi-status i {
+        margin-right: 0.5rem;
+    }
+    .kpi-info {
+        border-top: 2px solid #e9ecef;
+        padding-top: 1.5rem;
+    }
+    .kpi-info-box {
+        display: flex;
+        align-items: start;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: rgba(255, 212, 0, 0.05);
+        border-radius: 0.75rem;
+        border-left: 3px solid #3B82F6;
+    }
+    .kpi-info-box i {
+        font-size: 1.5rem;
+        margin-top: 0.25rem;
+    }
+    .kpi-info-box strong {
+        color: #1F2933;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .kpi-info-box div {
+        font-size: 0.875rem;
+        color: #6c757d;
+        line-height: 1.5;
+    }
+    
     /* Button Group */
     .btn-outline-warning {
-        color: var(--mg-yellow);
-        border-color: var(--mg-yellow);
+        color: var(--primary-color);
+        border-color: var(--primary-color);
         font-weight: 600;
         font-size: 0.85rem;
     }
     .btn-outline-warning:hover,
     .btn-outline-warning.active {
-        background: var(--mg-yellow);
-        color: var(--mg-black);
-        border-color: var(--mg-yellow);
+        background: var(--primary-color);
+        color: var(--primary-color);
+        border-color: var(--primary-color);
     }
     
     /* Export Button Styling */
@@ -574,12 +1004,12 @@
         padding: 1.5rem;
         background: linear-gradient(135deg, rgba(255, 212, 0, 0.1) 0%, rgba(255, 212, 0, 0.05) 100%);
         border-radius: 1rem;
-        border-left: 6px solid var(--mg-yellow);
+        border-left: 6px solid var(--primary-color);
     }
     .stat-icon {
         width: 70px;
         height: 70px;
-        background: var(--mg-black);
+        background: var(--primary-color);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -588,12 +1018,12 @@
     }
     .stat-icon i {
         font-size: 2rem;
-        color: var(--mg-yellow);
+        color: #FFFFFF;
     }
     .stat-value {
         font-size: 2.5rem;
         font-weight: 900;
-        color: var(--mg-black);
+        color: var(--primary-color);
         margin-bottom: 0;
         line-height: 1;
     }
@@ -651,14 +1081,6 @@
             opacity: 0.6;
         }
     }
-    @keyframes rotate {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
     /* Responsive */
     @media (max-width: 768px) {
         .brand-text {
@@ -687,6 +1109,7 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <script>
 // Initialize Particles
 particlesJS('particles-js', {
@@ -728,13 +1151,13 @@ particlesJS('particles-js', {
         line_linked: {
             enable: true,
             distance: 150,
-            color: '#6c6c6c',
+            color: '#808080',
             opacity: 0.4,
             width: 1
         },
         move: {
             enable: true,
-            speed: 3,
+            speed: 1,
             direction: 'none',
             out_mode: 'out'
         }
@@ -770,6 +1193,7 @@ particlesJS('particles-js', {
 const pelajarTotal = {{ $total_per_kategori->pelajar ?? 0 }};
 const umumTotal = {{ $total_per_kategori->umum ?? 0 }};
 const asingTotal = {{ $total_per_kategori->asing ?? 0 }};
+const khususTotal = {{ $total_per_kategori->khusus ?? 0 }};
 const tkTotal = {{ $sub_pelajar->tk ?? 0 }};
 const sdTotal = {{ $sub_pelajar->sd ?? 0 }};
 const smpTotal = {{ $sub_pelajar->smp ?? 0 }};
@@ -1065,6 +1489,104 @@ function detectSeasonality(data, period = 7) {
    
     return patterns;
 }
+
+/**
+ * Initialize Category Switcher for Interactive Card
+ */
+function initCategorySwitcher() {
+    const categoryData = {
+        pelajar: {
+            number: '{{ number_format($total_per_kategori->pelajar ?? 0) }}',
+            label: 'Total Pelajar',
+            desc: 'Semua Jenjang',
+            icon: 'bi-mortarboard-fill',
+            trend: {{ $trend_per_kategori->pelajar }},
+            trendFormatted: '{{ $trend_per_kategori->pelajar >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->pelajar, 1) }}%',
+            gradient: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
+            iconBg: 'var(--primary-color)'
+        },
+        umum: {
+            number: '{{ number_format($total_per_kategori->umum ?? 0) }}',
+            label: 'Total Umum',
+            desc: 'Pengunjung Dewasa',
+            icon: 'bi-people-fill',
+            trend: {{ $trend_per_kategori->umum }},
+            trendFormatted: '{{ $trend_per_kategori->umum >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->umum, 1) }}%',
+            gradient: 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)',
+            iconBg: 'var(--primary-color)'
+        },
+        asing: {
+            number: '{{ number_format($total_per_kategori->asing ?? 0) }}',
+            label: 'Wisatawan Asing',
+            desc: 'Mancanegara',
+            icon: 'bi-globe-americas',
+            trend: {{ $trend_per_kategori->asing }},
+            trendFormatted: '{{ $trend_per_kategori->asing >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->asing, 1) }}%',
+            gradient: 'linear-gradient(135deg, #FF5722 0%, #E64A19 100%)',
+            iconBg: 'var(--primary-color)'
+        },
+        khusus: {
+            number: '{{ number_format($total_per_kategori->khusus ?? 0) }}',
+            label: 'Tiket Khusus',
+            desc: 'Kategori Istimewa',
+            icon: 'bi-star-fill',
+            trend: {{ $trend_per_kategori->khusus }},
+            trendFormatted: '{{ $trend_per_kategori->khusus >= 0 ? '+' : '' }}{{ number_format($trend_per_kategori->khusus, 1) }}%',
+            gradient: 'linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%)',
+            iconBg: 'rgba(255, 255, 255, 0.2)'
+        }
+    };
+
+    const dropdownItems = document.querySelectorAll('#categoryDropdown + .dropdown-menu .dropdown-item');
+    
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const category = this.getAttribute('data-category');
+            const data = categoryData[category];
+            
+            if (!data) return;
+            
+            // Update card background
+            const card = document.getElementById('categoryCard');
+            card.style.background = data.gradient;
+            
+            // Update icon
+            const iconWrapper = document.getElementById('categoryIcon');
+            const icon = iconWrapper.querySelector('i');
+            icon.className = `bi ${data.icon}`;
+            iconWrapper.style.background = data.iconBg;
+            
+            // Update number
+            document.getElementById('categoryNumber').textContent = data.number;
+            
+            // Update label & description
+            document.getElementById('categoryLabel').textContent = data.label;
+            document.getElementById('categoryDesc').textContent = data.desc;
+            
+            // Update trend
+            const trendDiv = document.getElementById('categoryTrend');
+            const trendIcon = document.getElementById('categoryTrendIcon');
+            const trendValue = document.getElementById('categoryTrendValue');
+            
+            trendDiv.className = 'trend-indicator ' + (data.trend >= 0 ? 'positive' : 'negative');
+            trendIcon.className = 'bi bi-arrow-' + (data.trend >= 0 ? 'up' : 'down');
+            trendValue.textContent = data.trendFormatted;
+            
+            // Update text colors for khusus category
+            if (category === 'khusus') {
+                document.getElementById('categoryNumber').style.color = '#fff';
+                document.getElementById('categoryLabel').style.color = 'rgba(255, 255, 255, 0.9)';
+                document.getElementById('categoryDesc').style.color = 'rgba(255, 255, 255, 0.8)';
+            } else {
+                document.getElementById('categoryNumber').style.color = '';
+                document.getElementById('categoryLabel').style.color = '';
+                document.getElementById('categoryDesc').style.color = '';
+            }
+        });
+    });
+}
+
 /**
  * Detect Anomalies
  */
@@ -1206,7 +1728,7 @@ function createForecastChart(days = 7) {
                     padding: 15,
                     titleFont: { size: 14, weight: 'bold' },
                     bodyFont: { size: 13 },
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -1288,7 +1810,7 @@ function createHeatmapChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -1368,7 +1890,7 @@ function createMovingAverageChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2
                 }
             },
@@ -1393,26 +1915,28 @@ function createMovingAverageChart() {
 function createCategoryChart() {
     const categoryCtx = document.getElementById('categoryChart').getContext('2d');
     // Simpan nilai asli untuk tooltip. Gunakan nilai kecil (display) ketika data = 0 supaya bar tetap tergambar.
-    const realCategoryData = [pelajarTotal, umumTotal, asingTotal];
+    const realCategoryData = [pelajarTotal, umumTotal, asingTotal, khususTotal];
     const minDisplay = 0.5;
     const displayData = realCategoryData.map(v => (v > 0 ? v : minDisplay));
 
     new Chart(categoryCtx, {
         type: 'bar',
         data: {
-            labels: ['Pelajar', 'Umum', 'Asing'],
+            labels: ['Pelajar', 'Umum', 'Asing', 'Tiket Khusus'],
             datasets: [{
                 label: 'Jumlah Pengunjung',
                 data: displayData,
                 backgroundColor: [
                     'rgba(76, 175, 80, 0.8)',
                     'rgba(33, 150, 243, 0.8)',
-                    'rgba(255, 87, 34, 0.8)'
+                    'rgba(255, 87, 34, 0.8)',
+                    'rgba(156, 39, 176, 0.8)'
                 ],
                 borderColor: [
                     'rgb(76, 175, 80)',
                     'rgb(33, 150, 243)',
-                    'rgb(255, 87, 34)'
+                    'rgb(255, 87, 34)',
+                    'rgb(156, 39, 176)'
                 ],
                 borderWidth: 3,
                 borderRadius: 10,
@@ -1428,7 +1952,7 @@ function createCategoryChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -1463,13 +1987,14 @@ function createPieChart() {
     new Chart(pieCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Pelajar', 'Umum', 'Asing'],
+            labels: ['Pelajar', 'Umum', 'Asing', 'Tiket Khusus'],
             datasets: [{
-                data: [pelajarTotal, umumTotal, asingTotal],
+                data: [pelajarTotal, umumTotal, asingTotal, khususTotal],
                 backgroundColor: [
                     'rgba(76, 175, 80, 0.8)',
                     'rgba(33, 150, 243, 0.8)',
-                    'rgba(255, 87, 34, 0.8)'
+                    'rgba(255, 87, 34, 0.8)',
+                    'rgba(156, 39, 176, 0.8)'
                 ],
                 borderColor: '#ffffff',
                 borderWidth: 4,
@@ -1495,7 +2020,7 @@ function createPieChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -1545,7 +2070,7 @@ function createProvinceChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -1622,7 +2147,7 @@ function createStudentChart() {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     callbacks: {
                         label: function(context) {
@@ -1719,7 +2244,18 @@ async function loadMonthlySales() {
     isLoadingMonthlySales = true;
 
     try {
-        const resp = await fetch(`${monthlySalesUrl}?month=${month}&year=${year}`);
+        // Add cache buster to prevent browser caching
+        const cacheBuster = new Date().getTime();
+        const url = `${monthlySalesUrl}?month=${month}&year=${year}&_=${cacheBuster}`;
+        console.log('Fetching from:', url);
+        
+        const resp = await fetch(url, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
         const data = await resp.json();
         renderMonthlySalesChart(data);
     } catch (e) {
@@ -1734,7 +2270,16 @@ function renderMonthlySalesChart(payload) {
     if (!ctx) return;
 
     const labels = payload.labels || [];
-    const cat = payload.by_category || { pelajar: [], umum: [], asing: [] };
+    const cat = payload.by_category || { pelajar: [], umum: [], asing: [], khusus: [] };
+    
+    // Debug: Log data untuk memastikan datanya benar
+    console.log('=== MONTHLY SALES DEBUG ===');
+    console.log('Full Payload:', payload);
+    console.log('Labels:', labels);
+    console.log('Totals:', payload.totals);
+    console.log('Categories:', cat);
+    console.log('Debug Info:', payload.debug);
+    console.log('Non-zero days:', payload.totals?.map((v, i) => v > 0 ? `Day ${i+1}: ${v}` : null).filter(x => x));
 
     if (monthlySalesChart) monthlySalesChart.destroy();
 
@@ -1769,6 +2314,15 @@ function renderMonthlySalesChart(payload) {
                     borderWidth: 2,
                     borderRadius: 6,
                     stack: 'total'
+                },
+                {
+                    label: 'Tiket Khusus',
+                    data: cat.khusus || [],
+                    backgroundColor: 'rgba(156, 39, 176, 0.8)',
+                    borderColor: 'rgb(156, 39, 176)',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    stack: 'total'
                 }
             ]
         },
@@ -1783,7 +2337,7 @@ function renderMonthlySalesChart(payload) {
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0,0,0,0.85)',
-                    borderColor: '#FFD400',
+                    borderColor: '#3B82F6',
                     borderWidth: 2,
                     padding: 12,
                     callbacks: {
@@ -1796,16 +2350,221 @@ function renderMonthlySalesChart(payload) {
                 }
             },
             scales: {
-                x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } },
+                x: { 
+                    stacked: true, 
+                    grid: { display: false }, 
+                    ticks: { 
+                        font: { size: 10, weight: 'bold' } 
+                    },
+                    title: { 
+                        display: true, 
+                        text: 'Tanggal', 
+                        font: { size: 12, weight: 'bold' } 
+                    }
+                },
                 y: {
                     stacked: true,
                     beginAtZero: true,
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    grace: '5%',
                     grid: { color: 'rgba(0,0,0,0.05)' },
                     ticks: {
                         font: { size: 10, weight: 'bold' },
-                        callback: (v) => v.toLocaleString('id-ID')
+                        stepSize: 10,
+                        precision: 0,
+                        callback: (v) => {
+                            // Pastikan hanya menampilkan bilangan bulat
+                            if (Number.isInteger(v)) {
+                                return v.toLocaleString('id-ID');
+                            }
+                            return '';
+                        }
                     },
-                    title: { display: true, text: 'Jumlah Tiket', font: { size: 12, weight: 'bold' } }
+                    title: { display: true, text: 'Jumlah Pengunjung', font: { size: 12, weight: 'bold' } }
+                }
+            }
+        }
+    });
+}
+// ============================================================================
+// YEARLY SALES (PER TAHUN)
+// ============================================================================
+function initYearlySalesControls() {
+    const yearSelect = document.getElementById('yearlyYear');
+
+    if (!yearSelect) return;
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    // Populate years (currentYear-2 .. currentYear+1)
+    yearSelect.innerHTML = '';
+    for (let y = currentYear - 2; y <= currentYear + 1; y++) {
+        const opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = String(y);
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+    }
+
+    yearSelect.addEventListener('change', loadYearlySales);
+}
+
+let isLoadingYearlySales = false;
+let yearlySalesChart;
+const yearlySalesUrl = '{{ route('admin.sales.yearly') }}';
+
+async function loadYearlySales() {
+    const year = document.getElementById('yearlyYear')?.value;
+    if (!year) return;
+    
+    // Prevent multiple simultaneous calls
+    if (isLoadingYearlySales) {
+        console.log('Already loading yearly sales, skipping...');
+        return;
+    }
+
+    isLoadingYearlySales = true;
+
+    try {
+        // Add cache buster to prevent browser caching
+        const cacheBuster = new Date().getTime();
+        const url = `${yearlySalesUrl}?year=${year}&_=${cacheBuster}`;
+        console.log('Fetching yearly data from:', url);
+        
+        const resp = await fetch(url, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
+        const data = await resp.json();
+        renderYearlySalesChart(data);
+    } catch (e) {
+        console.error('Gagal memuat data penjualan tahunan', e);
+    } finally {
+        isLoadingYearlySales = false;
+    }
+}
+
+function renderYearlySalesChart(payload) {
+    const ctx = document.getElementById('yearlySalesChart')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = payload.labels || [];
+    const cat = payload.by_category || { pelajar: [], umum: [], asing: [], khusus: [] };
+    
+    // Debug: Log data untuk memastikan datanya benar
+    console.log('=== YEARLY SALES DEBUG ===');
+    console.log('Full Payload:', payload);
+    console.log('Labels:', labels);
+    console.log('Totals:', payload.totals);
+    console.log('Categories:', cat);
+    console.log('Debug Info:', payload.debug);
+
+    if (yearlySalesChart) yearlySalesChart.destroy();
+
+    yearlySalesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Pelajar',
+                    data: cat.pelajar || [],
+                    backgroundColor: 'rgba(76, 175, 80, 0.8)',
+                    borderColor: 'rgb(76, 175, 80)',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    stack: 'total'
+                },
+                {
+                    label: 'Umum',
+                    data: cat.umum || [],
+                    backgroundColor: 'rgba(33, 150, 243, 0.8)',
+                    borderColor: 'rgb(33, 150, 243)',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    stack: 'total'
+                },
+                {
+                    label: 'Asing',
+                    data: cat.asing || [],
+                    backgroundColor: 'rgba(255, 87, 34, 0.8)',
+                    borderColor: 'rgb(255, 87, 34)',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    stack: 'total'
+                },
+                {
+                    label: 'Tiket Khusus',
+                    data: cat.khusus || [],
+                    backgroundColor: 'rgba(156, 39, 176, 0.8)',
+                    borderColor: 'rgb(156, 39, 176)',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    stack: 'total'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { font: { size: 11, weight: 'bold' } }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.85)',
+                    borderColor: '#3B82F6',
+                    borderWidth: 2,
+                    padding: 12,
+                    callbacks: {
+                        footer: (items) => {
+                            const idx = items?.[0]?.dataIndex ?? 0;
+                            const total = (payload.totals?.[idx] ?? 0).toLocaleString('id-ID');
+                            return `Total bulan itu: ${total}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    stacked: true, 
+                    grid: { display: false }, 
+                    ticks: { 
+                        font: { size: 10, weight: 'bold' } 
+                    },
+                    title: { 
+                        display: true, 
+                        text: 'Bulan', 
+                        font: { size: 12, weight: 'bold' } 
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    grace: '5%',
+                    grid: { color: 'rgba(0,0,0,0.05)' },
+                    ticks: {
+                        font: { size: 10, weight: 'bold' },
+                        stepSize: 10,
+                        precision: 0,
+                        callback: (v) => {
+                            // Pastikan hanya menampilkan bilangan bulat
+                            if (Number.isInteger(v)) {
+                                return v.toLocaleString('id-ID');
+                            }
+                            return '';
+                        }
+                    },
+                    title: { display: true, text: 'Jumlah Pengunjung', font: { size: 12, weight: 'bold' } }
                 }
             }
         }
@@ -1966,7 +2725,7 @@ function exportMonthlyXlsx() {
 }
 
 function exportYearlyXlsx() {
-    const year = document.getElementById('exportYear')?.value;
+    const year = document.getElementById('yearlyYear')?.value;
     
     if (!year) {
         alert('Pilih tahun terlebih dahulu');
@@ -1983,20 +2742,63 @@ function exportForecastXlsx() {
     window.location.href = url;
 }
 
-function initYearlyExportSelector() {
-    const yearSelect = document.getElementById('exportYear');
-    if (!yearSelect) return;
+// ============================================================================
+// KPI SETTINGS
+// ============================================================================
+async function saveKpiSettings() {
+    const form = document.getElementById('kpiSettingsForm');
+    const formData = new FormData(form);
     
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    
-    yearSelect.innerHTML = '';
-    for (let y = currentYear - 2; y <= currentYear + 1; y++) {
-        const opt = document.createElement('option');
-        opt.value = String(y);
-        opt.textContent = String(y);
-        if (y === currentYear) opt.selected = true;
-        yearSelect.appendChild(opt);
+    const data = {
+        target_daily: parseInt(formData.get('target_daily')),
+        target_monthly: parseInt(formData.get('target_monthly')),
+        target_yearly: parseInt(formData.get('target_yearly')),
+        _token: formData.get('_token')
+    };
+
+    // Validasi
+    if (data.target_daily < 1 || data.target_daily > 2500) {
+        alert('Target harian harus antara 1 - 2,500 pengunjung');
+        return;
+    }
+    if (data.target_monthly < 1) {
+        alert('Target bulanan harus minimal 1');
+        return;
+    }
+    if (data.target_yearly < 1) {
+        alert('Target tahunan harus minimal 1');
+        return;
+    }
+
+    try {
+        const response = await fetch('{{ route("admin.kpi.update") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': data._token,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('kpiSettingsModal'));
+            modal.hide();
+
+            // Show success message
+            alert('Target KPI berhasil diperbarui! Halaman akan di-refresh.');
+            
+            // Reload page to show new targets
+            window.location.reload();
+        } else {
+            alert('Gagal memperbarui target KPI: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error saving KPI settings:', error);
+        alert('Terjadi kesalahan saat menyimpan target KPI');
     }
 }
 
@@ -2048,6 +2850,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Initializing Advanced Analytics Dashboard...');
     
+    // Initialize Category Switcher
+    initCategorySwitcher();
+    
     // Create all charts
     createCategoryChart();
     createPieChart();
@@ -2055,7 +2860,8 @@ document.addEventListener('DOMContentLoaded', function() {
     createStudentChart();
     initMonthlySalesControls();
     loadMonthlySales();
-    initYearlyExportSelector();
+    initYearlySalesControls();
+    loadYearlySales();
     
     // Update metrics
     // (removed forecasting metrics)
@@ -2076,6 +2882,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // EXPORT GLOBAL FUNCTIONS (if needed)
 // ============================================================================
 window.loadMonthlySales = loadMonthlySales;
+window.loadYearlySales = loadYearlySales;
 window.exportMonthlyXlsx = exportMonthlyXlsx;
 window.exportYearlyXlsx = exportYearlyXlsx;
 </script>

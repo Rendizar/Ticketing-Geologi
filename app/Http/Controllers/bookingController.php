@@ -11,66 +11,145 @@ use Midtrans\Notification;
 use Barryvdh\DomPDF\Facades\Pdf;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\TicketCategory;
 use App\Mail\TicketMail;
+use App\Helpers\HolidayHelper;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
     // INI YANG HARUS ADA — METHOD CREATE!
     public function create()
     {
-        return view('visitor.create'); // atau 'tickets.create' kalau view-nya di folder tickets
+        // Ambil HANYA kategori tiket yang AKTIF dari database
+        $categories = TicketCategory::where('is_active', 1)
+            ->orderBy('sort_order')
+            ->get();
+        
+        // Get disabled dates untuk date picker (Jumat & libur nasional)
+        $disabledDates = HolidayHelper::getDisabledDates();
+        
+        return view('visitor.create', compact('categories', 'disabledDates'));
     }
     public function store(Request $request)
     {
-        // 1. VALIDASI (sama seperti sebelumnya)
+        // 1. VALIDASI
         $validated = $request->validate([
             'nama'              => 'required|string|max:255',
             'email'             => 'required|email',
             'negara'            => 'required|string',
-            'nomor_telepon'     => 'required|string|min:10|max:15',
             'jenis_pemesanan'   => 'required|in:individu,rombongan',
-            'nama_rombongan'    => 'required_if:jenis_pemesanan,rombongan|nullable|string',
+            'nama_rombongan'    => 'nullable|string',
             'tanggal_kunjungan' => 'required|date|after_or_equal:today',
-            'kota_kabupaten'    => 'nullable|string',
+            'slot_waktu'        => 'nullable|string',
             'provinsi'          => 'nullable|string',
+            'nomor_telepon'     => 'nullable|string',
         ]);
 
-        // 2. HITUNG JUMLAH & HARGA (sama persis)
+        // 1.1 VALIDASI TANGGAL KUNJUNGAN - Tidak boleh Jumat atau libur nasional
+        $tanggalKunjungan = Carbon::parse($request->tanggal_kunjungan);
+        
+        if (!HolidayHelper::canBookOnDate($tanggalKunjungan)) {
+            $message = HolidayHelper::getBookingRestrictionMessage($tanggalKunjungan);
+            return back()
+                ->withInput()
+                ->with('error', $message);
+        }
+
+        // 1.2 CEK KAPASITAS HARIAN (MAKSIMAL 2500 PENGUNJUNG PER HARI)
+        // Ini dicek dulu sebelum hitung detail, untuk early warning
+        $dailyQuota = \App\Models\DailyVisitorQuota::getOrCreate($request->tanggal_kunjungan, 2500);
+
+        // 2. HITUNG JUMLAH PENGUNJUNG
         $jumlah_pelajar = $jumlah_umum = $jumlah_asing = 0;
         $sub_tk = $sub_sd = $sub_smp = $sub_sma = $sub_kuliah = 0;
 
         if ($request->jenis_pemesanan === 'individu') {
-            if ($request->kategori_individu === 'asing') {
-                $jumlah_asing = 1;
-            } elseif ($request->kategori_individu === 'umum') {
-                if ($request->is_pelajar === 'pelajar' && $request->jenjang_pelajar) {
-                    $jumlah_pelajar = 1;
-                    ${$request->jenjang_pelajar} = 1;
-                } else {
-                    $jumlah_umum = 1;
-                }
-            }
-        } else {
-            $jumlah_pelajar = (int)($request->sub_tk ?? 0) + (int)($request->sub_sd ?? 0) +
-                              (int)($request->sub_smp ?? 0) + (int)($request->sub_sma ?? 0) +
-                              (int)($request->sub_kuliah ?? 0);
-            $jumlah_umum  = (int)($request->jumlah_umum ?? 0);
-            $jumlah_asing = (int)($request->jumlah_asing ?? 0);
-
+            // NEW: Counter-based input untuk individu (1-19 orang)
             $sub_tk = (int)($request->sub_tk ?? 0);
             $sub_sd = (int)($request->sub_sd ?? 0);
             $sub_smp = (int)($request->sub_smp ?? 0);
             $sub_sma = (int)($request->sub_sma ?? 0);
             $sub_kuliah = (int)($request->sub_kuliah ?? 0);
+            
+            $jumlah_pelajar = $sub_tk + $sub_sd + $sub_smp + $sub_sma + $sub_kuliah;
+            $jumlah_umum  = (int)($request->jumlah_umum ?? 0);
+            $jumlah_asing = (int)($request->jumlah_asing ?? 0);
+            
+            // Validasi maksimal 19 untuk individu
+            $totalIndividu = $jumlah_pelajar + $jumlah_umum + $jumlah_asing;
+            if ($totalIndividu > 19) {
+                return back()->withInput()->with('error', 'Individu maksimal 19 orang. Untuk ≥20 orang, gunakan jenis pemesanan Rombongan.');
+            }
+        } else {
+            // Counter-based input untuk rombongan (≥20 orang)
+            // Input rombongan menggunakan prefix 'rombongan_' untuk menghindari konflik
+            $sub_tk = (int)($request->rombongan_sub_tk ?? 0);
+            $sub_sd = (int)($request->rombongan_sub_sd ?? 0);
+            $sub_smp = (int)($request->rombongan_sub_smp ?? 0);
+            $sub_sma = (int)($request->rombongan_sub_sma ?? 0);
+            $sub_kuliah = (int)($request->rombongan_sub_kuliah ?? 0);
+            
+            $jumlah_pelajar = $sub_tk + $sub_sd + $sub_smp + $sub_sma + $sub_kuliah;
+            $jumlah_umum  = (int)($request->rombongan_jumlah_umum ?? 0);
+            $jumlah_asing = (int)($request->rombongan_jumlah_asing ?? 0);
         }
 
-        $total_harga = ($jumlah_pelajar * 3000) + ($jumlah_umum * 5000) + ($jumlah_asing * 25000);
+        // 2.1 VALIDASI: Minimal 1 pengunjung
+        $totalPengunjung = $jumlah_pelajar + $jumlah_umum + $jumlah_asing;
+        if ($totalPengunjung <= 0) {
+            return back()->withInput()->with('error', 'Gagal! Anda harus mengisi jumlah pengunjung minimal 1 orang.');
+        }
+
+        // 2.15 VALIDASI KAPASITAS HARIAN MAKSIMAL 2500 PENGUNJUNG
+        if (!$dailyQuota->hasAvailableCapacity($totalPengunjung)) {
+            $available = $dailyQuota->getAvailableSlots();
+            return back()->withInput()->with('error', "Kapasitas kunjungan pada tanggal " . $tanggalKunjungan->format('d F Y') . " sudah penuh. Sisa kuota: {$available} orang. Silakan pilih tanggal lain.");
+        }
+
+        // 2.2 TENTUKAN JENIS PEMESANAN BERDASARKAN JUMLAH
+        // Aturan Baru: Individu = 1-19 orang, Rombongan = ≥20 orang
+        $jenisPemesananAktual = $totalPengunjung >= 20 ? 'rombongan' : 'individu';
+        $namaRombongan = $totalPengunjung >= 20 ? ($request->nama_rombongan ?? null) : null;
+
+        // 2.3 VALIDASI SLOT WAKTU UNTUK ROMBONGAN
+        $slotWaktu = null;
+        if ($jenisPemesananAktual === 'rombongan') {
+            if (!$request->slot_waktu) {
+                return back()->withInput()->with('error', 'Rombongan (≥20 orang) wajib memilih slot waktu kunjungan!');
+            }
+            $slotWaktu = $request->slot_waktu;
+            
+            // Check kuota slot waktu
+            $quotaRecord = \App\Models\DailyGroupQuota::getOrCreate(
+                $request->tanggal_kunjungan,
+                $slotWaktu,
+                500 // Default quota per slot
+            );
+            
+            if (!$quotaRecord->isAvailable($totalPengunjung)) {
+                $available = $quotaRecord->getAvailableSlots();
+                return back()->withInput()->with('error', "Slot waktu {$slotWaktu} hanya tersisa kuota untuk {$available} orang. Silakan pilih slot waktu lain.");
+            }
+        }
+
+        // 2.4 AMBIL HARGA DARI DATABASE (SNAPSHOT SAAT BOOKING) - HANYA YANG AKTIF
+        $categories = TicketCategory::where('is_active', 1)->get()->keyBy('code');
+        
+        $hargaPelajar = $categories->get('pelajar')?->price ?? 0;
+        $hargaUmum = $categories->get('umum')?->price ?? 0;
+        $hargaAsing = $categories->get('asing')?->price ?? 0;
+        
+        // Hitung total dengan harga dinamis
+        $total_harga = ($jumlah_pelajar * $hargaPelajar) + 
+                       ($jumlah_umum * $hargaUmum) + 
+                       ($jumlah_asing * $hargaAsing);
 
         if ($total_harga <= 0) {
-            return back()->with('error', 'Minimal ada 1 pengunjung!');
+            return back()->withInput()->with('error', 'Gagal menghitung harga. Minimal ada 1 pengunjung!');
         }
 
-        // 3. SIMPAN SEMENTARA DI SESSION (INI YANG BARU!)
+        // 3. SIMPAN SEMENTARA DI SESSION
         session([
             'pending_booking' => [
                 'form_data' => $request->except('_token'),
@@ -84,6 +163,14 @@ class BookingController extends Controller
                     'sub_smp'         => $sub_smp,
                     'sub_sma'         => $sub_sma,
                     'sub_kuliah'      => $sub_kuliah,
+                    'jenis_pemesanan_aktual' => $jenisPemesananAktual,
+                    'nama_rombongan'  => $namaRombongan,
+                    'slot_waktu'      => $slotWaktu,
+                    'total_pengunjung' => $totalPengunjung,
+                    // Snapshot harga saat booking dibuat
+                    'harga_pelajar_saat_booking' => $hargaPelajar,
+                    'harga_umum_saat_booking'    => $hargaUmum,
+                    'harga_asing_saat_booking'   => $hargaAsing,
                 ]
             ]
         ]);
@@ -106,7 +193,7 @@ class BookingController extends Controller
 
         $bookingId = $request->booking_id;
 
-        // Check in regular bookings
+        // Check in regular bookings only (reschedule hanya untuk tiket reguler)
         $regularBooking = \App\Models\Booking::where('booking_id', $bookingId)
             ->orWhere('unique_key', $bookingId)
             ->first();
@@ -117,29 +204,28 @@ class BookingController extends Controller
                 return back()->with('error', 'Tiket belum dibayar atau sudah expired.');
             }
             
-            if (\Carbon\Carbon::parse($regularBooking->tanggal_kunjungan)->isPast()) {
+            $tanggalKunjungan = \Carbon\Carbon::parse($regularBooking->tanggal_kunjungan);
+            $today = \Carbon\Carbon::today();
+            
+            if ($tanggalKunjungan->isPast()) {
                 return back()->with('error', 'Tanggal kunjungan sudah lewat, tidak bisa reschedule.');
+            }
+            
+            // Validasi H-2: Reschedule maksimal dilakukan 2 hari sebelum jadwal kunjungan
+            if ($today->diffInDays($tanggalKunjungan, false) < 2) {
+                return back()->with('error', 'Reschedule hanya dapat dilakukan maksimal H-2 dari jadwal kunjungan Anda.');
             }
 
             return redirect()->route('tickets.reschedule.edit', ['booking_id' => $regularBooking->booking_id, 'type' => 'regular']);
         }
 
-        // Check in event bookings
+        // Event bookings tidak bisa di-reschedule
         $eventBooking = \App\Models\EventBooking::where('booking_id', $bookingId)
             ->orWhere('unique_key', $bookingId)
-            ->with('event')
             ->first();
 
         if ($eventBooking) {
-            if ($eventBooking->payment_status !== 'paid') {
-                return back()->with('error', 'Tiket event belum dibayar atau sudah expired.');
-            }
-            
-            if (\Carbon\Carbon::parse($eventBooking->event->event_date)->isPast()) {
-                return back()->with('error', 'Event sudah berlangsung, tidak bisa reschedule.');
-            }
-
-            return redirect()->route('tickets.reschedule.edit', ['booking_id' => $eventBooking->booking_id, 'type' => 'event']);
+            return back()->with('error', 'Tiket event tidak dapat di-reschedule. Fitur reschedule hanya tersedia untuk tiket reguler.');
         }
 
         return back()->with('error', 'ID Tiket tidak ditemukan.');
@@ -147,109 +233,48 @@ class BookingController extends Controller
 
     public function rescheduleEdit(Request $request, $booking_id)
     {
-        $type = $request->query('type', 'regular');
-
-        if ($type === 'event') {
-            $booking = \App\Models\EventBooking::where('booking_id', $booking_id)
-                ->with('event')
-                ->firstOrFail();
-            
-            // Get available events (exclude past events)
-            $availableEvents = \App\Models\Event::where('is_active', true)
-                ->where('event_date', '>=', now())
-                ->orderBy('event_date', 'asc')
-                ->get();
-
-            return view('visitor.reschedule.edit-event', compact('booking', 'availableEvents'));
-        } else {
-            $booking = \App\Models\Booking::where('booking_id', $booking_id)->firstOrFail();
-            return view('visitor.reschedule.edit-regular', compact('booking'));
-        }
+        // Reschedule hanya untuk tiket reguler
+        $booking = \App\Models\Booking::where('booking_id', $booking_id)->firstOrFail();
+        return view('visitor.reschedule.edit-regular', compact('booking'));
     }
 
     public function rescheduleUpdate(Request $request)
     {
-        $type = $request->input('type');
+        // Reschedule hanya untuk tiket reguler
+        $request->validate([
+            'booking_id' => 'required|exists:bookings,booking_id',
+            'new_date' => 'required|date|after_or_equal:today'
+        ]);
 
-        if ($type === 'event') {
-            $request->validate([
-                'booking_id' => 'required|exists:event_bookings,booking_id',
-                'new_event_id' => 'required|exists:events,id'
-            ]);
-
-            $booking = \App\Models\EventBooking::where('booking_id', $request->booking_id)->firstOrFail();
-            $oldEvent = $booking->event;
-            $newEvent = \App\Models\Event::findOrFail($request->new_event_id);
-
-            // Check if event is still active and in future
-            if (!$newEvent->is_active || \Carbon\Carbon::parse($newEvent->event_date)->isPast()) {
-                return back()->with('error', 'Event yang dipilih tidak tersedia.');
-            }
-
-            // Calculate price difference if any
-            $oldTotal = $booking->total_harga;
-            $newTotal = $newEvent->price * $booking->jumlah_tiket;
-            $priceDiff = $newTotal - $oldTotal;
-
-            if ($priceDiff > 0) {
-                return back()->with('error', 'Event baru lebih mahal. Hubungi admin untuk upgrade.');
-            }
-
-            // Update booking
-            $booking->event_id = $request->new_event_id;
-            $booking->save();
-
-            // Reload booking with new event
-            $booking->load('event');
-
-            // Generate new PDF ticket
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('email.event-ticket', ['eventBooking' => $booking]);
-            $pdf->setPaper('A4', 'portrait');
-
-            $directory = storage_path('app/public/tickets');
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-
-            $path = $directory . "/{$booking->booking_id}.pdf";
-            $pdf->save($path);
-
-            // Send email with new ticket
-            \Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
-
-            return redirect()->route('tickets.reschedule.form')
-                ->with('success', 'Tiket event berhasil di-reschedule ke: ' . $newEvent->title . '. Email konfirmasi telah dikirim.');
-
-        } else {
-            $request->validate([
-                'booking_id' => 'required|exists:bookings,booking_id',
-                'new_date' => 'required|date|after_or_equal:today'
-            ]);
-
-            $booking = \App\Models\Booking::where('booking_id', $request->booking_id)->firstOrFail();
-            $oldDate = $booking->tanggal_kunjungan;
-
-            // Update tanggal kunjungan
-            $booking->tanggal_kunjungan = $request->new_date;
-            $booking->save();
-
-            // Generate new PDF ticket with updated date
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('email.ticket', ['booking' => $booking]);
-            $pdf->setPaper('A4', 'portrait');
-
-            $directory = storage_path('app/public/tickets');
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-
-            $path = $directory . "/{$booking->booking_id}.pdf";
-            $pdf->save($path);
-
-            // Send email with new ticket
-            \Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
-
-            return redirect()->route('tickets.reschedule.form')
-                ->with('success', 'Tanggal kunjungan berhasil diubah ke: ' . \Carbon\Carbon::parse($request->new_date)->format('d F Y') . '. Email konfirmasi telah dikirim.');
+        $booking = \App\Models\Booking::where('booking_id', $request->booking_id)->firstOrFail();
+        $oldDate = \Carbon\Carbon::parse($booking->tanggal_kunjungan);
+        $newDate = \Carbon\Carbon::parse($request->new_date);
+        
+        // Validasi: Tanggal baru harus lebih lambat dari tanggal awal (hanya bisa mundur)
+        if ($newDate->lte($oldDate)) {
+            return back()->with('error', 'Reschedule hanya dapat dilakukan untuk memundurkan jadwal kunjungan. Tanggal baru harus lebih lambat dari tanggal awal.');
         }
+
+        // Update tanggal kunjungan
+        $booking->tanggal_kunjungan = $request->new_date;
+        $booking->save();
+
+        // Generate new PDF ticket with updated date
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('email.ticket', ['booking' => $booking]);
+        $pdf->setPaper('A4', 'portrait');
+
+        $directory = storage_path('app/public/tickets');
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $path = $directory . "/{$booking->booking_id}.pdf";
+        $pdf->save($path);
+
+        // Send email with new ticket
+        Mail::to($booking->email)->send(new \App\Mail\TicketMail($booking, $path));
+
+        return redirect()->route('tickets.reschedule.form')
+            ->with('success', 'Tanggal kunjungan berhasil diubah ke: ' . \Carbon\Carbon::parse($request->new_date)->format('d F Y') . '. Email konfirmasi telah dikirim.');
     }
 }

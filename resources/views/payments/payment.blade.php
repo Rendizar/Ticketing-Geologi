@@ -3,6 +3,8 @@
 
 @section('title', 'Pembayaran Tiket')
 
+@section('page-title-key', 'payment_ticket_title')
+
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -13,7 +15,7 @@
                     <div class="payment-icon-wrapper mb-3">
                         <i class="bi bi-credit-card-2-front-fill" style="font-size: 4rem; color: #FACC15;"></i>
                     </div>
-                    <h3 class="mb-0" style="color: #ffffff; font-family: 'Merriweather', serif; font-weight: 700; letter-spacing: 0.5px;">
+                    <h3 class="mb-0" style="color: #ffffff; font-family: 'Merriweather', serif; font-weight: 700; letter-spacing: 0.5px;" data-lang-key="payment_ticket_title">
                         Pembayaran Tiket
                     </h3>
                 </div>
@@ -22,7 +24,7 @@
                     <!-- Order ID -->
                     <div class="order-info mb-4 p-4 rounded-3 shadow-sm" style="background: #ffffff; border-left: 4px solid #FACC15;">
                         <div class="label mb-2" style="font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; color: #9CA3AF; font-family: 'Inter', sans-serif;">
-                            <i class="bi bi-hash me-1" style="color: #9CA3AF;"></i>NOMOR PESANAN
+                            <i class="bi bi-hash me-1" style="color: #9CA3AF;"></i><span data-lang-key="order_number">NOMOR PESANAN</span>
                         </div>
                         <div class="order-id fw-semibold mb-3" style="color: #1F2933; font-size: 1.5rem; letter-spacing: 1px; font-family: 'Inter', sans-serif;">
                             {{ $orderId }}
@@ -32,7 +34,7 @@
                         <div class="divider my-3" style="height: 1px; background: #E5E7EB;"></div>
                         
                         <div class="label mb-2" style="font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; color: #9CA3AF; font-family: 'Inter', sans-serif;">
-                            <i class="bi bi-wallet2 me-1" style="color: #9CA3AF;"></i>TOTAL PEMBAYARAN
+                            <i class="bi bi-wallet2 me-1" style="color: #9CA3AF;"></i><span data-lang-key="total_payment">TOTAL PEMBAYARAN</span>
                         </div>
                         <div class="total-amount" style="color: #FACC15; font-size: 2.5rem; font-weight: 700; font-family: 'Inter', sans-serif;">
                             Rp {{ number_format(session('pending_booking.calculated.total_harga')) }}
@@ -41,7 +43,7 @@
 
                     <!-- Payment Button -->
                     <button id="pay-button" class="btn btn-payment w-100 mb-4" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px; position: relative; overflow: hidden;">
-                        <span class="btn-text">
+                        <span class="btn-text" data-lang-key="pay_now">
                             Bayar Sekarang
                         </span>
                     </button>
@@ -50,31 +52,31 @@
                     <div class="security-info p-3 rounded-3" style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981;">
                         <i class="bi bi-shield-fill-check me-2" style="color: #10B981; font-size: 1.2rem;"></i>
                         <small style="font-weight: 600; color: #1F2933; font-family: 'Inter', sans-serif;">
-                            Pembayaran aman & terenkripsi melalui <strong>Midtrans</strong>
+                            <span data-lang-key="payment_secure">Pembayaran aman & terenkripsi melalui</span> <strong>Midtrans</strong>
                         </small>
                     </div>
 
                     <!-- Payment Methods Info -->
                     <div class="payment-methods mt-4 p-4 rounded-3 shadow-sm" style="background: #ffffff;">
                         <div class="mb-3" style="color: #1F2933; font-weight: 600; font-size: 0.95rem; font-family: 'Inter', sans-serif;">
-                            <i class="bi bi-credit-card me-2" style="color: #1F2933;"></i>METODE PEMBAYARAN TERSEDIA
+                            <i class="bi bi-credit-card me-2" style="color: #1F2933;"></i><span data-lang-key="payment_methods_available">METODE PEMBAYARAN TERSEDIA</span>
                         </div>
                         <div class="d-flex flex-wrap justify-content-center gap-3 align-items-center">
                             <div class="payment-badge">
                                 <i class="bi bi-credit-card-fill" style="color: #1F2933;"></i>
-                                <small>Scan Q-RIS</small>
+                                <small data-lang-key="scan_qris">Scan Q-RIS</small>
                             </div>
                             <div class="payment-badge">
                                 <i class="bi bi-bank" style="color: #1F2933;"></i>
-                                <small>Bank Transfer</small>
+                                <small data-lang-key="bank_transfer">Bank Transfer</small>
                             </div>
                             <div class="payment-badge">
                                 <i class="bi bi-phone-fill" style="color: #1F2933;"></i>
-                                <small>E-Wallet</small>
+                                <small data-lang-key="e_wallet">E-Wallet</small>
                             </div>
                             <div class="payment-badge">
                                 <i class="bi bi-shop" style="color: #1F2933;"></i>
-                                <small>Credit Card</small>
+                                <small data-lang-key="credit_card">Credit Card</small>
                             </div>
                         </div>
                     </div>
@@ -82,7 +84,7 @@
                     <!-- Back Button -->
                     <div class="mt-4 text-center">
                         <a href="{{ url()->previous() }}" class="btn btn-back w-100" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px; text-decoration: none;">
-                            <i class="fas fa-arrow-left me-2"></i>Kembali ke Konfirmasi
+                            <i class="fas fa-arrow-left me-2"></i><span data-lang-key="back_to_confirmation">Kembali ke Konfirmasi</span>
                         </a>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventBooking;
+use App\Models\TicketCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -32,9 +33,7 @@ class EventBookingController extends Controller
             'event_id' => 'required|exists:events,id',
             'nama' => 'required|string|max:255',
             'email' => 'required|email',
-            'nomor_telepon' => 'required|string|min:10|max:15',
             'negara' => 'required|string',
-            'kota_kabupaten' => 'nullable|string',
             'provinsi' => 'nullable|string',
             'jenis_pemesanan' => 'required|in:individu,rombongan',
             'nama_rombongan' => 'required_if:jenis_pemesanan,rombongan|nullable|string',
@@ -60,46 +59,15 @@ class EventBookingController extends Controller
             return back()->with('error', 'Event ini sudah tidak aktif.');
         }
 
-        // Calculate total tickets and determine category
-        $jumlah_tiket = 0;
-        $kategori = '';
-
-        if ($request->jenis_pemesanan === 'individu') {
-            $jumlah_tiket = 1; // Individu always 1 ticket
-            
-            // Determine category from the form logic
-            if ($request->kategori_individu === 'asing' || $request->jumlah_asing > 0) {
-                $kategori = 'asing';
-            } elseif ($request->is_pelajar === 'pelajar' || $request->jumlah_pelajar > 0) {
-                $kategori = 'pelajar';
-            } elseif ($request->is_pelajar === 'bukan' || $request->jumlah_umum > 0) {
-                $kategori = 'umum';
-            }
-        } else {
-            // Rombongan - sum all tickets
-            $jumlah_tiket = 
-                ($request->sub_tk ?? 0) + 
-                ($request->sub_sd ?? 0) + 
-                ($request->sub_smp ?? 0) + 
-                ($request->sub_sma ?? 0) + 
-                ($request->sub_kuliah ?? 0) + 
-                ($request->jumlah_umum ?? 0) + 
-                ($request->jumlah_asing ?? 0);
-            
-            // Determine primary category (where most tickets are)
-            $pelajar_total = ($request->sub_tk ?? 0) + ($request->sub_sd ?? 0) + 
-                            ($request->sub_smp ?? 0) + ($request->sub_sma ?? 0) + ($request->sub_kuliah ?? 0);
-            $umum_total = $request->jumlah_umum ?? 0;
-            $asing_total = $request->jumlah_asing ?? 0;
-            
-            if ($pelajar_total >= $umum_total && $pelajar_total >= $asing_total) {
-                $kategori = 'pelajar';
-            } elseif ($umum_total >= $pelajar_total && $umum_total >= $asing_total) {
-                $kategori = 'umum';
-            } else {
-                $kategori = 'asing';
-            }
-        }
+        // Calculate total tickets from all categories (same for individu and rombongan now)
+        $jumlah_tiket = 
+            ($request->sub_tk ?? 0) + 
+            ($request->sub_sd ?? 0) + 
+            ($request->sub_smp ?? 0) + 
+            ($request->sub_sma ?? 0) + 
+            ($request->sub_kuliah ?? 0) + 
+            ($request->jumlah_umum ?? 0) + 
+            ($request->jumlah_asing ?? 0);
 
         // Validate that at least 1 ticket is selected
         if ($jumlah_tiket < 1) {
@@ -111,8 +79,23 @@ class EventBookingController extends Controller
             return back()->with('error', 'Maaf, kapasitas event tidak mencukupi untuk jumlah tiket yang diminta. Sisa kapasitas: ' . $event->available_slots . ' tiket.')->withInput();
         }
 
-        // Calculate total price
-        $total_harga = $event->price * $jumlah_tiket;
+        // Get current ticket prices from settings (like regular tickets)
+        $categories = TicketCategory::where('is_active', 1)->get()->keyBy('code');
+        
+        $hargaPelajar = $categories->get('pelajar')?->price ?? 0;
+        $hargaUmum = $categories->get('umum')?->price ?? 0;
+        $hargaAsing = $categories->get('asing')?->price ?? 0;
+        
+        // Calculate breakdown
+        $jumlahPelajar = ($request->sub_tk ?? 0) + ($request->sub_sd ?? 0) + 
+                        ($request->sub_smp ?? 0) + ($request->sub_sma ?? 0) + ($request->sub_kuliah ?? 0);
+        $jumlahUmum = $request->jumlah_umum ?? 0;
+        $jumlahAsing = $request->jumlah_asing ?? 0;
+        
+        // Calculate total price based on category prices (integrated with admin settings)
+        $total_harga = ($jumlahPelajar * $hargaPelajar) + 
+                      ($jumlahUmum * $hargaUmum) + 
+                      ($jumlahAsing * $hargaAsing);
 
         // Save to session for payment review
         session([
@@ -125,13 +108,13 @@ class EventBookingController extends Controller
                 'email' => $request->email,
                 'nomor_telepon' => $request->nomor_telepon,
                 'negara' => $request->negara,
-                'kota_kabupaten' => $request->kota_kabupaten,
                 'provinsi' => $request->provinsi,
                 'jenis_pemesanan' => $request->jenis_pemesanan,
                 'nama_rombongan' => $request->nama_rombongan,
-                'kategori' => $kategori,
                 'jumlah_tiket' => $jumlah_tiket,
-                'harga_satuan' => $event->price,
+                'harga_pelajar' => $hargaPelajar,
+                'harga_umum' => $hargaUmum,
+                'harga_asing' => $hargaAsing,
                 'total_harga' => $total_harga,
                 // Store breakdown for display
                 'sub_tk' => $request->sub_tk ?? 0,

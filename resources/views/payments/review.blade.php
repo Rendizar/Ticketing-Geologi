@@ -3,6 +3,8 @@
 
 @section('title', 'Konfirmasi Pemesanan')
 
+@section('page-title-key', 'confirmation_title')
+
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -13,7 +15,7 @@
                     <div class="check-icon-wrapper mb-3">
                         <i class="bi bi-check-circle-fill" style="font-size: 4rem; color: #10B981;"></i>
                     </div>
-                    <h3 class="mb-0" style="color: #ffffff; font-family: 'Merriweather', serif; font-weight: 700; letter-spacing: 0.5px;">
+                    <h3 class="mb-0" style="color: #ffffff; font-family: 'Merriweather', serif; font-weight: 700; letter-spacing: 0.5px;" data-lang-key="confirmation_title">
                         Konfirmasi Pemesanan Tiket
                     </h3>
                 </div>
@@ -30,14 +32,14 @@
                         <!-- Info Section -->
                         <div class="info-section mb-4 p-4 rounded-3 shadow-sm" style="background: #ffffff; border-left: 4px solid #FACC15;">
                             <h5 class="mb-4 fw-semibold" style="color: #1F2933; font-family: 'Inter', sans-serif;">
-                                <i class="bi bi-person-circle me-2" style="color: #FACC15;"></i>Informasi Pemesan
+                                <i class="bi bi-person-circle me-2" style="color: #FACC15;"></i><span data-lang-key="booker_info">Informasi Pemesan</span>
                             </h5>
                             
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
                                         <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-person-fill me-1" style="color: #9CA3AF;"></i>Nama Lengkap
+                                            <i class="bi bi-person-fill me-1" style="color: #9CA3AF;"></i><span data-lang-key="full_name">Nama Lengkap</span>
                                         </div>
                                         <div class="value fw-semibold" style="color: #1F2933;">
                                             {{ session('pending_booking.form_data.nama') }}
@@ -48,7 +50,7 @@
                                 <div class="col-md-6">
                                     <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
                                         <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-envelope-fill me-1" style="color: #9CA3AF;"></i>Email
+                                            <i class="bi bi-envelope-fill me-1" style="color: #9CA3AF;"></i><span data-lang-key="ticket_email">Email</span>
                                         </div>
                                         <div class="value fw-semibold" style="color: #1F2933;">
                                             {{ session('pending_booking.form_data.email') }}
@@ -59,18 +61,7 @@
                                 <div class="col-md-6">
                                     <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
                                         <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-telephone-fill me-1" style="color: #9CA3AF;"></i>Nomor Telepon
-                                        </div>
-                                        <div class="value fw-semibold" style="color: #1F2933;">
-                                            {{ session('pending_booking.form_data.nomor_telepon') }}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
-                                        <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-globe-americas me-1" style="color: #9CA3AF;"></i>Negara Asal
+                                            <i class="bi bi-globe-americas me-1" style="color: #9CA3AF;"></i><span data-lang-key="country_origin">Negara Asal</span>
                                         </div>
                                         <div class="value fw-semibold" style="color: #1F2933;">
                                             {{ session('pending_booking.form_data.negara') }}
@@ -81,7 +72,7 @@
                                 <div class="col-md-6">
                                     <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
                                         <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-people-fill me-1" style="color: #9CA3AF;"></i>Jenis Pemesanan
+                                            <i class="bi bi-people-fill me-1" style="color: #9CA3AF;"></i><span data-lang-key="booking_type_label">Jenis Pemesanan</span>
                                         </div>
                                         <div class="value fw-semibold" style="color: #1F2933;">
                                             {{ ucfirst(session('pending_booking.form_data.jenis_pemesanan')) }}
@@ -92,7 +83,7 @@
                                 <div class="col-md-6">
                                     <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
                                         <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-calendar-event-fill me-1" style="color: #9CA3AF;"></i>Tanggal Kunjungan
+                                            <i class="bi bi-calendar-event-fill me-1" style="color: #9CA3AF;"></i><span data-lang-key="visit_date">Tanggal Kunjungan</span>
                                         </div>
                                         <div class="value fw-semibold" style="color: #1F2933;">
                                             {{ \Carbon\Carbon::parse(session('pending_booking.form_data.tanggal_kunjungan'))->format('d F Y') }}
@@ -104,7 +95,7 @@
                                 <div class="col-12">
                                     <div class="info-item p-3 rounded-3" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
                                         <div class="label mb-1" style="font-size: 0.85rem; font-weight: 600; color: #9CA3AF;">
-                                            <i class="bi bi-building-fill me-1" style="color: #9CA3AF;"></i>Nama Rombongan / Instansi
+                                            <i class="bi bi-building-fill me-1" style="color: #9CA3AF;"></i><span data-lang-key="group_name_institution">Nama Rombongan / Instansi</span>
                                         </div>
                                         <div class="value fw-semibold" style="color: #1F2933;">
                                             {{ session('pending_booking.form_data.nama_rombongan') }}
@@ -118,7 +109,7 @@
                         <!-- Detail Pengunjung Section -->
                         <div class="visitor-section mb-4 p-4 rounded-3 shadow-sm" style="background: #ffffff; border-left: 4px solid #10B981;">
                             <h5 class="mb-4 fw-semibold" style="color: #1F2933; font-family: 'Inter', sans-serif;">
-                                <i class="bi bi-ticket-perforated me-2" style="color: #10B981;"></i>Detail Pengunjung & Harga
+                                <i class="bi bi-ticket-perforated me-2" style="color: #10B981;"></i><span data-lang-key="ticket_details">Detail Pengunjung & Harga</span>
                             </h5>
                             
                             <div class="list-group list-group-flush">
@@ -126,11 +117,11 @@
                                     <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3" style="background: transparent;">
                                         <div>
                                             <i class="bi bi-mortarboard-fill me-2" style="color: #10B981;"></i>
-                                            <span class="fw-semibold">Pelajar</span>
-                                            <span class="badge" style="background: #10B981; color: white;">{{ session('pending_booking.calculated.jumlah_pelajar') }} orang</span>
+                                            <span class="fw-semibold" data-lang-key="student_price">Pelajar</span>
+                                            <span class="badge" style="background: #10B981; color: white;">{{ session('pending_booking.calculated.jumlah_pelajar') }} <span data-lang-key="visitors">orang</span></span>
                                         </div>
                                         <strong style="color: #1F2933; font-size: 1.1rem;">
-                                            Rp {{ number_format(session('pending_booking.calculated.jumlah_pelajar') * 3000) }}
+                                            Rp {{ number_format(session('pending_booking.calculated.jumlah_pelajar') * session('pending_booking.calculated.harga_pelajar_saat_booking', 0)) }}
                                         </strong>
                                     </div>
                                 @endif
@@ -139,11 +130,11 @@
                                     <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3" style="background: transparent;">
                                         <div>
                                             <i class="bi bi-person-fill me-2" style="color: #3B82F6;"></i>
-                                            <span class="fw-semibold">Umum</span>
-                                            <span class="badge" style="background: #3B82F6; color: white;">{{ session('pending_booking.calculated.jumlah_umum') }} orang</span>
+                                            <span class="fw-semibold" data-lang-key="general_price">Umum</span>
+                                            <span class="badge" style="background: #3B82F6; color: white;">{{ session('pending_booking.calculated.jumlah_umum') }} <span data-lang-key="visitors">orang</span></span>
                                         </div>
                                         <strong style="color: #1F2933; font-size: 1.1rem;">
-                                            Rp {{ number_format(session('pending_booking.calculated.jumlah_umum') * 5000) }}
+                                            Rp {{ number_format(session('pending_booking.calculated.jumlah_umum') * session('pending_booking.calculated.harga_umum_saat_booking', 0)) }}
                                         </strong>
                                     </div>
                                 @endif
@@ -152,11 +143,11 @@
                                     <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3" style="background: transparent;">
                                         <div>
                                             <i class="bi bi-globe-americas me-2" style="color: #FACC15;"></i>
-                                            <span class="fw-semibold">Asing</span>
-                                            <span class="badge" style="background: #FACC15; color: #1F2933;">{{ session('pending_booking.calculated.jumlah_asing') }} orang</span>
+                                            <span class="fw-semibold" data-lang-key="foreign_price">Asing</span>
+                                            <span class="badge" style="background: #FACC15; color: #1F2933;">{{ session('pending_booking.calculated.jumlah_asing') }} <span data-lang-key="visitors">orang</span></span>
                                         </div>
                                         <strong style="color: #1F2933; font-size: 1.1rem;">
-                                            Rp {{ number_format(session('pending_booking.calculated.jumlah_asing') * 25000) }}
+                                            Rp {{ number_format(session('pending_booking.calculated.jumlah_asing') * session('pending_booking.calculated.harga_asing_saat_booking', 0)) }}
                                         </strong>
                                     </div>
                                 @endif
@@ -165,7 +156,7 @@
 
                         <!-- Total Section -->
                         <div class="total-section mb-4 p-4 rounded-3 shadow-sm text-center" style="background: #1F2933;">
-                            <div class="mb-2" style="color: #E5E7EB; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; font-family: 'Inter', sans-serif;">
+                            <div class="mb-2" style="color: #E5E7EB; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; font-family: 'Inter', sans-serif;" data-lang-key="total_payment">
                                 TOTAL PEMBAYARAN
                             </div>
                             <div class="total-amount" style="color: #FACC15; font-size: 2.5rem; font-weight: 700; font-family: 'Inter', sans-serif;">
@@ -180,13 +171,13 @@
                         <form action="{{ route('payment.initiate') }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-payment w-100 mb-3" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px;">
-                                <i class="bi bi-credit-card-fill me-2"></i>Lanjutkan ke Pembayaran
+                                <i class="bi bi-credit-card-fill me-2"></i><span data-lang-key="proceed_payment">Lanjutkan ke Pembayaran</span>
                             </button>
                         </form>
 
                         <div class="text-center">
                             <a href="{{ route('tickets.create') }}" class="btn btn-back w-100" style="border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px; text-decoration: none;">
-                                <i class="fas fa-arrow-left me-2"></i>Kembali ke Form
+                                <i class="fas fa-arrow-left me-2"></i><span data-lang-key="back_to_form">Kembali ke Form</span>
                             </a>
                         </div>
                     @endif

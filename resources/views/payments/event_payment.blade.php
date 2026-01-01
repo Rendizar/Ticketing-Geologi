@@ -12,7 +12,7 @@
                     <div class="mb-3">
                         <i class="fas fa-credit-card" style="font-size: 3.5rem; color: #10B981;"></i>
                     </div>
-                    <h3 class="mb-0" style="font-family: 'Merriweather', serif; font-weight: 700; color: #ffffff; font-size: 1.75rem;">
+                    <h3 class="mb-0" style="font-family: 'Merriweather', serif; font-weight: 700; color: #ffffff; font-size: 1.75rem;" data-lang-key="event_payment_title">
                         Pembayaran Event Ticket
                     </h3>
                 </div>
@@ -21,7 +21,7 @@
                     <!-- Order ID -->
                     <div class="mb-4 p-4" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px;">
                         <div class="text-muted mb-2" style="font-size: 0.9rem; font-weight: 600; color: #6c6c6c;">
-                            <i class="fas fa-hashtag me-1" style="color: #FACC15;"></i>NOMOR PESANAN
+                            <i class="fas fa-hashtag me-1" style="color: #FACC15;"></i><span data-lang-key="event_payment_order_number">NOMOR PESANAN</span>
                         </div>
                         <div class="fw-bold mb-3" style="color: #1F2933; font-size: 1.5rem;">
                             {{ $orderId }}
@@ -30,7 +30,7 @@
                         <hr style="border-color: #e5e7eb;">
                         
                         <div class="text-muted mb-2" style="font-size: 0.9rem; font-weight: 600; color: #6c6c6c;">
-                            <i class="fas fa-wallet me-1" style="color: #FACC15;"></i>TOTAL PEMBAYARAN
+                            <i class="fas fa-wallet me-1" style="color: #FACC15;"></i><span data-lang-key="event_payment_total">TOTAL PEMBAYARAN</span>
                         </div>
                         <div class="fw-bold" style="color: #10B981; font-size: 2.5rem;">
                             Rp {{ number_format(session('pending_event_booking.total_harga')) }}
@@ -40,14 +40,14 @@
                     <!-- Payment Button -->
                     <button id="pay-button" class="btn btn-lg w-100 mb-4 fw-bold btn-pay-now" 
                         style="background: #10B981; color: #ffffff; border: 2px solid #10B981; border-radius: 12px; padding: 0.875rem 2rem; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s ease;">
-                        BAYAR SEKARANG
+                        <span data-lang-key="event_payment_pay_now">BAYAR SEKARANG</span>
                     </button>
 
                     <!-- Security Info -->
                     <div class="p-3" style="background: #d1fae5; border: 1px solid #86efac; border-radius: 12px;">
                         <i class="fas fa-shield-alt me-2" style="color: #10B981; font-size: 1.2rem;"></i>
                         <small class="fw-bold" style="color: #065f46;">
-                            Pembayaran aman & terenkripsi melalui <strong>Midtrans</strong>
+                            <span data-lang-key="event_payment_secure">Pembayaran aman & terenkripsi melalui</span> <strong>Midtrans</strong>
                         </small>
                     </div>
                 </div>
@@ -65,10 +65,10 @@
         <div class="popup-icon">
             <i class="fas fa-check-circle"></i>
         </div>
-        <h3 class="popup-title">Pembayaran Berhasil!</h3>
-        <p class="popup-message">Terima kasih, pembayaran Anda telah berhasil diproses. Silahkan cek email anda untuk tiketnya!</p>
+        <h3 class="popup-title" data-lang-key="event_payment_success_title">Pembayaran Berhasil!</h3>
+        <p class="popup-message" data-lang-key="event_payment_success_message">Terima kasih, pembayaran Anda telah berhasil diproses. Silahkan cek email anda untuk tiketnya!</p>
         <div class="popup-timer">
-            Menutup dalam <span id="popupTimer">10</span> detik...
+            <span data-lang-key="event_payment_closing_in">Menutup dalam</span> <span id="popupTimer">10</span> <span data-lang-key="event_payment_seconds">detik...</span>
         </div>
     </div>
 </div>

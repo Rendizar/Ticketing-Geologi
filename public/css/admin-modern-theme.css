@@ -1,0 +1,416 @@
+/* ====================================
+   MODERN MINIMALIST ADMIN THEME
+   Konsisten dengan Visitor Pages
+   ==================================== */
+
+:root {
+    /* Primary Colors - Navy Blue Theme */
+    --primary-color: #1F2933;
+    --primary-hover: #2D3748;
+    --primary-light: #4A5568;
+    
+    /* Secondary Colors - Blue Accent */
+    --secondary-color: #3B82F6;
+    --secondary-hover: #2563EB;
+    --secondary-light: #60A5FA;
+    
+    /* Success/Accent Colors */
+    --success-color: #10B981;
+    --success-hover: #059669;
+    --success-light: #34D399;
+    
+    /* Warning */
+    --warning-color: #F59E0B;
+    --warning-hover: #D97706;
+    
+    /* Danger */
+    --danger-color: #EF4444;
+    --danger-hover: #DC2626;
+    
+    /* Neutral Colors */
+    --text-primary: #1F2933;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    
+    /* Background */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F9FAFB;
+    --bg-tertiary: #F3F4F6;
+    
+    /* Borders */
+    --border-color: #E5E7EB;
+    --border-light: #F3F4F6;
+}
+
+/* ====================================
+   BUTTONS - Minimalist Modern Style
+   ==================================== */
+
+/* Primary Button - Navy */
+.btn-modern-primary {
+    background: var(--primary-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-modern-primary:hover {
+    background: var(--primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Secondary Button - Blue */
+.btn-modern-secondary {
+    background: var(--secondary-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
+}
+
+.btn-modern-secondary:hover {
+    background: var(--secondary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+}
+
+/* Success Button - Green */
+.btn-modern-success {
+    background: var(--success-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2);
+}
+
+.btn-modern-success:hover {
+    background: var(--success-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+}
+
+/* Warning Button */
+.btn-modern-warning {
+    background: var(--warning-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);
+}
+
+.btn-modern-warning:hover {
+    background: var(--warning-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
+}
+
+/* Danger Button */
+.btn-modern-danger {
+    background: var(--danger-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);
+}
+
+.btn-modern-danger:hover {
+    background: var(--danger-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+}
+
+/* Outline Buttons */
+.btn-modern-outline-primary {
+    background: transparent !important;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--primary-color) !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.btn-modern-outline-primary:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+.btn-modern-outline-secondary {
+    background: transparent !important;
+    color: var(--secondary-color) !important;
+    border: 2px solid var(--secondary-color) !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.btn-modern-outline-secondary:hover {
+    background: var(--secondary-color) !important;
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+/* ====================================
+   CARDS - Modern Clean Style
+   ==================================== */
+
+.card-modern {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.card-modern:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.card-modern .card-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+    border-radius: 0.75rem 0.75rem 0 0;
+    font-weight: 600;
+}
+
+.card-modern .card-body {
+    padding: 1.5rem;
+}
+
+/* ====================================
+   ALERTS - Clean Modern Alerts
+   ==================================== */
+
+.alert-modern-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--success-color);
+    border-left: 4px solid var(--success-color);
+    color: #065F46;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.alert-modern-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid var(--warning-color);
+    border-left: 4px solid var(--warning-color);
+    color: #92400E;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.alert-modern-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--danger-color);
+    border-left: 4px solid var(--danger-color);
+    color: #991B1B;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.alert-modern-info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--secondary-color);
+    border-left: 4px solid var(--secondary-color);
+    color: #1E40AF;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+/* ====================================
+   BADGES - Modern Minimalist Badges
+   ==================================== */
+
+.badge-modern-primary {
+    background: var(--primary-color) !important;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.badge-modern-success {
+    background: var(--success-color) !important;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.badge-modern-warning {
+    background: var(--warning-color) !important;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.badge-modern-danger {
+    background: var(--danger-color) !important;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.badge-modern-secondary {
+    background: var(--secondary-color) !important;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* ====================================
+   FORM ELEMENTS - Clean Input Style
+   ==================================== */
+
+.input-modern {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.input-modern:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select-modern {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.select-modern:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ====================================
+   TABLE - Clean Modern Table
+   ==================================== */
+
+.table-modern {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-modern thead {
+    background: var(--bg-secondary);
+}
+
+.table-modern thead th {
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+}
+
+.table-modern tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.table-modern tbody tr:hover {
+    background: var(--bg-secondary);
+}
+
+.table-modern tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+/* ====================================
+   UTILITIES
+   ==================================== */
+
+.text-modern-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-modern-secondary {
+    color: var(--secondary-color) !important;
+}
+
+.text-modern-success {
+    color: var(--success-color) !important;
+}
+
+.text-modern-muted {
+    color: var(--text-muted) !important;
+}
+
+.bg-modern-primary {
+    background-color: var(--bg-primary) !important;
+}
+
+.bg-modern-secondary {
+    background-color: var(--bg-secondary) !important;
+}
+
+/* ====================================
+   PARTICLES BACKGROUND - Consistent
+   ==================================== */
+
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.particles-content {
+    position: relative;
+    z-index: 1;
+}
