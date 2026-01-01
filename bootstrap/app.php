@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             }
             return route('home');
         });
+        
+        // Ensure session is started for all requests
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
