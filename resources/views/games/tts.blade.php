@@ -9,10 +9,10 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-4 game-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
+            <h1 class="display-2 fw-bold mb-4 game-title" data-lang-key="tts_title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
                 Geology Crossword Puzzle
             </h1>
-            <p class="fs-4 game-subtitle" style="color: #6c6c6c; font-weight: 500;">
+            <p class="fs-4 game-subtitle" data-lang-key="tts_subtitle" style="color: #6c6c6c; font-weight: 500;">
                 Fill the grid with correct geology terms!
             </p>
             
@@ -20,11 +20,11 @@
             <div class="d-flex justify-content-center gap-3 mt-4">
                 <div class="badge bg-white border-2 border-danger fs-6 px-4 py-2 shadow-sm">
                     <i class="fas fa-clock text-danger me-2"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Time:</span> <span id="timer" class="text-danger fw-bold">00:00</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="tts_time">Time:</span> <span id="timer" class="text-danger fw-bold">00:00</span>
                 </div>
                 <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;">
                     <i class="fas fa-check-circle me-2" style="color: #FACC15;"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Score:</span> <span id="score" class="fw-bold" style="color: #FACC15;">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="total" class="fw-bold" style="color: #FACC15;">0</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="tts_score">Score:</span> <span id="score" class="fw-bold" style="color: #FACC15;">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="total" class="fw-bold" style="color: #FACC15;">0</span>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
                                 <!-- Progress Bar -->
                                 <div class="mt-3">
                                     <label class="form-label fw-bold mb-2" style="color: #1F2933;">
-                                        <i class="fas fa-chart-line me-2" style="color: #FACC15;"></i>Progress Bar
+                                        <i class="fas fa-chart-line me-2" style="color: #FACC15;"></i><span data-lang-key="tts_progress">Progress Bar</span>
                                     </label>
                                     <div class="progress game-progress">
                                         <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
@@ -60,14 +60,14 @@
                             <!-- Clues Section -->
                             <div class="col-lg-5">
                                 <h3 class="fw-bold mb-4 fs-4" style="color: #1F2933;">
-                                    <i class="fas fa-lightbulb me-2" style="color: #FACC15;"></i>Clues
+                                    <i class="fas fa-lightbulb me-2" style="color: #FACC15;"></i><span data-lang-key="tts_clues">Clues</span>
                                 </h3>
                                 <div class="clues-container bg-light p-4 rounded-3 border-2" style="border-color: #FACC15 !important;">
                                     
                                     <!-- Across -->
                                     <div class="mb-4">
                                         <h5 class="fw-bold mb-3 fs-5" style="color: #1F2933;">
-                                            <i class="fas fa-arrow-right me-2" style="color: #FACC15;"></i>Across
+                                            <i class="fas fa-arrow-right me-2" style="color: #FACC15;"></i><span data-lang-key="tts_across">Across</span>
                                         </h5>
                                         <div class="clue-list" id="acrossClues">
                                             <!-- Clues will be generated dynamically -->
@@ -77,7 +77,7 @@
                                     <!-- Down -->
                                     <div>
                                         <h5 class="fw-bold mb-3 fs-5" style="color: #1F2933;">
-                                            <i class="fas fa-arrow-down me-2" style="color: #FACC15;"></i>Down
+                                            <i class="fas fa-arrow-down me-2" style="color: #FACC15;"></i><span data-lang-key="tts_down">Down</span>
                                         </h5>
                                         <div class="clue-list" id="downClues">
                                             <!-- Clues will be generated dynamically -->
@@ -99,15 +99,15 @@
                             <div class="d-flex flex-wrap justify-content-center gap-3">
                                 <button onclick="checkAnswers()" 
                                         class="btn btn-check-answer px-4 py-2 fw-bold">
-                                    <i class="fas fa-check-double me-2"></i>Check Answers
+                                    <i class="fas fa-check-double me-2"></i><span data-lang-key="tts_check_answers">Check Answers</span>
                                 </button>
                                 <button onclick="revealAnswer()" 
                                         class="btn btn-reveal-answer px-4 py-2 fw-bold">
-                                    <i class="fas fa-eye me-2"></i>Reveal All
+                                    <i class="fas fa-eye me-2"></i><span data-lang-key="tts_reveal_all">Reveal All</span>
                                 </button>
                                 <button onclick="resetPuzzle()" 
                                         class="btn btn-reset-game px-4 py-2 fw-bold">
-                                    <i class="fas fa-redo me-2"></i>Reset
+                                    <i class="fas fa-redo me-2"></i><span data-lang-key="tts_reset">Reset</span>
                                 </button>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
         <div class="text-center mt-5">
             <a href="{{ route('games.index') }}" 
                class="btn btn-back-home px-4 py-2 fw-bold">
-                <i class="fas fa-arrow-left me-2"></i>Back to Mini Games
+                <i class="fas fa-arrow-left me-2"></i><span data-lang-key="games_back_menu">Back to Mini Games</span>
             </a>
         </div>
     </div>
@@ -369,15 +369,16 @@ const GAME_CONFIG = {
     }
 };
 
-// Data Crossword dengan clues terintegrasi
-const crosswordData = [
+// Data Crossword English Version
+const crosswordDataEN = [
     { 
         word: 'IGNEOUS', 
         x: 2, 
         y: 3, 
         direction: 'across', 
         number: 1,
-        clue: 'Rock formed from cooled magma'
+        clue: 'Rock formed from cooled magma',
+        clueKey: 'tts_clue1'
     },
     { 
         word: 'FOSSIL', 
@@ -385,7 +386,8 @@ const crosswordData = [
         y: 1, 
         direction: 'down', 
         number: 2,
-        clue: 'Preserved remains of ancient life'
+        clue: 'Preserved remains of ancient life',
+        clueKey: 'tts_clue2'
     },
     { 
         word: 'PLATE', 
@@ -393,7 +395,8 @@ const crosswordData = [
         y: 5, 
         direction: 'down', 
         number: 3,
-        clue: 'Tectonic ___ moves continents'
+        clue: 'Tectonic ___ moves continents',
+        clueKey: 'tts_clue3'
     },
     { 
         word: 'QUARTZ', 
@@ -401,13 +404,71 @@ const crosswordData = [
         y: 8, 
         direction: 'across', 
         number: 4,
-        clue: 'Most common mineral on Earth'
+        clue: 'Most common mineral on Earth',
+        clueKey: 'tts_clue4'
     }
 ];
+
+// Data Crossword Indonesian Version
+const crosswordDataID = [
+    { 
+        word: 'MAGMA', 
+        x: 3, 
+        y: 3, 
+        direction: 'across', 
+        number: 1,
+        clue: 'Batuan yang terbentuk dari magma yang mendingin',
+        clueKey: 'tts_clue1'
+    },
+    { 
+        word: 'FOSIL', 
+        x: 5, 
+        y: 1, 
+        direction: 'down', 
+        number: 2,
+        clue: 'Sisa-sisa kehidupan purba yang terawetkan',
+        clueKey: 'tts_clue2'
+    },
+    { 
+        word: 'LEMPENG', 
+        x: 4, 
+        y: 5, 
+        direction: 'down', 
+        number: 3,
+        clue: 'Lempeng ___ menggerakkan benua',
+        clueKey: 'tts_clue3'
+    },
+    { 
+        word: 'KUARSA', 
+        x: 3, 
+        y: 8, 
+        direction: 'across', 
+        number: 4,
+        clue: 'Mineral paling umum di Bumi',
+        clueKey: 'tts_clue4'
+    }
+];
+
+// Select crossword data based on language
+let crosswordData = [];
+function getCrosswordData() {
+    const currentLang = localStorage.getItem('language') || 'id';
+    return currentLang === 'id' ? crosswordDataID : crosswordDataEN;
+}
+crosswordData = getCrosswordData();
 
 let timerInterval;
 let seconds = 0;
 let hintsRemaining = GAME_CONFIG.INITIAL_HINTS;
+
+// Helper function to get translated text
+function getTrans(key) {
+    const currentLang = localStorage.getItem('language') || 'id';
+    if (window.translations && window.translations[currentLang] && window.translations[currentLang][key]) {
+        return window.translations[currentLang][key];
+    }
+    return key; // Fallback to key if translation not found
+}
 
 // Generate Clues Dynamically
 function generateClues() {
@@ -422,12 +483,25 @@ function generateClues() {
     acrossContainer.innerHTML = '';
     downContainer.innerHTML = '';
     
+    // Get current language and update crossword data
+    const currentLang = localStorage.getItem('language') || 'id';
+    crosswordData = getCrosswordData();
+    
+    const lettersText = currentLang === 'id' ? 'huruf' : 'letters';
+    
     crosswordData.forEach(item => {
         const clueDiv = document.createElement('div');
         clueDiv.className = 'clue-item mb-3 p-3 rounded';
+        
+        // Get translated clue if available
+        let clueText = item.clue;
+        if (item.clueKey && typeof window.translations !== 'undefined' && window.translations[currentLang]) {
+            clueText = window.translations[currentLang][item.clueKey] || item.clue;
+        }
+        
         clueDiv.innerHTML = `
             <span class="badge bg-warning text-dark fw-bold me-2">${item.number}</span>
-            <span class="fs-6">${item.clue} (${item.word.length} letters)</span>
+            <span class="fs-6">${clueText} (${item.word.length} ${lettersText})</span>
         `;
         
         if (item.direction === 'across') {
@@ -676,8 +750,8 @@ function checkAnswers() {
 function giveHint() {
     if (hintsRemaining <= 0) {
         Swal.fire({
-            title: 'No hints left!',
-            text: 'You have used all your hints.',
+            title: getTrans('tts_alert_no_hints'),
+            text: getTrans('tts_alert_no_hints_text'),
             icon: 'warning',
             ...GAME_CONFIG.SWAL_THEME
         });
@@ -689,8 +763,8 @@ function giveHint() {
     
     if (emptyInputs.length === 0) {
         Swal.fire({
-            title: 'All filled!',
-            text: 'All cells are already filled correctly.',
+            title: getTrans('tts_alert_all_filled'),
+            text: getTrans('tts_alert_all_filled_text'),
             icon: 'info',
             ...GAME_CONFIG.SWAL_THEME
         });
@@ -703,10 +777,13 @@ function giveHint() {
     
     hintsRemaining--;
     const hintText = document.getElementById('hintText');
-    const hintBtn = document.querySelector('.btn-info');
+    const hintBtn = document.querySelector('.btn-hint');
     
     if (hintText) {
-        hintText.textContent = `Get Hint (${hintsRemaining} remaining)`;
+        const currentLang = localStorage.getItem('language') || 'id';
+        const getText = currentLang === 'id' ? 'Dapatkan Petunjuk' : 'Get Hint';
+        const remainText = currentLang === 'id' ? 'tersisa' : 'remaining';
+        hintText.textContent = `${getText} (${hintsRemaining} ${remainText})`;
     }
     
     if (hintsRemaining === 0 && hintBtn) {
@@ -719,15 +796,15 @@ function giveHint() {
 // Reveal All Answers
 function revealAnswer() {
     Swal.fire({
-        title: 'Reveal all answers?',
-        text: "This will show all the correct answers!",
+        title: getTrans('tts_alert_reveal_title'),
+        text: getTrans('tts_alert_reveal_text'),
         icon: 'question',
         showCancelButton: true,
         ...GAME_CONFIG.SWAL_THEME,
         confirmButtonColor: '#17a2b8',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Yes, reveal!',
-        cancelButtonText: 'Cancel'
+        confirmButtonText: getTrans('tts_alert_yes'),
+        cancelButtonText: getTrans('tts_alert_cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             document.querySelectorAll('#crossword input').forEach(input => {
@@ -748,15 +825,15 @@ function gameCompleted() {
     const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     
     Swal.fire({
-        title: '🎉 Congratulations!',
+        title: `🎉 ${getTrans('tts_alert_congrats')}`,
         html: `
-            <p class="fs-5">You completed the Geology Crossword!</p>
-            <p class="text-warning fs-4 fw-bold">⏱️ Time: ${timeStr}</p>
-            <p class="text-info">💡 Hints used: ${GAME_CONFIG.INITIAL_HINTS - hintsRemaining}</p>
+            <p class="fs-5">${getTrans('tts_alert_completed')}</p>
+            <p class="text-warning fs-4 fw-bold">⏱️ ${getTrans('tts_alert_time')} ${timeStr}</p>
+            <p class="text-info">💡 ${getTrans('tts_alert_hints_used')}: ${GAME_CONFIG.INITIAL_HINTS - hintsRemaining}</p>
         `,
         icon: 'success',
         ...GAME_CONFIG.SWAL_THEME,
-        confirmButtonText: 'Play Again!'
+        confirmButtonText: getTrans('tts_alert_play_again')
     }).then((result) => {
         if (result.isConfirmed) {
             resetPuzzle();
@@ -772,27 +849,56 @@ function resetPuzzle() {
     
     const resultEl = document.getElementById('result');
     const scoreEl = document.getElementById('score');
-    const hintBtn = document.querySelector('.btn-info');
     
     if (resultEl) resultEl.innerHTML = '';
     if (scoreEl) scoreEl.textContent = '0';
-    if (hintBtn) {
-        hintBtn.disabled = false;
-        hintBtn.innerHTML = `<i class="fas fa-question-circle me-2"></i>Get Hint (${GAME_CONFIG.INITIAL_HINTS} remaining)`;
-    }
+    
+    updateHintButtonText();
     
     createCrossword();
 }
 
 // Initialize
+function updateHintButtonText() {
+    const hintBtn = document.getElementById('hintText');
+    if (hintBtn) {
+        const currentLang = localStorage.getItem('language') || 'id';
+        const getText = currentLang === 'id' ? 'Dapatkan Petunjuk' : 'Get Hint';
+        const remainText = currentLang === 'id' ? 'tersisa' : 'remaining';
+        hintBtn.textContent = `${getText} (${hintsRemaining} ${remainText})`;
+    }
+}
+
+// Listen for language change
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for custom languageChanged event on window
+    window.addEventListener('languageChanged', function() {
+        crosswordData = getCrosswordData(); // Update crossword data
+        generateClues(); // Regenerate clues with new language
+        updateHintButtonText(); // Update hint button text
+        createCrossword(); // Recreate grid with new words
+    });
+    
+    // Also listen for storage change (when language changes in another tab)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'language') {
+            crosswordData = getCrosswordData();
+            generateClues();
+            updateHintButtonText();
+            createCrossword();
+        }
+    });
+});
+
 try {
     generateClues();
     createCrossword();
+    updateHintButtonText(); // Initialize hint button text
 } catch (error) {
     console.error('Failed to initialize crossword game:', error);
     Swal.fire({
-        title: 'Error!',
-        text: 'Failed to load the game. Please refresh the page.',
+        title: getTrans('tts_alert_error'),
+        text: getTrans('tts_alert_error_text'),
         icon: 'error',
         ...GAME_CONFIG.SWAL_THEME
     });

@@ -72,7 +72,7 @@
             </div>
             <div class="col-md-6 text-center text-md-end">
                 <p class="mb-0 text-light opacity-75" style="font-size: 0.9rem;">
-                    <span data-lang-key="footer_made_with">Made with</span> <i class="fas fa-heart" style="color: #FACC15;"></i> <span data-lang-key="footer_by_team">by Capstone Team</span>
+                    <span data-lang-key="footer_made_with">Made with</span> <i class="fas fa-heart" style="color: #FACC15;"></i> <span data-lang-key="footer_by_team">by Innosphere Team</span>
                 </p>
             </div>
         </div>

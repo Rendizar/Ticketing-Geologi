@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
@@ -276,5 +277,74 @@ class BookingController extends Controller
 
         return redirect()->route('tickets.reschedule.form')
             ->with('success', 'Tanggal kunjungan berhasil diubah ke: ' . \Carbon\Carbon::parse($request->new_date)->format('d F Y') . '. Email konfirmasi telah dikirim.');
+    }
+
+    /**
+     * Get slot availability for a specific date
+     * Returns JSON with slot information
+     * Logic: 1 slot waktu hanya bisa dipesan oleh 1 rombongan (eksklusif)
+     */
+    public function getSlotAvailability(Request $request)
+    {
+        $date = $request->input('date');
+        
+        if (!$date) {
+            return response()->json(['error' => 'Date is required'], 400);
+        }
+        
+        // Cek total pengunjung di hari ini (maksimal 2500)
+        $totalDailyVisitors = Booking::where('tanggal_kunjungan', $date)
+            ->where('status', '!=', 'cancelled')
+            ->sum(DB::raw('jumlah_pelajar + jumlah_umum + jumlah_asing'));
+        
+        $dailyCapacity = 2500;
+        $dailyAvailable = $dailyCapacity - $totalDailyVisitors;
+        $isDayFull = $dailyAvailable <= 0;
+        
+        // Define all available time slots
+        $timeSlots = [
+            '08:00-09:00',
+            '09:00-10:00',
+            '10:00-11:00',
+            '11:00-12:00',
+            '12:00-13:00',
+            '13:00-14:00',
+            '14:00-15:00',
+            '15:00-16:00',
+        ];
+        
+        $slotData = [];
+        
+        foreach ($timeSlots as $slot) {
+            // Cek apakah ada booking di slot ini (cukup 1 booking saja sudah booked)
+            $booking = Booking::where('tanggal_kunjungan', $date)
+                ->where('slot_waktu', $slot)
+                ->where('status', '!=', 'cancelled')
+                ->first();
+            
+            $isBooked = $booking !== null;
+            $bookedCount = 0;
+            
+            if ($isBooked) {
+                // Hitung total pengunjung yang sudah booking
+                $bookedCount = $booking->jumlah_pelajar + $booking->jumlah_umum + $booking->jumlah_asing;
+            }
+            
+            $slotData[] = [
+                'slot' => $slot,
+                'booked' => $bookedCount,
+                'available' => $isBooked ? 0 : 2500, // Jika sudah booked, available = 0
+                'percentage' => $isBooked ? 100 : 0,
+                'status' => $isBooked ? 'booked' : 'available'
+            ];
+        }
+        
+        return response()->json([
+            'slots' => $slotData,
+            'daily_capacity' => $dailyCapacity,
+            'daily_booked' => $totalDailyVisitors,
+            'daily_available' => max(0, $dailyAvailable),
+            'is_day_full' => $isDayFull
+        ]);
     }
 }

@@ -8,10 +8,10 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-4 quiz-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
+            <h1 class="display-2 fw-bold mb-4 quiz-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;" data-lang-key="quiz_title">
                 Rock & Fossil Quiz
             </h1>
-            <p class="fs-4 quiz-subtitle" style="color: #6c6c6c; font-weight: 500;">
+            <p class="fs-4 quiz-subtitle" style="color: #6c6c6c; font-weight: 500;" data-lang-key="quiz_subtitle">
                 Test your knowledge about rocks and fossils!
             </p>
             
@@ -19,11 +19,11 @@
             <div class="d-flex flex-wrap justify-content-center gap-3 mt-4 px-3">
                 <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;" role="status" aria-live="polite">
                     <i class="fas fa-star me-2" style="color: #FACC15;"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Score:</span> <span id="score" class="fw-bold" style="color: #FACC15;" aria-label="Current score">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="total" style="color: #FACC15;">10</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="quiz_score">Score:</span> <span id="score" class="fw-bold" style="color: #FACC15;" aria-label="Current score">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="total" style="color: #FACC15;">10</span>
                 </div>
                 <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;" role="status" aria-live="polite">
                     <i class="fas fa-question-circle me-2" style="color: #FACC15;"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Question:</span> <span id="currentQ" class="fw-bold" style="color: #FACC15;" aria-label="Current question number">1</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="totalQ" style="color: #FACC15;">10</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="quiz_question">Question:</span> <span id="currentQ" class="fw-bold" style="color: #FACC15;" aria-label="Current question number">1</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="totalQ" style="color: #FACC15;">10</span>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                                         id="nextBtn" 
                                         style="display:none;"
                                         aria-label="Go to next question">
-                                    <i class="fas fa-arrow-right me-2"></i>Next Question
+                                    <i class="fas fa-arrow-right me-2"></i><span data-lang-key="quiz_next">Next Question</span>
                                 </button>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
         <div class="text-center mt-5">
             <a href="{{ route('games.index') }}" 
                class="btn btn-back-home px-4 py-2 fw-bold">
-                <i class="fas fa-arrow-left me-2"></i>Back to Mini Games
+                <i class="fas fa-arrow-left me-2"></i><span data-lang-key="games_back_menu">Back to Mini Games</span>
             </a>
         </div>
     </div>
@@ -221,8 +221,16 @@ const QUIZ_CONFIG = {
     }
 };
 
-// Quiz Data - 10 Questions
-const questions = [
+// Helper function to get translation
+function getTrans(key) {
+    const lang = localStorage.getItem('language') || 'en';
+    const translation = window.translations?.[lang]?.[key] || key;
+    console.log(`getTrans(${key}) in ${lang}: ${translation}`);
+    return translation;
+}
+
+// Quiz Data - English Version
+const questionsEN = [
     { 
         q: "What type of rock is formed from cooled lava or magma?", 
         options: ["Sedimentary", "Igneous", "Metamorphic"], 
@@ -285,6 +293,82 @@ const questions = [
     }
 ];
 
+// Get questions based on current language
+function getQuestions() {
+    const lang = localStorage.getItem('language') || 'en';
+    console.log('getQuestions() called with language:', lang);
+    if (lang === 'id') {
+        // Indonesian questions with translations
+        const idQuestions = [
+            { 
+                q: getTrans('quiz_q1'),
+                options: [getTrans('quiz_q1_a'), getTrans('quiz_q1_b'), getTrans('quiz_q1_c')],
+                a: 1,
+                category: "Rock Types"
+            },
+            { 
+                q: getTrans('quiz_q2'),
+                options: [getTrans('quiz_q2_a'), getTrans('quiz_q2_b'), getTrans('quiz_q2_c')],
+                a: 1,
+                category: "Minerals"
+            },
+            { 
+                q: getTrans('quiz_q3'),
+                options: [getTrans('quiz_q3_a'), getTrans('quiz_q3_b'), getTrans('quiz_q3_c')],
+                a: 1,
+                category: "Fossils"
+            },
+            { 
+                q: getTrans('quiz_q4'),
+                options: [getTrans('quiz_q4_a'), getTrans('quiz_q4_b'), getTrans('quiz_q4_c')],
+                a: 2,
+                category: "Rock Types"
+            },
+            { 
+                q: getTrans('quiz_q5'),
+                options: [getTrans('quiz_q5_a'), getTrans('quiz_q5_b'), getTrans('quiz_q5_c')],
+                a: 1,
+                category: "Rock Types"
+            },
+            { 
+                q: getTrans('quiz_q6'),
+                options: [getTrans('quiz_q6_a'), getTrans('quiz_q6_b'), getTrans('quiz_q6_c')],
+                a: 1,
+                category: "Science"
+            },
+            { 
+                q: getTrans('quiz_q7'),
+                options: [getTrans('quiz_q7_a'), getTrans('quiz_q7_b'), getTrans('quiz_q7_c')],
+                a: 0,
+                category: "Rock Types"
+            },
+            { 
+                q: getTrans('quiz_q8'),
+                options: [getTrans('quiz_q8_a'), getTrans('quiz_q8_b'), getTrans('quiz_q8_c')],
+                a: 0,
+                category: "Rock Types"
+            },
+            { 
+                q: getTrans('quiz_q9'),
+                options: [getTrans('quiz_q9_a'), getTrans('quiz_q9_b'), getTrans('quiz_q9_c')],
+                a: 0,
+                category: "Geology History"
+            },
+            { 
+                q: getTrans('quiz_q10'),
+                options: [getTrans('quiz_q10_a'), getTrans('quiz_q10_b'), getTrans('quiz_q10_c')],
+                a: 1,
+                category: "Minerals"
+            }
+        ];
+        console.log('Returning Indonesian questions:', idQuestions[0]);
+        return idQuestions;
+    }
+    console.log('Returning English questions:', questionsEN[0]);
+    return questionsEN;
+}
+
+let questions = getQuestions();
 let score = 0;
 let currentQuestion = 0;
 let answered = false;
@@ -381,7 +465,7 @@ function checkAnswer(selected, btn) {
         document.getElementById('score').textContent = score;
         btn.classList.add('correct');
         
-        feedback.innerHTML = '<p class="text-success fw-bold mb-0"><i class="fas fa-check-circle me-2"></i>Correct! Great job!</p>';
+        feedback.innerHTML = `<p class="text-success fw-bold mb-0"><i class="fas fa-check-circle me-2"></i>${getTrans('quiz_correct')}</p>`;
         
         // Confetti effect
         if (typeof confetti === 'function') {
@@ -399,7 +483,7 @@ function checkAnswer(selected, btn) {
         const allBtns = document.querySelectorAll('.option-btn');
         allBtns[correct].classList.add('correct');
         
-        feedback.innerHTML = '<p class="text-danger fw-bold mb-0"><i class="fas fa-times-circle me-2"></i>Wrong! The correct answer is highlighted in green.</p>';
+        feedback.innerHTML = `<p class="text-danger fw-bold mb-0"><i class="fas fa-times-circle me-2"></i>${getTrans('quiz_wrong')} ${getTrans('quiz_correct_answer')} <strong>${questions[currentQuestion].options[correct]}</strong></p>`;
     }
     
     nextBtn.style.display = 'inline-block';
@@ -425,25 +509,25 @@ function nextQuestion() {
 function showResults() {
     const percentage = (score / questions.length * 100).toFixed(0);
     let icon = 'success';
-    let title = 'Excellent!';
-    let message = '';
+    let title = getTrans('quiz_result_excellent');
+    let message = getTrans('quiz_result_excellent_msg');
     
     if (percentage >= QUIZ_CONFIG.SCORE_THRESHOLDS.EXCELLENT) {
         icon = 'success';
-        title = '🏆 Outstanding!';
-        message = 'You have excellent knowledge of rocks and fossils!';
+        title = '🏆 ' + getTrans('quiz_result_excellent');
+        message = getTrans('quiz_result_excellent_msg');
     } else if (percentage >= QUIZ_CONFIG.SCORE_THRESHOLDS.GOOD) {
         icon = 'info';
-        title = '👍 Good Job!';
-        message = 'You have a solid understanding of geology!';
+        title = '👍 ' + getTrans('quiz_result_good');
+        message = getTrans('quiz_result_good_msg');
     } else if (percentage >= QUIZ_CONFIG.SCORE_THRESHOLDS.FAIR) {
         icon = 'warning';
-        title = '📚 Not Bad!';
-        message = 'Keep learning about rocks and fossils!';
+        title = '📚 ' + getTrans('quiz_result_fair');
+        message = getTrans('quiz_result_fair_msg');
     } else {
         icon = 'error';
-        title = '💪 Keep Trying!';
-        message = 'Review the material and try again!';
+        title = '💪 ' + getTrans('quiz_result_poor');
+        message = getTrans('quiz_result_poor_msg');
     }
     
     Swal.fire({
@@ -452,14 +536,14 @@ function showResults() {
             <div class="text-center">
                 <h3 class="mb-3">${message}</h3>
                 <h2 class="display-4 fw-bold" style="color: #FFC107;">${score}/${questions.length}</h2>
-                <p class="fs-4">${percentage}% Correct</p>
+                <p class="fs-4">${percentage}% ${getTrans('quiz_correct')}</p>
             </div>
         `,
         icon: icon,
         ...QUIZ_CONFIG.SWAL_THEME,
-        confirmButtonText: '<i class="fas fa-redo me-2"></i>Play Again',
+        confirmButtonText: '<i class="fas fa-redo me-2"></i>' + getTrans('quiz_play_again'),
         showCancelButton: true,
-        cancelButtonText: '<i class="fas fa-arrow-left me-2"></i>Back to Games',
+        cancelButtonText: '<i class="fas fa-arrow-left me-2"></i>' + getTrans('games_back_menu'),
         cancelButtonColor: '#6c757d'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -485,5 +569,20 @@ try {
         ...QUIZ_CONFIG.SWAL_THEME
     });
 }
+
+// Listen for language change events
+document.addEventListener('languageChanged', function() {
+    console.log('Language changed, reloading quiz questions...');
+    // Reload questions with new language
+    questions = getQuestions();
+    // Reset quiz state
+    score = 0;
+    currentQuestion = 0;
+    answered = false;
+    // Update UI elements
+    document.getElementById('score').textContent = '0';
+    // Restart quiz with new language
+    initQuiz();
+});
 </script>
 @endsection

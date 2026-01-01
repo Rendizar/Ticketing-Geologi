@@ -29,6 +29,7 @@ Route::prefix('tickets')->group(function () {
     Route::post('/create', [BookingController::class, 'store'])->name('tickets.store');
     Route::get('/track', [BookingController::class, 'track'])->name('tickets.track');
     Route::post('/track', [BookingController::class, 'checkStatus'])->name('tickets.check-status');
+    Route::get('/slot-availability', [BookingController::class, 'getSlotAvailability'])->name('tickets.slot-availability');
     
     // Reschedule routes
     Route::get('/reschedule', [BookingController::class, 'rescheduleForm'])->name('tickets.reschedule.form');

@@ -9,10 +9,10 @@
 
         <!-- Judul Utama -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-4 memory-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
+            <h1 class="display-2 fw-bold mb-4 memory-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;" data-lang-key="memory_title">
                 Fossil Memory Match
             </h1>
-            <p class="fs-4 memory-subtitle" style="color: #6c6c6c; font-weight: 500;">
+            <p class="fs-4 memory-subtitle" style="color: #6c6c6c; font-weight: 500;" data-lang-key="memory_subtitle">
                 Find matching pairs of ancient fossils!
             </p>
             
@@ -20,15 +20,15 @@
             <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap" role="status" aria-live="polite">
                 <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;">
                     <i class="fas fa-shoe-prints me-2" style="color: #FACC15;" aria-hidden="true"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Moves:</span> <span id="moves" class="fw-bold" style="color: #FACC15;" aria-label="Number of moves">0</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="memory_moves">Moves:</span> <span id="moves" class="fw-bold" style="color: #FACC15;" aria-label="Number of moves">0</span>
                 </div>
                 <div class="badge bg-white border-2 border-danger fs-6 px-4 py-2 shadow-sm">
                     <i class="fas fa-clock text-danger me-2" aria-hidden="true"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Time:</span> <span id="timer" class="text-danger fw-bold" aria-label="Elapsed time">00:00</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="memory_time">Time:</span> <span id="timer" class="text-danger fw-bold" aria-label="Elapsed time">00:00</span>
                 </div>
                 <div class="badge bg-white border-2 fs-6 px-4 py-2 shadow-sm" style="border-color: #FACC15 !important;">
                     <i class="fas fa-trophy me-2" style="color: #FACC15;" aria-hidden="true"></i>
-                    <span style="color: #1F2933; font-weight: 600;">Pairs:</span> <span id="pairs" class="fw-bold" style="color: #FACC15;" aria-label="Matched pairs">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="totalPairs" style="color: #FACC15;">6</span>
+                    <span style="color: #1F2933; font-weight: 600;" data-lang-key="memory_pairs">Pairs:</span> <span id="pairs" class="fw-bold" style="color: #FACC15;" aria-label="Matched pairs">0</span> <span style="color: #1F2933; font-weight: 600;">/</span> <span id="totalPairs" style="color: #FACC15;">6</span>
                 </div>
             </div>
         </div>
@@ -45,12 +45,12 @@
                         <!-- Progress Bar -->
                         <div class="mt-4 mb-4">
                             <label class="form-label fw-bold mb-2" style="color: #1F2933;">
-                                <i class="fas fa-chart-line me-2" style="color: #FACC15;"></i>Progress Bar
+                                <i class="fas fa-chart-line me-2" style="color: #FACC15;"></i><span data-lang-key="memory_progress">Progress Bar</span>
                             </label>
                             <div class="progress memory-progress">
                                 <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
                                      role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="fw-bold fs-6">0% Complete</span>
+                                    <span class="fw-bold fs-6" id="progressText">0% <span data-lang-key="memory_complete">Complete</span></span>
                                 </div>
                             </div>
                         </div>
@@ -58,17 +58,17 @@
                         <!-- Difficulty Selection -->
                         <div class="text-center mb-4">
                             <h4 class="mb-3" style="color: #1F2933; font-weight: 600;">
-                                <i class="fas fa-sliders-h me-2" style="color: #FACC15;" aria-hidden="true"></i>Difficulty Level
+                                <i class="fas fa-sliders-h me-2" style="color: #FACC15;" aria-hidden="true"></i><span data-lang-key="memory_difficulty">Difficulty Level</span>
                             </h4>
                             <div class="btn-group" role="group" aria-label="Difficulty level selection">
                                 <button type="button" class="btn btn-outline-success difficulty-btn active" onclick="setDifficulty('easy')" aria-label="Easy mode with 6 pairs">
-                                    <i class="fas fa-smile me-2" aria-hidden="true"></i>Easy (6 pairs)
+                                    <i class="fas fa-smile me-2" aria-hidden="true"></i><span data-lang-key="memory_easy">Easy (6 pairs)</span>
                                 </button>
                                 <button type="button" class="btn btn-outline-warning difficulty-btn" onclick="setDifficulty('medium')" aria-label="Medium mode with 8 pairs">
-                                    <i class="fas fa-meh me-2" aria-hidden="true"></i>Medium (8 pairs)
+                                    <i class="fas fa-meh me-2" aria-hidden="true"></i><span data-lang-key="memory_medium">Medium (8 pairs)</span>
                                 </button>
                                 <button type="button" class="btn btn-outline-danger difficulty-btn" onclick="setDifficulty('hard')" aria-label="Hard mode with 10 pairs">
-                                    <i class="fas fa-fire me-2" aria-hidden="true"></i>Hard (10 pairs)
+                                    <i class="fas fa-fire me-2" aria-hidden="true"></i><span data-lang-key="memory_hard">Hard (10 pairs)</span>
                                 </button>
                             </div>
                         </div>
@@ -78,12 +78,12 @@
                             <button onclick="startGame()" 
                                     class="btn btn-new-game px-4 py-2 me-2 fw-bold"
                                     aria-label="Start a new game">
-                                <i class="fas fa-play me-2" aria-hidden="true"></i>New Game
+                                <i class="fas fa-play me-2" aria-hidden="true"></i><span data-lang-key="memory_new_game">New Game</span>
                             </button>
                             <button onclick="resetGame()" 
                                     class="btn btn-reset-game px-4 py-2 fw-bold"
                                     aria-label="Reset current game">
-                                <i class="fas fa-redo me-2" aria-hidden="true"></i>Reset
+                                <i class="fas fa-redo me-2" aria-hidden="true"></i><span data-lang-key="memory_reset">Reset</span>
                             </button>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
             <a href="{{ route('games.index') }}" 
                class="btn btn-back-home px-4 py-2 fw-bold"
                aria-label="Go back to mini games menu">
-                <i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Back to Mini Games
+                <i class="fas fa-arrow-left me-2" aria-hidden="true"></i><span data-lang-key="games_back_menu">Back to Mini Games</span>
             </a>
         </div>
     </div>
@@ -357,6 +357,12 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
+// Helper function to get translation
+function getTrans(key) {
+    const lang = localStorage.getItem('language') || 'en';
+    return window.translations?.[lang]?.[key] || key;
+}
+
 // Game Configuration
 const GAME_CONFIG = {
     CONFETTI_COLORS: ['#FACC15', '#FFC107', '#28a745'],
@@ -634,7 +640,7 @@ function updateProgress() {
     
     const progressBar = document.getElementById('progressBar');
     progressBar.style.width = percentage + '%';
-    progressBar.querySelector('span').textContent = percentage + '% Complete';
+    progressBar.querySelector('span').innerHTML = `${percentage}% <span data-lang-key="memory_complete">${getTrans('memory_complete')}</span>`;
 }
 
 // Start Timer
@@ -692,25 +698,25 @@ function gameCompleted() {
     
     setTimeout(() => {
         Swal.fire({
-            title: '🎉 Congratulations!',
+            title: '🎉 ' + getTrans('memory_congrats'),
             html: `
                 <div class="text-center">
-                    <p class="fs-4 mb-3">You completed the Fossil Memory Match!</p>
+                    <p class="fs-4 mb-3">${getTrans('memory_completed')}</p>
                     <div class="bg-dark bg-opacity-50 p-4 rounded-3 mb-3">
-                        <p class="text-warning fs-3 fw-bold mb-2">⏱️ Time: ${timeStr}</p>
-                        <p class="text-info fs-3 fw-bold mb-2">🎯 Moves: ${gameState.moves}</p>
-                        <p class="text-success fs-3 fw-bold mb-2">🏆 Level: ${gameState.difficulty.toUpperCase()}</p>
+                        <p class="text-warning fs-3 fw-bold mb-2">⏱️ ${getTrans('memory_time_label')} ${timeStr}</p>
+                        <p class="text-info fs-3 fw-bold mb-2">🎯 ${getTrans('memory_moves_label')} ${gameState.moves}</p>
+                        <p class="text-success fs-3 fw-bold mb-2">🏆 ${getTrans('memory_level')} ${gameState.difficulty.toUpperCase()}</p>
                         <p class="fs-2 mt-3">${rating}</p>
                     </div>
-                    <p class="text-muted fs-6">Try a harder difficulty for more challenge!</p>
+                    <p class="text-muted fs-6">${getTrans('memory_try_harder')}</p>
                 </div>
             `,
             icon: 'success',
             ...GAME_CONFIG.SWAL_THEME,
-            confirmButtonText: '<i class="fas fa-play me-2"></i>Play Again!',
+            confirmButtonText: '<i class="fas fa-play me-2"></i>' + getTrans('memory_play_again'),
             showCancelButton: true,
             cancelButtonColor: '#6c757d',
-            cancelButtonText: 'Close'
+            cancelButtonText: getTrans('memory_close')
         }).then((result) => {
             if (result.isConfirmed) {
                 startGame();
@@ -722,14 +728,14 @@ function gameCompleted() {
 // Reset Game
 function resetGame() {
     Swal.fire({
-        title: 'Reset game?',
-        text: "Your current progress will be lost!",
+        title: getTrans('memory_reset_title'),
+        text: getTrans('memory_reset_text'),
         icon: 'question',
         showCancelButton: true,
         ...GAME_CONFIG.SWAL_THEME,
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Yes, reset!',
-        cancelButtonText: 'Cancel'
+        confirmButtonText: getTrans('memory_reset_confirm'),
+        cancelButtonText: getTrans('memory_reset_cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             startGame();
@@ -757,5 +763,12 @@ try {
         ...swalConfig
     });
 }
+
+// Listen for language change events
+document.addEventListener('languageChanged', function() {
+    console.log('Language changed, updating Memory Match game...');
+    // Update progress bar text
+    updateProgress();
+});
 </script>
 @endsection

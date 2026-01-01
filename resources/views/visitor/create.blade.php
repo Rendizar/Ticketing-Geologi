@@ -415,6 +415,26 @@
                                 Kuota tersedia per slot akan ditampilkan setelah memilih tanggal.</span>
                             </small>
                         </div>
+
+                        <!-- Tabel Ketersediaan Slot -->
+                        <div class="mb-3" id="slot_availability_table_container" style="display:none;">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" style="border-radius: 0.75rem; overflow: hidden;">
+                                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                        <tr>
+                                            <th style="border: none; padding: 0.75rem;">Slot Waktu</th>
+                                            <th style="border: none; padding: 0.75rem;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="slot_availability_body">
+                                        <tr>
+                                            <td colspan="2" class="text-center text-muted">Pilih tanggal untuk melihat ketersediaan slot</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                         <div class="input-group">
                             <span class="input-group-text modern-input-icon">
                                 <i class="bi bi-clock-fill" style="color: #9CA3AF;"></i>
@@ -974,6 +994,119 @@ function enableInputsInElement(element) {
     });
 }
 
+// Fetch slot availability untuk rombongan
+function fetchSlotAvailability(date) {
+    const tableContainer = document.getElementById('slot_availability_table_container');
+    const tableBody = document.getElementById('slot_availability_body');
+    const slotSelect = document.getElementById('slot_waktu');
+    
+    if (!date || !tableBody) return;
+    
+    // Show loading
+    tableBody.innerHTML = '<tr><td colspan="2" class="text-center"><i class="bi bi-hourglass-split me-2"></i>Memuat data...</td></tr>';
+    tableContainer.style.display = '';
+    
+    // Reset semua option ke enabled dulu
+    if (slotSelect) {
+        const options = slotSelect.querySelectorAll('option[value]');
+        options.forEach(opt => {
+            if (opt.value) {
+                opt.disabled = false;
+                opt.textContent = opt.value;
+            }
+        });
+    }
+    
+    // Fetch data dari API
+    fetch(`/tickets/slot-availability?date=${date}`)
+        .then(response => response.json())
+        .then(data => {
+            // Cek apakah hari ini penuh (kapasitas 2500 tercapai)
+            if (data.is_day_full) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <div class="alert alert-danger mb-0" style="border-radius: 0.5rem;">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <strong>Kapasitas Penuh!</strong><br>
+                                Tanggal ini sudah mencapai kapasitas maksimal (${data.daily_booked}/${data.daily_capacity} pengunjung).
+                                Silakan pilih tanggal lain.
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                // Disable semua slot
+                if (slotSelect) {
+                    const options = slotSelect.querySelectorAll('option[value]');
+                    options.forEach(opt => {
+                        if (opt.value) {
+                            opt.disabled = true;
+                            opt.style.display = 'none';
+                        }
+                    });
+                }
+                return;
+            }
+            
+            if (!data.slots || data.slots.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="2" class="text-center text-muted">Tidak ada data slot tersedia</td></tr>';
+                return;
+            }
+            
+            // Clear table
+            tableBody.innerHTML = '';
+            
+            // Tampilkan info kapasitas harian di atas tabel
+            const infoRow = document.createElement('tr');
+            infoRow.innerHTML = `
+                <td colspan="2" class="text-center" style="background: #f0f9ff; padding: 0.5rem;">
+                    <small><i class="bi bi-info-circle me-1"></i>Kapasitas hari ini: ${data.daily_booked}/${data.daily_capacity} pengunjung (Tersisa: ${data.daily_available})</small>
+                </td>
+            `;
+            tableBody.appendChild(infoRow);
+            
+            // Populate table dan filter slot yang sudah booked
+            data.slots.forEach(slot => {
+                const row = document.createElement('tr');
+                
+                // Status styling
+                let statusBadge = '';
+                let statusClass = '';
+                let slotOption = slotSelect.querySelector(`option[value="${slot.slot}"]`);
+                
+                if (slot.status === 'booked') {
+                    statusBadge = '<span class="badge bg-danger">Di-Booking</span>';
+                    statusClass = 'table-danger';
+                    // HIDE/DISABLE slot yang sudah di-booking
+                    if (slotOption) {
+                        slotOption.disabled = true;
+                        slotOption.style.display = 'none'; // Hide dari dropdown
+                    }
+                } else {
+                    statusBadge = '<span class="badge bg-success">Tersedia</span>';
+                    statusClass = 'table-success';
+                    if (slotOption) {
+                        slotOption.disabled = false;
+                        slotOption.style.display = '';
+                        slotOption.textContent = slot.slot;
+                    }
+                }
+                
+                row.className = statusClass;
+                row.innerHTML = `
+                    <td style="padding: 0.75rem; font-weight: 500;">${slot.slot}</td>
+                    <td style="padding: 0.75rem;">${statusBadge}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching slot availability:', error);
+            tableBody.innerHTML = '<tr><td colspan="2" class="text-center text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Gagal memuat data. Silakan coba lagi.</td></tr>';
+        });
+}
+
 // Show/hide provinsi field when Indonesia is selected
 function toggleProvinsi() {
     const negara = document.getElementById('negara').value;
@@ -1311,6 +1444,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 tanggalHiddenInput.value = raw;
                 console.log('Hidden input value after set:', tanggalHiddenInput.value);
             }
+
+            // Fetch slot availability untuk rombongan
+            fetchSlotAvailability(raw);
         });
     } else {
         console.error('tanggal_kunjungan_raw input not found!');

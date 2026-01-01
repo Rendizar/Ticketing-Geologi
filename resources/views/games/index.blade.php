@@ -9,10 +9,10 @@
 
         <!-- Judul -->
         <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold mb-4 games-title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
+            <h1 class="display-2 fw-bold mb-4 games-title" data-lang-key="games_page_title" style="font-family: 'Merriweather', serif !important; color: #1F2933;">
                 GEOLOGY MINI GAMES
             </h1>
-            <p class="lead fs-4 games-subtitle" style="color: #6c6c6c; font-weight: 500;">
+            <p class="lead fs-4 games-subtitle" data-lang-key="games_page_subtitle" style="color: #6c6c6c; font-weight: 500;">
                 Choose a fun & educational game!
             </p>
         </div>
@@ -21,7 +21,9 @@
         $games = [
             [
                 'title' => 'Geology Crossword',
+                'title_key' => 'game1_title',
                 'description' => 'Test your geology vocabulary knowledge!',
+                'desc_key' => 'game1_desc',
                 'icon' => 'fa-th-large',
                 'gradient' => 'bg-gradient-1',
                 'route' => 'games.tts',
@@ -29,7 +31,9 @@
             ],
             [
                 'title' => 'Rock & Fossil Quiz',
+                'title_key' => 'game2_title',
                 'description' => 'Guess the rocks and fossils from real photos!',
+                'desc_key' => 'game2_desc',
                 'icon' => 'fa-question-circle',
                 'gradient' => 'bg-gradient-2',
                 'route' => 'games.quiz',
@@ -37,7 +41,9 @@
             ],
             [
                 'title' => 'Fossil Memory Match',
+                'title_key' => 'game3_title',
                 'description' => 'Match pairs of ancient fossils!',
+                'desc_key' => 'game3_desc',
                 'icon' => 'fa-brain',
                 'gradient' => 'bg-gradient-3',
                 'route' => 'games.memory',
@@ -68,12 +74,12 @@
                         </div>
 
                         <div class="p-4 text-center">
-                            <h3 class="fw-bold fs-4 mb-3" style="color: #1F2933;">{{ $game['title'] }}</h3>
-                            <p class="fs-6 mb-4" style="color: #6c6c6c;">{{ $game['description'] }}</p>
+                            <h3 class="fw-bold fs-4 mb-3" data-lang-key="{{ $game['title_key'] }}" style="color: #1F2933;">{{ $game['title'] }}</h3>
+                            <p class="fs-6 mb-4" data-lang-key="{{ $game['desc_key'] }}" style="color: #6c6c6c;">{{ $game['description'] }}</p>
                             <a href="{{ route($game['route']) }}" 
                                class="btn btn-game-play px-4 py-2 fw-bold"
                                aria-label="Play {{ $game['title'] }} game">
-                                <i class="fas fa-play me-2" aria-hidden="true"></i>Play Now
+                                <i class="fas fa-play me-2" aria-hidden="true"></i><span data-lang-key="games_play_now">Play Now</span>
                             </a>
                         </div>
                     </div>
@@ -87,7 +93,7 @@
             <a href="{{ url('/') }}" 
                class="btn btn-back-home px-4 py-2 fw-bold"
                aria-label="Go back to homepage">
-                <i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Back to Home
+                <i class="fas fa-arrow-left me-2" aria-hidden="true"></i><span data-lang-key="games_back_home">Back to Home</span>
             </a>
         </div>
     </div>
